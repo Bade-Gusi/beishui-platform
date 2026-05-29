@@ -1,0 +1,634 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>背水对战平台 · BeiShui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ========== Reset & Variables ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#FFFFFF;
+  --bg-alt:#F7F9F8;
+  --surface:#FFFFFF;
+  --surface-hover:#F5F7F6;
+  --primary:#1D8B4C;
+  --primary-soft:#E8F5EC;
+  --accent:#B8860B;
+  --accent-soft:#FEF7E6;
+  --danger:#D92D4A;
+  --text:#1A1A1E;
+  --text2:#5B5B62;
+  --text3:#909096;
+  --border:#E8EAE9;
+  --border2:#D6DAD8;
+  --radius-sm:6px;
+  --radius:10px;
+  --radius-lg:14px;
+  --shadow:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,0.06);
+  --font-serif:'Noto Serif SC','Georgia','Times New Roman',serif;
+  --font-sans:'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono','Cascadia Code',monospace;
+}
+
+/* ========== Base ========== */
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+::selection{background:var(--primary-soft);color:var(--primary-dim)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ========== Navigation ========== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:52px;display:flex;align-items:center;padding:0 24px;
+  background:color-mix(in oklch,var(--bg) 88%,transparent);
+  backdrop-filter:blur(20px) saturate(1.1);
+  -webkit-backdrop-filter:blur(20px) saturate(1.1);
+  border-bottom:1px solid var(--border);
+  transition:border-color .3s;
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:1000px;margin:0 auto;
+}
+.nav-brand{
+  font-family:var(--font-serif);font-size:16px;font-weight:600;
+  color:var(--text);letter-spacing:.03em;margin-right:28px;flex-shrink:0;
+}
+.nav-center{display:flex;align-items:center;gap:2px}
+.nav-links{display:flex;gap:2px}
+.nav-links a{
+  padding:6px 12px;font-size:13px;font-weight:500;
+  color:var(--text2);text-decoration:none;border-radius:var(--radius-sm);
+  cursor:pointer;transition:all .2s ease;position:relative;
+}
+.nav-links a:hover{color:var(--text);background:var(--primary-soft)}
+.nav-links a.act{color:var(--primary);background:var(--primary-soft)}
+
+/* ========== Page Transitions ========== */
+.page{
+  display:none;padding-top:52px;min-height:100vh;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.page.act{display:block}
+.page.enter{opacity:1;transform:translateY(0)}
+.page.exit{opacity:0;transform:translateY(-8px)}
+
+/* ========== Hero ========== */
+.hero{
+  text-align:center;padding:80px 24px 56px;
+  max-width:780px;margin:0 auto;position:relative;
+}
+.hero::before{
+  content:'';position:absolute;top:-30%;left:50%;
+  transform:translateX(-50%);width:min(640px,80vw);height:400px;
+  background:radial-gradient(ellipse,var(--primary-soft) 0%,transparent 70%);
+  pointer-events:none;opacity:.7;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 14px;border-radius:20px;
+  background:var(--primary-soft);color:var(--primary);
+  font-size:12px;font-weight:500;margin-bottom:20px;
+  letter-spacing:.02em;position:relative;
+}
+.hero h1{
+  font-family:var(--font-serif);
+  font-size:clamp(26px,4vw,40px);font-weight:700;
+  line-height:1.3;margin-bottom:0;position:relative;
+  letter-spacing:-.01em;
+}
+.hero h1 .hl{color:var(--primary)}
+.hero-divider{
+  width:36px;height:2px;border-radius:1px;
+  background:var(--primary);margin:20px auto;opacity:.5;
+}
+.hero-p{
+  font-size:14.5px;color:var(--text2);
+  max-width:580px;margin:0 auto 28px;line-height:1.85;
+  position:relative;
+}
+.hero-sub{
+  font-size:13px;color:var(--text3);
+  margin-bottom:24px;position:relative;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 24px;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:500;font-family:inherit;
+  text-decoration:none;cursor:pointer;transition:all .25s ease;
+  border:1px solid transparent;line-height:1.4;
+}
+.btn-p{
+  background:var(--primary);color:#fff;border-color:var(--primary);
+}
+.btn-p:hover{
+  opacity:.88;transform:translateY(-1.5px);
+  box-shadow:0 4px 14px color-mix(in oklch,var(--primary) 25%,transparent);
+}
+.btn-o{
+  background:transparent;border-color:var(--border);color:var(--text);
+}
+.btn-o:hover{background:var(--surface-hover);border-color:var(--border2);transform:translateY(-1px)}
+.btn-g{
+  background:var(--accent-soft);color:var(--accent);border-color:transparent;
+}
+.btn-g:hover{opacity:.85;transform:translateY(-1.5px)}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ========== Section ========== */
+.sec{max-width:900px;margin:0 auto;padding:56px 24px}
+.sec-hd{margin-bottom:32px}
+.sec-hd h2{
+  font-family:var(--font-serif);
+  font-size:24px;font-weight:600;margin-bottom:6px;
+}
+.sec-hd p{font-size:14px;color:var(--text2)}
+
+/* ========== Block ========== */
+.block{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 24px;margin-bottom:10px;
+  background:var(--surface);font-size:14px;color:var(--text2);line-height:1.9;
+  transition:border-color .3s;
+}
+.block strong{color:var(--text)}
+.bullet{
+  margin-bottom:6px;padding-left:18px;position:relative
+}
+.bullet::before{
+  content:'●';position:absolute;left:0;
+  color:var(--primary);font-size:9px;top:.15em;
+}
+
+/* ========== Cards (metric) ========== */
+.cards{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:10px;margin-bottom:24px;
+}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;transition:all .25s ease;
+}
+.card:hover{
+  border-color:var(--border2);box-shadow:var(--shadow-hover);transform:translateY(-2px);
+}
+.card .l{
+  font-size:11px;font-weight:600;color:var(--text3);
+  margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;
+}
+.card .v{font-size:19px;font-weight:600;font-family:var(--font-serif)}
+.card .s{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* ========== Game List ========== */
+.gl{display:grid;gap:10px}
+.g{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 24px;background:var(--surface);
+  box-shadow:var(--shadow);
+  border-left:3px solid var(--border);
+}
+.g.cs2{border-left-color:var(--primary)}
+.g.mc{border-left-color:var(--accent)}
+.g.ot{border-left-color:#4A7BC5}
+.g.g2{grid-column:span 2}
+@media(max-width:600px){.g.g2{grid-column:span 1}}
+.gt{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;flex-wrap:wrap;gap:8px;
+}
+.gt h3{font-size:15px;font-weight:600}
+.gts{display:flex;gap:4px;flex-wrap:wrap}
+.tg{
+  padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;letter-spacing:.01em;
+}
+.tg-g{background:var(--primary-soft);color:var(--primary)}
+.tg-y{background:var(--accent-soft);color:var(--accent)}
+.tg-b{background:#EEF3FF;color:#3366CC}
+.tg-gy{background:var(--bg-alt);color:var(--text3)}
+.gi{font-size:13px;color:var(--text2);line-height:1.85}
+.gi .ip{
+  display:inline-flex;padding:4px 12px;
+  background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:5px;font-family:var(--font-mono);font-size:12px;
+  color:var(--primary);cursor:pointer;margin:5px 4px 5px 0;
+  transition:all .2s ease;user-select:none;
+}
+.gi .ip:hover{border-color:var(--primary);background:var(--primary-soft)}
+.gd{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.gd span{
+  padding:2px 8px;background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:4px;font-size:11px;color:var(--text2);
+}
+
+/* ========== Changelog Accordion ========== */
+.cl{display:grid;gap:4px}
+.cl-i{
+  border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;background:var(--surface);
+  transition:border-color .3s;
+}
+.cl-h{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;cursor:pointer;
+  transition:background .2s;user-select:none;
+}
+.cl-h:hover{background:var(--surface-hover)}
+.cl-d{
+  font-size:12px;font-weight:600;color:var(--primary);
+  font-family:var(--font-mono);min-width:82px;
+}
+.cl-v{
+  font-size:11px;color:var(--text3);
+  font-family:var(--font-mono);min-width:56px;
+}
+.cl-t{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500}
+.cl-a{
+  font-size:10px;color:var(--text3);margin-left:auto;
+  transition:transform .3s ease;opacity:.5;
+}
+.cl-i.op .cl-a{transform:rotate(90deg)}
+.cl-b{
+  padding:0 18px 0 104px;max-height:0;
+  overflow:hidden;font-size:13px;color:var(--text2);
+  line-height:1.85;transition:all .35s ease;
+}
+.cl-i.op .cl-b{max-height:600px;padding-bottom:14px;padding-top:2px}
+.cl-b code{
+  padding:1px 5px;background:var(--bg-alt);border-radius:4px;
+  font-family:var(--font-mono);font-size:12px;color:var(--accent);
+}
+
+/* ========== Notification ========== */
+.noti{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px 18px;border:1px solid var(--border);
+  border-radius:var(--radius);font-size:13px;color:var(--text2);
+  line-height:1.75;margin-bottom:10px;background:var(--surface);
+}
+
+/* ========== Step cards ========== */
+.steps{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:8px;margin:14px 0;
+}
+.st{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;background:var(--bg-alt);position:relative;
+  transition:border-color .25s;
+}
+.st:hover{border-color:var(--border2)}
+.st .n{
+  position:absolute;top:8px;right:14px;
+  font-size:28px;font-weight:700;font-family:var(--font-mono);
+  color:var(--primary-soft);line-height:1;
+}
+.st h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.st p{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ========== Sponsor Grid ========== */
+.sps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.sp{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 18px;border:1px solid var(--border);
+  border-radius:var(--radius-sm);background:var(--surface);
+  font-size:13px;color:var(--text2);text-decoration:none;
+  transition:all .25s ease;font-family:inherit;cursor:pointer;
+}
+.sp:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1.5px)}
+.sp.gd{
+  background:linear-gradient(135deg,var(--accent-soft),transparent 80%);
+  border-color:color-mix(in oklch,var(--accent) 20%,transparent);
+  color:var(--accent);
+}
+
+/* ========== Footer ========== */
+footer{
+  text-align:center;border-top:1px solid var(--border);
+  padding:24px;margin-top:24px;
+}
+footer p{font-size:12px;color:var(--text3)}
+footer .cp{
+  color:color-mix(in oklch,var(--danger) 50%,transparent);
+  font-size:11px;margin-top:6px;
+}
+
+/* ========== Reveal Animations ========== */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .55s ease-out,transform .55s ease-out}
+.rv.in{opacity:1;transform:translateY(0)}
+.rv-d1{transition-delay:.06s}.rv-d2{transition-delay:.12s}.rv-d3{transition-delay:.18s}.rv-d4{transition-delay:.24s}.rv-d5{transition-delay:.30s}
+
+/* Hero entrance (initial load only) */
+.he{opacity:0;transform:translateY(18px);transition:opacity .5s ease-out,transform .5s ease-out}
+.he.in{opacity:1;transform:translateY(0)}
+
+/* ========== Responsive ========== */
+@media(max-width:768px){
+  nav{padding:0 14px;height:48px}
+  .nav-brand{font-size:14px;margin-right:12px}
+  .nav-links a{padding:5px 8px;font-size:12px}
+  .hero{padding:60px 16px 40px}
+  .hero::before{width:100vw;height:280px;top:-20%}
+  .sec{padding:40px 16px}
+  .block{padding:16px 18px}
+  .card{padding:16px 18px}
+  .g{padding:16px 18px}
+  .cards{grid-template-columns:1fr 1fr}
+  .cl-b{padding-left:18px}
+}
+@media(max-width:480px){
+  .cards{grid-template-columns:1fr}
+  .nav-links{gap:0}
+  .nav-links a{padding:4px 6px;font-size:11px}
+}
+
+/* ========== Reduced Motion ========== */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms!important;
+    transition-duration:0.01ms!important;
+  }
+  .rv,.he{opacity:1;transform:none}
+  .page{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Navigation ===== -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-center">
+      <span class="nav-brand">背水</span>
+      <div class="nav-links">
+        <a class="act" onclick="sw('home')">平台</a>
+        <a onclick="sw('games')">游戏</a>
+        <a onclick="sw('cl')">更新日志</a>
+        <a onclick="sw('sp')">赞助</a>
+        <a onclick="sw('demo')">Demo</a>
+      </div>
+    </div>
+    <a href="#" onclick="sw('sp')" class="btn btn-p" style="padding:6px 14px;font-size:12px">赞助</a>
+  </div>
+</nav>
+
+<!-- ===== 平台 ===== -->
+<div class="page act" id="p-home">
+  <div class="hero">
+    <div class="he in" style="transition-delay:.04s">
+      <div class="hero-badge">S1 内测已结束 · 感谢各位 · 敬请期待</div>
+    </div>
+    <h1 class="he" style="transition-delay:.1s">我们始终坚持，<br>您每一个 <span class="hl">Tick</span> 的操作<br>都应该被值得看到</h1>
+    <div class="hero-divider he" style="transition-delay:.18s" aria-hidden="true"></div>
+    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V1.0.336（推荐电脑浏览）</div>
+    <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
+    <div class="acts he" style="transition-delay:.36s">
+      <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
+      <a href="https://www.123912.com/s/VrDpjv-bpsfd" target="_blank" class="btn btn-o">📦 配套软件下载（先解压再运行）</a>
+      <a href="https://www.bilibili.com/video/BV1GJ411x7h7/" target="_blank" class="btn btn-o">加入我们</a>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="block rv rv-d1">
+      <div class="bullet">欢迎来到本平台！服务器当前线路由中国联通提供网络支持，此网络用户可能比其它家的快1~3ms左右！如果你对三毫秒的延迟发烧的话，请更换自家宽带！</div>
+      <div class="bullet"><a href="https://hsfaka.cn/shop/BSP" target="_blank" style="color:var(--primary);text-decoration:none">CS2赞助链接</a> · 推荐直接加管理员好友赞助</div>
+      <div class="bullet"><a href="https://afdian.com/a/Bade-Gusi" target="_blank" style="color:var(--accent);text-decoration:none">赞助链接</a> · 推荐直接加管理员好友赞助</div>
+      <div class="bullet"><a href="https://hsfaka.cn/shop/BSP" target="_blank" style="color:var(--text2);text-decoration:none">赞助榜</a> · 点我跳转</div>
+      <div class="bullet">延迟测试：省内标准为20ms+、中部地区50ms+、广州等地区65ms+、新疆85ms+</div>
+      <div class="bullet"><a href="#" onclick="sw('cl')" style="color:var(--text2);text-decoration:none">服务器更新日志</a> · 点我跳转</div>
+    </div>
+
+    <div class="block rv rv-d2" style="text-align:center;font-weight:600;color:var(--text);font-size:15px">! 全平台跨核心调度延迟不超过1毫秒 !</div>
+
+    <div class="cards">
+      <div class="card rv rv-d2"><div class="l">归属</div><div class="v" style="color:var(--primary)">背水工作室</div><div class="s">高性能统一布控中心 · 公网 IPv4</div></div>
+      <div class="card rv rv-d3"><div class="l">网络</div><div class="v" style="color:#1A9C8C">中国联通</div><div class="s">优先带宽 · TCP/UDP 超宽频道</div></div>
+      <div class="card rv rv-d4"><div class="l">服务器配置</div><div class="v">14核/24线程</div><div class="s">3.2GHz · 16GB 三星 ECC · 400W</div></div>
+      <div class="card rv rv-d4"><div class="l">位置 · 延迟</div><div class="v" style="color:var(--accent)">辽宁联通</div><div class="s">最低 6ms</div></div>
+    </div>
+
+    <div class="block rv rv-d3">
+      <div class="bullet">本服务器归属于背水工作室旗下的高性能服务器统一管理布控中心，拥有公网IPV4地址，享受中国联通优先带宽特权，辽宁省内TCP/UDP超宽频道优先带宽权限！可以做到7×24小时不间断运行无压力，可同时开设多个大型游戏服务器。</div>
+      <div class="bullet">单台搭载14核24线程（单核峰值3.2GHz）/16GB三星ECC纠错内存。单台功率约400W左右，经测试，我的世界108人同时在线或10人反方向跑图无压力！2022年，我们的平台建立，至今已有4年历史！历年发展，用爱发电！日积月累，精益求精！极低的价格，出色的性能！</div>
+      <div class="bullet"><strong>后续升级计划：</strong>CPU由3.2GHz改为4.7GHz</div>
+      <div class="bullet"><strong>收费标准：</strong>服务器为免费运营，无需购买通行证，但服务器运行维护的开支是笔不小的费用，您可以自己购买vip来赞助服务器，您的名称将会出现在赞助榜上。但目前辽宁地区服务器购买无需开设费用，其他地区还请支付架设费用！</div>
+      <div class="bullet"><strong>服务器位置：</strong>当前服务器所在地：[中国辽宁联通] 最低延迟：[6ms]</div>
+    </div>
+
+    <div class="block rv rv-d4">
+      <strong>【赛事承办】</strong><br>
+      背水平台提供电竞赛事服务，平台提供专业的赛事服务器代理。优秀的服务器资源，让您轻松举办《CS:GO》、《我的世界》、《Dread Hunger》等电竞比赛和活动。<br>
+      <strong>服务器管理/购买定制请联系QQ：</strong>2994938720
+    </div>
+  </div>
+
+  <footer>
+    <p>背水对战平台 · 背水工作室</p>
+    <p>服务器管理/购买定制请联系QQ：2994938720</p>
+    <p class="cp">版权所有@侵权必究 · 不要源代码公开</p>
+  </footer>
+</div>
+
+<!-- ===== 游戏 ===== -->
+<div class="page" id="p-games">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>游戏列表</h2><p>下方将展示服务器全部已完成部署的游戏列表</p></div>
+
+    <div class="noti rv rv-d1">
+      <span>⚠️ IPV4地址几乎不会改变，但为避免DDOS意外，请收藏本网站或关注群内官方通知！公益服务器免费试用，性能相同！公益服务器统一使用辽宁联通IPV4地址转发，购买服务器后如需使用其它地区服务器请告知！公益服务器默认为休眠状态，无法直接链接，如需使用请联系管理！</span>
+    </div>
+
+    <div class="gl">
+      <div class="g cs2 rv rv-d2">
+        <div class="gt"><h3>🎯 CS2 · Counter-Strike 2</h3><div class="gts"><span class="tg tg-g">VAC</span><span class="tg tg-g">自研 4000+/场</span><span class="tg tg-y">部分 7×24H</span></div></div>
+        <div class="gi">
+          【统一使用V社VAC反作弊】背水对战平台。平台拥有自主研发的相关插件每场比赛近4000+的自研代码插件运行，摒弃千篇一律的体验，从原始出发！<br>
+          请到顶端下载服务器配套进服软件！快捷！方便！实用！<br>
+          极高成熟度，拥有丰富的开服经验。<br>
+          服务器链接时不考虑用户是否使用国服还是国际服启动，平台推荐国际服启动！<br>
+          关闭vac指令：<code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">-insecure</code>（因为服务器依赖VAC反作弊，关闭VAC后将被服务器屏蔽！）<br>
+          <span class="ip" onclick="cp(this)">frp-hip.com:30355</span>
+          <span class="ip" onclick="cp(this)">frp-hip.com:30355</span>
+          <div style="margin-top:4px;font-size:12px;color:var(--text3)">服务器文件更新时间：详情见更新公告！</div>
+        </div>
+      </div>
+
+      <div class="g mc rv rv-d3">
+        <div class="gt"><h3>⛏️ 我的世界 · Minecraft</h3><div class="gts"><span class="tg tg-y">BAC3.0</span><span class="tg tg-y">部分 7×24H</span></div></div>
+        <div class="gi">
+          BAC3.0自研反作弊：服务端已部署。极高成熟度，拥有丰富的开服经验。<br>
+          <a href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" target="_blank" style="color:var(--primary);text-decoration:none">点我下载PCL2启动器</a><br>
+          版本：群内通知 · 下载链接：下载在QQ文件<br>
+          <span class="ip" onclick="cp(this)">frp-hip.com:28523</span>
+          <div class="gd"><span>惊变一百天</span><span>mc卡丁车</span><span>乌托邦3.2</span><span>雾中人</span><span>随机空岛</span><span>灾难直线</span><span>暮色森林最新版</span></div>
+        </div>
+      </div>
+
+      <div class="g ot rv rv-d4">
+        <div class="gt"><h3>🗡️ Dread Hunger</h3><div class="gts"><span class="tg tg-b">BAC3.0</span><span class="tg tg-gy">完善中</span></div></div>
+        <div class="gi">BAC3.0自研反作弊：基础功能部署。基础功能已完成，有待完善。版本：群内通知。链接IP请私信管理员！</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="rv rv-d5">
+        <div class="g ot" style="margin:0"><div class="gt"><h3 style="font-size:14px">💬 KOOK</h3><div class="gts"><span class="tg tg-g">在线</span></div></div><div class="gi">联系管理员</div></div>
+        <div class="g ot" style="margin:0"><div class="gt"><h3 style="font-size:14px">🎧 TeamSpeak（TS语音软件）</h3><div class="gts"><span class="tg tg-g">部分 7×24H</span></div></div><div class="gi">链接IP请私信管理员！</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 更新日志 ===== -->
+<div class="page" id="p-cl">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V1.0.336 · 时间使一切发生着变化 ——埃斯库罗斯</p></div>
+    <div class="cl">
+      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.04.04</span><span class="cl-v">V1.0.365</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b"><b>1v1 单挑插件 - 玩家说明书</b><br>设置顺序如 <code>5 rifle 3 pistol 2 sniper</code> · <code>random</code>/<code>fixed</code> 模式 · <code>.1v1</code> 开始 · <code>.stop1v1</code> 停止 · <code>.tz</code> 换枪 · 自动奇数回合 · 自动换边 · 自动 Demo</div></div>
+      <div class="cl-i rv rv-d2"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.03.27</span><span class="cl-v">V1.0.360</span><span class="cl-t" style="background:#EEF3FF;color:#3366CC">反作弊</span><span class="cl-a">▸</span></div><div class="cl-b">反作弊心跳系统上线，持续发送认证信号，信号中断自动请出。服务端适配插件同步部署。</div></div>
+      <div class="cl-i rv rv-d3"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.25</span><span class="cl-v">V1.0.330</span><span class="cl-t" style="background:var(--accent-soft);color:var(--accent)">会员</span><span class="cl-a">▸</span></div><div class="cl-b">计分板会员标签全员可见 · Steam64ID绑定 · 贡献值排行 · 激活冷却60s · 日限50次</div></div>
+      <div class="cl-i rv rv-d4"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.24</span><span class="cl-v">V1.0.328</span><span class="cl-a">▸</span></div><div class="cl-b">阵亡快捷指令提示 · C4倒计时智能分段</div></div>
+      <div class="cl-i rv rv-d5"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.05</span><span class="cl-v">V1.0.320</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重写</span><span class="cl-a">▸</span></div><div class="cl-b">重写300行发刀代码 · 玩家状态通告 · 超6分钟记录</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.01.23</span><span class="cl-v">V1.0.300</span><span class="cl-t" style="background:color-mix(in oklch,var(--danger) 12%,transparent);color:var(--danger)">里程碑</span><span class="cl-a">▸</span></div><div class="cl-b">修复核心API · 跳舞/表情包 · C4倒计时 · 大连节点 · AI外挂检测 · 一人一号</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.12.23</span><span class="cl-v">V1.0.282</span><span class="cl-a">▸</span></div><div class="cl-b">修复了一些那该死的拼写错误</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.01</span><span class="cl-v">V1.0.262</span><span class="cl-a">▸</span></div><div class="cl-b">自研一键进服器上架 · 优化反作弊逻辑</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.06.19</span><span class="cl-v">V1.0.257</span><span class="cl-a">▸</span></div><div class="cl-b">修复CS2左下角 · .ct/.t选边 · Dread Hunger更新</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.06.06</span><span class="cl-v">V1.0.254</span><span class="cl-a">▸</span></div><div class="cl-b">新增Dread Hunger服务器 · 反 Achilles 完成</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.21</span><span class="cl-v">V1.0.248</span><span class="cl-a">▸</span></div><div class="cl-b">热身模式语音互通 · 刀/枪/物品可丢弃</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.16</span><span class="cl-v">V1.0.247</span><span class="cl-a">▸</span></div><div class="cl-b">优化CPU核心亲核性 · MC愚人节服务端</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.04.05</span><span class="cl-v">V1.0.130</span><span class="cl-a">▸</span></div><div class="cl-b">新增服务器提示语 · 修复13比分不自动判定</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.03.15</span><span class="cl-v">V1.0.86</span><span class="cl-t" style="background:color-mix(in oklch,var(--danger) 12%,transparent);color:var(--danger)">里程碑</span><span class="cl-a">▸</span></div><div class="cl-b">接入VAC3.0+BAC3.0 · 举报功能 · 不损帧率</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.02.26</span><span class="cl-v">V1.0.75</span><span class="cl-a">▸</span></div><div class="cl-b">自动Demo录制 · 网盘下载 · 修复异常踢出</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.02.25</span><span class="cl-v">V1.0.3</span><span class="cl-a">▸</span></div><div class="cl-b">修复投票 · 优化性能 · 优化连接</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 赞助 ===== -->
+<div class="page" id="p-sp">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>赞助</h2><p>服务器运营依赖社区支持</p></div>
+    <div class="sps">
+      <a class="sp gd" href="https://hsfaka.cn/shop/BSP" target="_blank">💎 CS2赞助链接</a>
+      <a class="sp gd" href="https://afdian.com/a/Bade-Gusi" target="_blank">🌟 赞助链接</a>
+      <a class="sp" href="https://hsfaka.cn/shop/BSP" target="_blank">🏆 赞助榜</a>
+      <a class="sp" href="#" onclick="sw('cl')">📋 更新日志</a>
+      <a class="sp" href="#">⏱️ 延迟测试</a>
+    </div>
+    <div class="block rv" style="text-align:center">
+      QQ：<strong style="color:var(--primary);font-size:17px;font-family:var(--font-mono)">2994938720</strong><br>
+      <span style="font-size:13px;color:var(--text3)">服务器管理 · 购买定制</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Demo ===== -->
+<div class="page" id="p-demo">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>Demo 回放</h2><p>全比赛demo下载</p></div>
+
+    <div class="block rv rv-d1">
+      <strong>下载方式</strong><br>
+      <a href="https://pan.quark.cn/s/dcdb0dfa4b89" target="_blank" style="color:var(--primary)">【夸克网盘实时更新，标准速度】</a><br>
+      （截至2025年11月26日23:21前的demo现已完成上传供大家下载）<br>
+      <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" style="color:var(--accent)">【123云盘管理员手动更新，不限速下载】</a><br>
+      <span style="font-size:12px;color:var(--text3)">（一般情况不更新，除非有重大赛事下载需求才会更新的）</span>
+    </div>
+
+    <div class="block rv rv-d2">
+      <strong>如何播放demo进行观看？</strong>
+      <div class="steps">
+        <div class="st"><div class="n">1</div><h4>下载demo</h4><p>下载链接的demo文件，无需解压。</p></div>
+        <div class="st"><div class="n">2</div><h4>定位steam</h4><p>单击CS2界面向右看，选择管理→浏览本地文件。</p></div>
+        <div class="st"><div class="n">3</div><h4>放入csgo</h4><p>打开game→csgo文件夹，放入demo文件。</p></div>
+        <div class="st"><div class="n">4</div><h4>控制台播放</h4><p>输入 <code style="color:var(--primary);font-family:var(--font-mono)">playdemo </code> 选择文件。</p></div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-top:10px">文件路径：G:\steam\steamapps\common\Counter-Strike Global Offensive\game\csgo</div>
+    </div>
+
+    <div class="block rv rv-d3">
+      <strong>如何开启demo语音？</strong><br>
+      在Demo播放过程中，按 ~ 呼出控制台，输入以下命令：<br>
+      <code style="color:var(--primary);font-family:var(--font-mono)">voice_enable 1</code>：启用所有语音频道（默认可能为0，即关闭）<br>
+      <code style="color:var(--accent);font-family:var(--font-mono)">demo_timescale 1</code>：Demo播放速度
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========== Page switching with transitions ========== */
+function sw(id) {
+  const pages = document.querySelectorAll('.page');
+  const current = document.querySelector('.page.act');
+  const next = document.getElementById('p-' + id);
+  if (current === next) return;
+
+  current.classList.remove('act', 'enter');
+  current.classList.add('exit');
+  current.style.display = 'none';
+
+  next.style.display = 'block';
+  next.classList.remove('exit');
+  next.classList.add('act');
+  // Force reflow then trigger enter
+  void next.offsetWidth;
+  next.classList.add('enter');
+
+  // Nav active state
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('act'));
+  const ls = ['home','games','cl','sp','demo'];
+  const i = ls.indexOf(id);
+  if (i >= 0) document.querySelectorAll('.nav-links a')[i].classList.add('act');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ========== Accordion (Changelog) ========== */
+function t(h) {
+  const i = h.closest('.cl-i');
+  const op = i.classList.contains('op');
+  document.querySelectorAll('.cl-i.op').forEach(e => e.classList.remove('op'));
+  if (!op) i.classList.add('op');
+}
+
+/* ========== Copy IP ========== */
+function cp(el) {
+  const ip = el.textContent.trim();
+  navigator.clipboard.writeText(ip).then(() => {
+    const o = el.textContent;
+    el.textContent = '✓ 已复制';
+    setTimeout(() => el.textContent = o, 800);
+  });
+}
+
+/* ========== Scroll Reveal ========== */
+const ro = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      ro.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+  // Initial hero items already have .in, but ensure any that missed it
+  document.querySelectorAll('.he:not(.in)').forEach(el => {
+    el.classList.add('in');
+  });
+});
+</script>
+</body>
+</html>
