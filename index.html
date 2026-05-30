@@ -1,0 +1,1046 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>背水对战平台 · BeiShui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ========== Reset & Variables ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#FBFCFB;
+  --bg-alt:#F4F6F5;
+  --surface:#FFFFFF;
+  --surface-hover:#F4F6F5;
+  --primary:#1A8A48;
+  --primary-soft:#E6F2EA;
+  --accent:#B8860B;
+  --accent-soft:#FDF6E3;
+  --danger:#D92D4A;
+  --text:#1C1C1F;
+  --text2:#585D62;
+  --text3:#8E9298;
+  --border:#E5E7E6;
+  --border2:#D1D4D3;
+  --radius-sm:6px;
+  --radius:10px;
+  --radius-lg:14px;
+  --shadow:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,0.07);
+  --font-serif:'Noto Serif SC','Georgia','Times New Roman',serif;
+  --font-sans:'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono','Cascadia Code',monospace;
+}
+
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+::selection{background:var(--primary-soft);color:var(--primary)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+a{color:var(--primary);text-decoration:none}
+
+/* ========== Navigation ========== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:52px;display:flex;align-items:center;padding:0 24px;
+  background:rgba(251,252,251,0.88);
+  backdrop-filter:blur(20px) saturate(1.2);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:1000px;margin:0 auto;
+}
+.nav-brand{
+  font-family:var(--font-serif);font-size:13px;font-weight:600;
+  color:var(--text);letter-spacing:.02em;margin-right:20px;flex-shrink:0;
+  white-space:nowrap;
+}
+.nav-center{display:flex;align-items:center;gap:2px}
+.nav-links{display:flex;gap:2px}
+.nav-links a{
+  padding:6px 12px;font-size:13px;font-weight:500;
+  color:var(--text2);text-decoration:none;border-radius:var(--radius-sm);
+  cursor:pointer;transition:color .2s ease;position:relative;
+}
+.nav-links a:hover{color:var(--text);background:var(--primary-soft)}
+.nav-links a.act{color:var(--primary);background:var(--primary-soft)}
+
+/* ========== Page Transitions ========== */
+.page{
+  display:none;padding-top:52px;min-height:100vh;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .35s ease-out,transform .35s ease-out;
+}
+.page.act{display:block}
+.page.enter{opacity:1;transform:translateY(0)}
+.page.exit{opacity:0;transform:translateY(-8px);transition-duration:.2s;transition-timing-function:ease-in}
+
+/* ========== Hero ========== */
+.hero{
+  text-align:center;padding:80px 24px 56px;
+  max-width:780px;margin:0 auto;position:relative;
+}
+.hero::before{
+  content:'';position:absolute;top:-30%;left:50%;
+  transform:translateX(-50%);width:min(640px,80vw);height:400px;
+  background:radial-gradient(ellipse,var(--primary-soft) 0%,transparent 70%);
+  pointer-events:none;opacity:.6;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 22px;border-radius:24px;
+  background:var(--primary-soft);color:var(--primary);
+  font-size:15px;font-weight:600;margin-bottom:24px;
+  letter-spacing:.03em;position:relative;
+}
+.hero h1{
+  font-family:var(--font-serif);
+  font-size:clamp(28px,4.5vw,44px);font-weight:700;
+  line-height:1.55;margin-bottom:0;position:relative;
+  letter-spacing:.02em;
+  max-width:680px;margin-left:auto;margin-right:auto;
+}
+.hero h1 .hl{color:var(--primary)}
+.hero-divider{
+  width:36px;height:2px;border-radius:1px;
+  background:var(--primary);margin:20px auto;opacity:.4;
+}
+.hero-p{
+  font-size:14.5px;color:var(--text2);
+  max-width:580px;margin:0 auto 28px;line-height:1.85;
+  position:relative;
+}
+.hero-sub{
+  font-size:13px;color:var(--text3);
+  margin-bottom:24px;position:relative;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 24px;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:500;font-family:inherit;
+  text-decoration:none;cursor:pointer;transition:all .25s ease-out;
+  border:1px solid transparent;line-height:1.4;
+}
+.btn-p{
+  background:var(--primary);color:#FCFDFC;border-color:var(--primary);
+}
+.btn-p:hover{
+  opacity:.88;transform:translateY(-1.5px);
+  box-shadow:0 4px 14px rgba(26,138,72,0.2);
+}
+.btn-o{
+  background:transparent;border-color:var(--border);color:var(--text);
+}
+.btn-o:hover{background:var(--surface-hover);border-color:var(--border2);transform:translateY(-1px)}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ========== Section ========== */
+.sec{max-width:900px;margin:0 auto;padding:56px 24px}
+.sec-hd{margin-bottom:32px}
+.sec-hd h2{
+  font-family:var(--font-serif);
+  font-size:24px;font-weight:600;margin-bottom:6px;
+}
+.sec-hd p{font-size:14px;color:var(--text2);line-height:1.6}
+
+/* ========== Block ========== */
+.block{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 24px;margin-bottom:10px;
+  background:var(--surface);font-size:14px;color:var(--text2);line-height:1.9;
+}
+.block strong{color:var(--text)}
+.bullet{
+  margin-bottom:6px;padding-left:18px;position:relative
+}
+.bullet::before{
+  content:'●';position:absolute;left:0;
+  color:var(--primary);font-size:9px;top:.15em;
+}
+
+/* ========== Metric Cards ========== */
+.cards{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:10px;margin-bottom:24px;
+}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;
+  transition:transform .25s ease-out,box-shadow .25s ease-out,border-color .25s ease-out;
+}
+.card:hover{
+  border-color:var(--border2);box-shadow:var(--shadow-hover);transform:translateY(-2px);
+}
+.card .l{
+  font-size:11px;font-weight:600;color:var(--text3);
+  margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;
+}
+.card .v{font-size:19px;font-weight:600;font-family:var(--font-serif)}
+.ct{display:inline-block;transition:color .3s ease-out}
+.card .s{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5}
+
+/* ========== Game List ========== */
+.gl{display:grid;gap:10px}
+.g{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 24px;background:var(--surface);
+  box-shadow:var(--shadow);
+  border-left:3px solid var(--border);
+  transition:box-shadow .25s ease-out;
+}
+.g:hover{box-shadow:var(--shadow-hover)}
+.g.cs2{border-left-color:var(--primary)}
+.g.mc{border-left-color:var(--accent)}
+.g.ot{border-left-color:#4A7BC5}
+.gt{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;flex-wrap:wrap;gap:8px;
+}
+.gt h3{font-size:15px;font-weight:600}
+.gts{display:flex;gap:4px;flex-wrap:wrap}
+.tg{
+  padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;letter-spacing:.02em;
+}
+.tg-g{background:var(--primary-soft);color:var(--primary)}
+.tg-y{background:var(--accent-soft);color:var(--accent)}
+.tg-b{background:#EEF3FF;color:#3366CC}
+.tg-gy{background:var(--bg-alt);color:var(--text3)}
+.gi{font-size:13px;color:var(--text2);line-height:1.85}
+.gi .ip{
+  display:inline-flex;padding:4px 12px;
+  background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:5px;font-family:var(--font-mono);font-size:12px;
+  color:var(--primary);cursor:pointer;margin:5px 4px 5px 0;
+  transition:all .2s ease-out;user-select:none;
+}
+.gi .ip:hover{border-color:var(--primary);background:var(--primary-soft)}
+.gd{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.gd span{
+  padding:2px 8px;background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:4px;font-size:11px;color:var(--text2);
+  transition:border-color .2s ease-out;
+}
+.gd span:hover{border-color:var(--border2)}
+
+/* ========== Changelog Accordion ========== */
+.cl{display:grid;gap:4px}
+.cl-i{
+  border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;background:var(--surface);
+}
+.cl-h{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;cursor:pointer;
+  transition:background .2s ease-out;user-select:none;
+}
+.cl-h:hover{background:var(--surface-hover)}
+.cl-d{
+  font-size:12px;font-weight:600;color:var(--primary);
+  font-family:var(--font-mono);min-width:82px;
+}
+.cl-v{
+  font-size:11px;color:var(--text3);
+  font-family:var(--font-mono);min-width:56px;
+}
+.cl-t{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500}
+.cl-a{
+  font-size:10px;color:var(--text3);margin-left:auto;
+  transition:transform .35s ease-out;opacity:.4;
+}
+.cl-i.op .cl-a{transform:rotate(90deg);opacity:.7}
+.cl-b{
+  padding:0 18px 0 104px;max-height:0;
+  overflow:hidden;font-size:13px;color:var(--text2);
+  line-height:1.85;transition:max-height .35s ease-out,padding .35s ease-out;
+}
+.cl-i.op .cl-b{max-height:3000px;padding-bottom:14px;padding-top:2px}
+.cl-b code{
+  padding:1px 5px;background:var(--bg-alt);border-radius:4px;
+  font-family:var(--font-mono);font-size:12px;color:var(--accent);
+}
+
+/* ========== Table ========== */
+.tbl-wrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--surface);
+  margin-bottom:10px;
+}
+table{
+  width:100%;border-collapse:collapse;
+  font-size:13px;
+}
+th{
+  text-align:left;padding:10px 14px;
+  background:var(--bg-alt);color:var(--text3);
+  font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:.04em;
+  border-bottom:1px solid var(--border);
+}
+td{
+  padding:10px 14px;color:var(--text2);
+  border-bottom:1px solid var(--border);
+}
+tr:last-child td{border-bottom:none}
+tr td:first-child{font-weight:500;color:var(--text);font-family:var(--font-mono);font-size:12px}
+tr:hover td{background:var(--primary-soft)}
+
+/* ========== Notification ========== */
+.noti{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px 18px;border:1px solid var(--border);
+  border-radius:var(--radius);font-size:13px;color:var(--text2);
+  line-height:1.75;margin-bottom:10px;background:var(--surface);
+}
+
+/* ========== Step cards ========== */
+.steps{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:8px;margin:14px 0;
+}
+.st{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;background:var(--bg-alt);position:relative;
+  transition:border-color .25s ease-out;
+}
+.st:hover{border-color:var(--border2)}
+.st .n{
+  position:absolute;top:8px;right:14px;
+  font-size:28px;font-weight:700;font-family:var(--font-mono);
+  color:var(--primary-soft);line-height:1;transition:color .25s ease-out;
+}
+.st:hover .n{color:var(--primary)}
+.st h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.st p{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ========== Sponsor Grid ========== */
+.sps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:28px}
+.sp{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 18px;border:1px solid var(--border);
+  border-radius:var(--radius-sm);background:var(--surface);
+  font-size:13px;color:var(--text2);text-decoration:none;
+  transition:all .25s ease-out;font-family:inherit;cursor:pointer;
+}
+.sp:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1.5px)}
+.sp.gd{
+  background:linear-gradient(135deg,var(--accent-soft),transparent 80%);
+  border-color:rgba(184,134,11,0.2);
+  color:var(--accent);
+}
+.sp.gd:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(184,134,11,0.12)}
+
+/* ========== List ========== */
+.lst{list-style:none;padding:0}
+.lst li{
+  padding:4px 0 4px 18px;position:relative;
+  font-size:13px;color:var(--text2);line-height:1.7;
+}
+.lst li::before{
+  content:'';position:absolute;left:0;top:12px;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--primary);opacity:.35;
+}
+
+/* ========== Footer ========== */
+footer{
+  text-align:center;border-top:1px solid var(--border);
+  padding:24px;margin-top:24px;
+}
+footer p{font-size:12px;color:var(--text3)}
+footer .cp{color:rgba(217,45,74,0.5);font-size:11px;margin-top:6px}
+footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-spacing:.03em}
+
+/* ========== Toast Notification ========== */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--text);color:var(--bg);padding:12px 24px;
+  border-radius:var(--radius-sm);font-size:13px;font-weight:500;
+  opacity:0;transition:all .35s ease-out;z-index:200;
+  pointer-events:none;white-space:nowrap;
+}
+.toast.sh{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ========== Reveal Animations ========== */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .55s ease-out,transform .55s ease-out}
+.rv.in{opacity:1;transform:translateY(0)}
+.rv-d1{transition-delay:.06s}.rv-d2{transition-delay:.12s}.rv-d3{transition-delay:.18s}.rv-d4{transition-delay:.24s}.rv-d5{transition-delay:.30s}
+
+/* ========== Extra animations ========== */
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 0 0 0 rgba(26,138,72,0.12)}
+  50%{box-shadow:0 0 0 6px rgba(26,138,72,0)}
+}
+.hero-badge{animation:pulse-glow 3s ease-in-out infinite}
+.block{transition:border-color .3s,box-shadow .3s ease-out}
+.block:hover{border-color:var(--border2);box-shadow:var(--shadow-hover)}
+.sp{transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.sp:hover{transform:translateY(-2px) scale(1.03)}
+.g{transition:box-shadow .25s ease-out,transform .25s ease-out}
+.g:hover{box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+
+/* Hero entrance */
+.he{opacity:0;transform:translateY(18px);transition:opacity .5s ease-out,transform .5s ease-out}
+.he.in{opacity:1;transform:translateY(0)}
+
+/* ========== Responsive ========== */
+@media(max-width:768px){
+  nav{padding:0 14px;height:48px}
+  .nav-brand{font-size:12px;margin-right:8px}
+  .nav-links a{padding:5px 8px;font-size:12px}
+  .hero{padding:60px 16px 40px}
+  .hero::before{width:100vw;height:280px;top:-20%}
+  .sec{padding:40px 16px}
+  .block{padding:16px 18px}
+  .card{padding:16px 18px}
+  .g{padding:16px 18px}
+  .cards{grid-template-columns:1fr 1fr}
+  .cl-b{padding-left:18px}
+  th,td{padding:8px 10px}
+}
+@media(max-width:480px){
+  .cards{grid-template-columns:1fr}
+  .nav-links{gap:0}
+  .nav-links a{padding:4px 6px;font-size:11px}
+}
+
+/* ========== Reduced Motion ========== */
+/* Back to Top */
+.btt{
+  position:fixed;bottom:24px;right:24px;z-index:99;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text2);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(16px);
+  transition:all .3s ease-out;pointer-events:none;
+  font-family:var(--font-sans);
+}
+.btt.sh{opacity:1;transform:translateY(0);pointer-events:auto}
+.btt:hover{border-color:var(--primary);color:var(--primary)}
+
+/* Floating Particles */
+#pts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.pt{
+  position:absolute;border-radius:50%;
+  background:var(--primary);opacity:0;
+  animation:ptf linear infinite;
+}
+@keyframes ptf{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  5%{opacity:0.06}
+  90%{opacity:0.04}
+  100%{transform:translateY(-5vh) scale(1);opacity:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms!important;
+    transition-duration:0.01ms!important;
+  }
+  .rv,.he{opacity:1;transform:none}
+  .page{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Navigation ===== -->
+<div id="pts"></div>
+<nav>
+  <div class="nav-inner">
+    <div class="nav-center">
+      <span class="nav-brand">背水工作室旗下的高性能服务器群组</span>
+      <div class="nav-links">
+        <a class="act" onclick="sw('home')">平台</a>
+        <a onclick="sw('games')">游戏</a>
+        <a onclick="sw('cmds')">命令</a>
+        <a onclick="sw('cl')">更新日志</a>
+        <a onclick="sw('sp')">赞助</a>
+        <a onclick="sw('demo')">Demo</a>
+      </div>
+    </div>
+    <a href="#" onclick="sw('sp')" class="btn btn-p" style="padding:6px 14px;font-size:12px">赞助</a>
+  </div>
+</nav>
+
+<!-- ===== 平台 ===== -->
+<div class="page act enter" id="p-home">
+  <div class="hero">
+    <div class="he in" style="transition-delay:.04s">
+      <div class="hero-badge">S1 内测已结束 · 感谢各位 · 敬请期待</div>
+    </div>
+    <h1 class="he" style="transition-delay:.1s">我们始终坚持，<br>您每一个 <span class="hl">Tick</span> 的操作<br>都应该被值得看到</h1>
+    <div class="hero-divider he" style="transition-delay:.18s" aria-hidden="true"></div>
+    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V1.0.370（推荐电脑浏览）</div>
+    <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
+    <div class="acts he" style="transition-delay:.36s">
+      <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
+      <a href="https://www.123912.com/s/VrDpjv-bpsfd" target="_blank" class="btn btn-o">配套软件下载（先解压再运行）</a>
+      <a href="#" onclick="sw('sp');nt('谢谢你的好意，但是我们确实没有这个需求')" class="btn btn-o">加入我们</a>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="block rv rv-d1">
+      <div class="bullet">欢迎来到本平台！服务器当前线路由中国联通提供网络支持，此网络用户可能比其它家的快1~3ms左右！如果你对三毫秒的延迟发烧的话，请更换自家宽带！</div>
+      <div class="bullet"><a href="https://hsfaka.cn/shop/BSP" target="_blank">CS2赞助链接</a> · 推荐直接加管理员好友赞助</div>
+      <div class="bullet"><a href="https://afdian.com/a/Bade-Gusi" target="_blank" style="color:var(--accent)">赞助链接</a> · 推荐直接加管理员好友赞助</div>
+      <div class="bullet"><a href="https://hsfaka.cn/shop/BSP" target="_blank" style="color:var(--text2)">赞助榜</a> · 点我跳转</div>
+      <div class="bullet">延迟测试：省内标准为20ms+、中部地区50ms+、广州等地区65ms+、新疆85ms+</div>
+      <div class="bullet"><a href="#" onclick="sw('cl')" style="color:var(--text2)">服务器更新日志</a> · 点我跳转</div>
+    </div>
+
+    <div class="block rv rv-d2" style="text-align:center;font-weight:600;color:var(--text);font-size:15px">! 全平台跨核心调度延迟不超过1毫秒 !</div>
+
+    <div class="cards">
+      <div class="card rv rv-d2"><div class="l">归属</div><div class="v" style="color:var(--primary)">背水工作室</div><div class="s">高性能统一布控中心 · 公网 IPv4</div></div>
+      <div class="card rv rv-d3"><div class="l">网络</div><div class="v" style="color:#1A9C8C">中国联通</div><div class="s">优先带宽 · TCP/UDP 超宽频道</div></div>
+      <div class="card rv rv-d4"><div class="l">服务器配置</div><div class="v"><span class="ct" data-to="14">0</span>核/<span class="ct" data-to="24">0</span>线程</div><div class="s">3.2GHz · 16GB 三星 ECC · 400W</div></div>
+      <div class="card rv rv-d4"><div class="l">位置 · 延迟</div><div class="v" style="color:var(--accent)">辽宁联通 · <span class="ct" data-to="6">0</span>ms</div><div class="s">最低 6ms</div></div>
+    </div>
+
+    <div class="block rv rv-d3">
+      <div class="bullet">本服务器归属于背水工作室旗下的高性能服务器统一管理布控中心，拥有公网IPV4地址，享受中国联通优先带宽特权，辽宁省内TCP/UDP超宽频道优先带宽权限！可以做到7×24小时不间断运行无压力，可同时开设多个大型游戏服务器。</div>
+      <div class="bullet">单台搭载14核24线程（单核峰值3.2GHz）/16GB三星ECC纠错内存。单台功率约400W左右，经测试，我的世界108人同时在线或10人反方向跑图无压力！2022年，我们的平台建立，至今已有<span class="ct" data-to="4">0</span>年历史！历年发展，用爱发电！日积月累，精益求精！极低的价格，出色的性能！</div>
+      <div class="bullet"><strong>后续升级计划：</strong>CPU由3.2GHz改为4.7GHz</div>
+      <div class="bullet"><strong>收费标准：</strong>服务器为免费运营，无需购买通行证，但服务器运行维护的开支是笔不小的费用，您可以自己购买vip来赞助服务器，您的名称将会出现在赞助榜上。但目前辽宁地区服务器购买无需开设费用，其他地区还请支付架设费用！</div>
+      <div class="bullet"><strong>服务器位置：</strong>当前服务器所在地：[中国辽宁联通] 最低延迟：[6ms]</div>
+    </div>
+
+    <div class="block rv rv-d4">
+      <strong>【赛事承办】</strong><br>
+      背水平台提供电竞赛事服务，平台提供专业的赛事服务器代理。优秀的服务器资源，让您轻松举办《CS:GO》、《我的世界》、《Dread Hunger》等电竞比赛和活动。<br>
+      <strong>服务器管理/购买定制请联系QQ：</strong>2994938720
+    </div>
+  </div>
+
+  <footer class="rv">
+    <p>背水对战平台 · 背水工作室</p>
+    <p>服务器管理/购买定制请联系QQ：2994938720</p>
+    <p class="cp">版权所有@侵权必究 · 不要源代码公开</p>
+    <p class="ver">网站版本 V2.0</p>
+  </footer>
+</div>
+
+<!-- ===== 游戏 ===== -->
+<div class="page" id="p-games">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>游戏列表</h2><p>下方将展示服务器全部已完成部署的游戏列表</p></div>
+
+    <div class="noti rv rv-d1">
+      <span>IPV4地址几乎不会改变，但为避免DDOS意外，请收藏本网站或关注群内官方通知。公益服务器免费试用，性能相同。公益服务器统一使用辽宁联通IPV4地址转发，购买服务器后如需使用其它地区服务器请告知。公益服务器默认为休眠状态，无法直接链接，如需使用请联系管理。</span>
+    </div>
+
+    <div class="gl">
+      <div class="g cs2 rv rv-d2">
+        <div class="gt"><h3>CS2 · Counter-Strike 2</h3><div class="gts"><span class="tg tg-g">VAC</span><span class="tg tg-g">自研 4000+/场</span><span class="tg tg-y">部分 7×24H</span></div></div>
+        <div class="gi">
+          【统一使用V社VAC反作弊】背水对战平台。平台拥有自主研发的相关插件每场比赛近4000+的自研代码插件运行，摒弃千篇一律的体验，从原始出发。<br>
+          请到顶端下载服务器配套进服软件。快捷，方便，实用。<br>
+          极高成熟度，拥有丰富的开服经验。<br>
+          服务器链接时不考虑用户是否使用国服还是国际服启动，平台推荐国际服启动。<br>
+          关闭vac指令：<code style="color:var(--accent);font-family:var(--font-mono);font-size:12px;background:var(--bg-alt);padding:1px 5px;border-radius:4px">-insecure</code>（因为服务器依赖VAC反作弊，关闭VAC后将被服务器屏蔽）<br>
+          <span class="ip" onclick="cp(this)">frp-hip.com:30355</span>
+          <span class="ip" onclick="cp(this)">frp-hip.com:30355</span>
+          <div style="margin-top:4px;font-size:12px;color:var(--text3)">服务器文件更新时间：详情见更新公告</div>
+        </div>
+      </div>
+
+      <div class="g mc rv rv-d3">
+        <div class="gt"><h3>我的世界 · Minecraft</h3><div class="gts"><span class="tg tg-y">BAC3.0</span><span class="tg tg-y">部分 7×24H</span></div></div>
+        <div class="gi">
+          BAC3.0自研反作弊：服务端已部署。极高成熟度，拥有丰富的开服经验。<br>
+          <a href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" target="_blank">点我下载PCL2启动器</a><br>
+          版本：群内通知 · 下载链接：下载在QQ文件<br>
+          <span class="ip" onclick="cp(this)">frp-hip.com:28523</span>
+          <div class="gd"><span>惊变一百天</span><span>mc卡丁车</span><span>乌托邦3.2</span><span>雾中人</span><span>随机空岛</span><span>灾难直线</span><span>暮色森林最新版</span></div>
+        </div>
+      </div>
+
+      <div class="g ot rv rv-d4">
+        <div class="gt"><h3>Dread Hunger</h3><div class="gts"><span class="tg tg-b">BAC3.0</span><span class="tg tg-gy">完善中</span></div></div>
+        <div class="gi">BAC3.0自研反作弊：基础功能部署。基础功能已完成，有待完善。版本：群内通知。链接IP请私信管理员。</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="rv rv-d5">
+        <div class="g ot" style="margin:0"><div class="gt"><h3 style="font-size:14px">KOOK</h3><div class="gts"><span class="tg tg-g">在线</span></div></div><div class="gi">联系管理员</div></div>
+        <div class="g ot" style="margin:0"><div class="gt"><h3 style="font-size:14px">TeamSpeak（TS语音软件）</h3><div class="gts"><span class="tg tg-g">部分 7×24H</span></div></div><div class="gi">链接IP请私信管理员</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 更新日志 ===== -->
+<div class="page" id="p-cl">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V1.0.370 · 时间使一切发生着变化 ——埃斯库罗斯</p></div>
+    <div class="cl">
+      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.05.29</span><span class="cl-v">V1.0.370</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【背水平台】1v1 单挑插件 - 玩家说明书</b><br><br>
+<b>一、怎么开始一把单挑？</b><br>
+第1步：设置比赛顺序（谁先打什么枪）<br>
+在聊天框里输入，例如：<br>
+<code>5 rifle 3 pistol 2 sniper</code><br>
+意思就是：先打5局步枪→再打3局手枪→最后打2局狙击<br>
+系统会自动把双数改成单数（比如你输4局，它会变成5局），不用担心。<br><br>
+第2步：选择模式（随机枪 or 固定枪）<br>
+输入 <code>random</code> → 每局从当前类别里随机抽一把枪（双方一样）<br>
+输入 <code>fixed</code> → 每局用固定的枪（比如步枪固定用AK）<br><br>
+第3步：开始打！<br>
+聊天框输入：<code>.1v1</code><br>
+系统会自动匹配你和另一个活着的玩家，开始单挑。<br><br>
+第4步：不想打了？<br>
+输入：<code>.stop1v1</code><br><br>
+<b>二、固定模式下怎么换枪？</b><br>
+如果你用的是 fixed 模式，可以自己选用什么枪。<br><br>
+方法1：用 .tz 命令（全局设置）<br>
+<code>.tz 手枪 3</code><br>
+意思就是：以后手枪局都用第3把枪（沙漠之鹰）<br>
+可选类别：步枪、手枪、狙击<br>
+数字对应：<br>
+手枪：1=格洛克，2=USP，3=沙漠之鹰，4=P250，5=Tec-9，6=FN57<br>
+步枪：1=AK，2=M4A1，3=M4A1消音，4=加利尔，5=法玛斯<br>
+狙击：1=AWP，2=鸟狙，3=连狙G3，4=连狙SCAR<br><br>
+方法2：对局中直接按数字（临时换枪）<br>
+打的过程中，直接在聊天框输入数字，比如 <code>3</code>，就会把当前阶段的武器换成对应的那把。<br>
+这个方法只在固定模式（fixed）下生效，随机模式（random）无效。<br><br>
+<b>三、比赛规则（不用记，系统自动管）</b><br>
+回合数：自动变成奇数（公平）<br>
+护甲：步枪/狙击局→头盔+护甲；手枪局→只有护甲（没头盔）<br>
+比分显示：屏幕中央会弹出来，5秒后自动消失<br>
+Demo录像：自动录制，文件名带时间和双方名字<br>
+换边：打完一局后，双方自动交换CT/T阵营<br><br>
+<b>四、屏幕中间那个框是干嘛的？</b><br>
+每次得分、换阶段、或者新回合开始，屏幕中间会显示5秒钟：<br>
+当前阶段：步枪局 [2/5] 比分 1:0<br>
+下回合武器：ak47<br>
+模式：固定 对手：张三<br>
+5秒后自动消失，不挡视野。<br><br>
+<b>五、常见问题（Q&A）</b><br>
+Q：我输入了 .1v1 没反应？<br>
+A：先设置顺序（第1步），而且场上至少要有2个活着的玩家。<br><br>
+Q：我不想和别人打，只想观战？<br>
+A：开始单挑后系统会自动把你挪到观众席，打完再放你出来。<br><br>
+Q：C4还在吗？<br>
+A：在，不会主动删你的C4。<br><br>
+Q：打完了怎么再开一局？<br>
+A：重新输入 .1v1 就行，会自动换边。<br><br>
+Q：我是房主/管理员，怎么强制结束？<br>
+A：输入 .stop1v1<br><br>
+<b>六、命令速查表</b><br>
+设置5局步枪、3局手枪、2局狙击：<code>5 rifle 3 pistol 2 sniper</code><br>
+切换随机枪模式：<code>random</code><br>
+切换固定枪模式：<code>fixed</code><br>
+开始单挑：<code>.1v1</code><br>
+停止单挑：<code>.stop1v1</code><br>
+设置手枪固定用第3把枪：<code>.tz 手枪 3</code><br>
+对局中临时换枪（固定模式）：直接输入数字，如 <code>3</code><br><br>
+所有命令都在聊天框里输入，不要加斜杠，直接打字就行。祝您玩得开心，一枪一个小朋友！
+      </div></div>
+      <div class="cl-i rv rv-d2"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.03.27</span><span class="cl-v">V1.0.360</span><span class="cl-t" style="background:#EEF3FF;color:#3366CC">反作弊</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>新版本发布：反作弊心跳系统上线</b><br><br>
+各位玩家，大家好！我们刚刚发布了背水平台预览版，这次更新的重点是反作弊心跳功能，旨在为大家创造一个更公平、更安心的游戏环境。<br><br>
+<b>什么是"反作弊心跳"？</b><br>
+简单说，当您通过我们的平台启动游戏后，平台会像您的心脏一样，持续地向游戏服务器发送"我还活着，我是安全的"信号。这个信号每隔几秒就跳一次，确保您的反作弊保护一直处于开启状态。<br><br>
+如果信号正常：服务器就知道您是"认证玩家"，可以正常游戏。<br>
+如果信号中断（比如您关闭了平台，或者电脑里检测到可疑程序）：服务器会认为您可能失去了反作弊保护，就会暂时将您请出对局，保护其他玩家的游戏体验。<br>
+但就目前而言，对于个人对局，我们通常关闭强制心跳认证，在正式比赛时会强制启用心跳认证功能。<br><br>
+<b>服务器也做好了准备</b><br>
+我们同时在服务器端安装了适配插件，它会自动识别平台发来的心跳信号。这意味着：<br>
+使用平台登录的玩家：自动获得通行证，畅快游戏。<br>
+尝试绕开平台直接启动游戏：服务器会拒绝连接，或者将您踢出。<br>
+这样一来，大家就不用担心有人悄悄作弊啦。<br><br>
+<b>如何体验？</b><br>
+本次预览版主要面向内部测试用户，您可以通过邀请链接或房间号参与体验。使用方法非常简单：<br>
+1. 登录平台：启动背水平台，选择您的 Steam 账号登录。<br>
+2. 进入游戏：点击"浏览房间"或在"服务器管理"中输入邀请方提供的地址，即可加入。<br>
+3. 放心游玩：平台会在后台自动保护您的游戏过程。<br><br>
+<b>后续计划</b><br>
+预览版只是第一步，我们会继续优化反作弊系统，增加更多实用功能。如果您在使用中遇到任何问题，或者有好的建议，欢迎随时联系我们反馈。<br>
+感谢您的支持，让我们一起打造更干净的游戏世界！</div></div>
+      <div class="cl-i rv rv-d4"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.25</span><span class="cl-v">V1.0.330</span><span class="cl-t" style="background:var(--accent-soft);color:var(--accent)">会员</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>会员系统底层架构升级</b><br><br>
+各位玩家好！为了提供更具尊荣感的服务器体验，平台对会员系统进行了底层架构升级。<br><br>
+<b>核心更新内容</b><br><br>
+<b>1. 计分板（Tab键）标签全员可见</b><br>
+视觉增强：现在，所有的会员玩家在计分板上的名字前，将永久挂载专属战队标签。<br>
+专属分类：标签严格分为四类：年VIP、VIP、年SVIP、SVIP。<br>
+实时同步：修复了之前版本中切换地图或回合开始时标签消失的 Bug。<br><br>
+<b>2. 数据架构升级</b><br>
+Steam64ID 绑定：系统现已完全切换至 Steam64ID 唯一识别码记录，即便您修改了 Steam 昵称，您的会员权限与消费记录也将稳如泰山。<br>
+排行数据精细化：每一笔通过卡密激活的消费都将精准计入贡献值，快去控制台输入 <code>ph</code> 查看你在全服的地位吧。<br><br>
+<b>3. 安全与防骚扰优化</b><br>
+激活冷却机制：为防止非法刷屏，激活指令 <code>jh</code> 现已加入 60秒 冷却机制。<br>
+每日尝试限制：每位玩家每日最多可尝试激活 50 次，有效保障服务器运行环境安全。<br><br>
+<b>玩家常用指令回顾</b><br>
+<code>jh [卡密]</code> — 激活您手中的会员卡密，示例：<code>jh KAMI-888888</code><br>
+<code>cx</code> — 随时查询您的身份与到期时间<br>
+<code>ph</code> — 查看全服消费贡献榜（前十名）<br><br>
+<b>小贴士</b><br>
+进服提醒：会员玩家进服时，系统将自动发送全服广播，并私聊提醒您剩余的会员天数，请留意左下角聊天栏。<br>
+卡密存放：请妥善保管您的卡密，切勿泄露给他人。<br><br>
+感谢大家一直以来对服务器的支持！我们会持续优化插件功能，祝大家游戏愉快！<br>
+—— 背水管理团队 2026年2月25日</div></div>
+      <div class="cl-i rv rv-d5"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.24</span><span class="cl-v">V1.0.328</span><span class="cl-a">▸</span></div><div class="cl-b">
+1. 核心指令提示优化：阵亡或回合结束时系统自动弹出操作提示，聊天框提示快捷指令：<code>.d</code> 发刀 | <code>.p</code> 暂停 | <code>.r</code> 举报。死亡提示仅限本人可见。<br><br>
+2. C4倒计时逻辑重构：15秒以前通过左下角聊天框每10秒播报一次；15秒以后自动开启屏幕中心实时倒计时。去除了冗余的进度条和特效。<br><br>
+3. 同步更新CS2服务器游戏文件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.20</span><span class="cl-v">V1.0.324</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重写</span><span class="cl-a">▸</span></div><div class="cl-b">
+1. 重写发刀插件，修复了关于.map指令切换地图所出现的插件失效的问题。<br>
+2. 举报插件的视图优化得非常好，更加方便玩家的举报需求。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.08</span><span class="cl-v">V1.0.323</span><span class="cl-a">▸</span></div><div class="cl-b">
+1. 优化：.r 仅能使用举报功能，避免与其他插件冲突。<br>
+2. 优化：进入服务器仅会提示一次。<br>
+3. 重写了部分举报插件的代码。<br>
+4. 准备最低人数改为2人。<br>
+5. 准备使用指令改为 .zb</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.06</span><span class="cl-v">V1.0.322</span><span class="cl-a">▸</span></div><div class="cl-b">
+1. 修复了进入服务器提示词的显示问题。<br>
+2. 玩家可以 .r 举报了！<br>
+3. .r 举报菜单优化。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.02.05</span><span class="cl-v">V1.0.320</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重写</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>发刀代码重写</b><br><br>
+平台现已重写300行发刀代码，现在更加优秀。<br>
+<b>不能使用的情况：</b><br>
+你手上没有刀<br>
+正在冷却中（10秒冷却）<br>
+队友全部阵亡<br><br>
+<b>工作原理</b><br>
+简单三步：<br>
+1. 你使用命令分享刀具<br>
+2. 系统复制你当前的刀具型号<br>
+3. 所有活着的队友获得相同的刀具<br>
+注意：不会拿走你的刀，只是复制给队友。<br><br>
+<b>新增玩家状态通告</b><br>
+为了让大家更好地了解队友的在线状态，我们添加了玩家状态通知功能。<br><br>
+当你成功加入服务器，你会看到：欢迎消息。<br>
+离开游戏时：当任何玩家离开游戏，所有在线玩家都会看到离开提示及游戏时长。<br>
+超过6分钟未进行连接，将被记录服务器中，后续会受到惩罚。<br><br>
+<b>常见问题</b><br>
+Q：我只是去接个电话，会被记录吗？<br>
+A：只要在6分钟内回来就不会。<br><br>
+Q：这个记录会影响我的账号吗？<br>
+A：正常游戏的玩家完全不用担心，只有恶意行为才会被处理。<br><br>
+Q：可以看到谁加入了游戏吗？<br>
+A：目前只通知离开，加入时只有自己会收到欢迎消息。<br><br>
+Q：游戏时长怎么计算的？<br>
+A：从你完全连接成功开始，到断开连接为止。<br><br>
+<b>其他调整</b><br>
+优化：平台开始等待时的英文提示词改为中文版本。<br>
+调整：开始比赛条件由原来的10人临时调整为2人。<br>
+优化：比赛结束时左下角提示更简洁易懂。<br>
+修改：技能模式开放两个端口用于切换使用。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.01.29</span><span class="cl-v">V1.0.310</span><span class="cl-a">▸</span></div><div class="cl-b">
+1. 修复：玩家可以在服务器中进行跳舞、发表情包了！<br>
+2. 新增娱乐模式！随机技能，玩家可以随机技能了！（竞技模式下关闭）<br>
+3. 同步更新CS2服务器游戏文件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.01.23</span><span class="cl-v">V1.0.300</span><span class="cl-t" style="background:rgba(217,45,74,0.1);color:var(--danger)">里程碑</span><span class="cl-a">▸</span></div><div class="cl-b">
+1.【修复】同步更新CS2服务器游戏文件，以适配最新版本<br>
+2.【修复】修复核心插件的API接口，修复CSS核心插件的API<br>
+3.【新增】现在，玩家们可以在服务器中进行跳舞、发表情包了！快来试试看！（正在修复）<br>
+4.【新增】现在，玩家们可以看到C4还有多少秒<br>
+5.【新增】新增大连节点，现在玩家们可以使用大连节点进行连接服务器，延迟更低<br>
+6.【优化】启动器进行了外观层面的优化<br>
+7.【优化】服务器底层核心调度进行了调整<br>
+8.【反作弊】同步VAC反作弊的官方文件<br>
+9.【反作弊】对已知AI类外挂进行迭代分析，扩大了对各类AI外挂的检测范围，同步细化当前检测指标深度、增加检测指标内容<br>
+10.【线下真实】现在，平台实行一人一号尽可能匹配互相认识的人，冰心查过后确认开挂，线下真实<br>
+11.【调整】现在，.d 发刀，将直接发到玩家脚下</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.01.18</span><span class="cl-v">V1.0.283</span><span class="cl-a">▸</span></div><div class="cl-b">
+1. 修复了比赛开始的队伍展示动画。<br>
+2. 同步了CS2的官方版本文件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.12.23</span><span class="cl-v">V1.0.282</span><span class="cl-a">▸</span></div><div class="cl-b">修复了一些那该死的拼写错误</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.11.07</span><span class="cl-v">V1.0.280</span><span class="cl-a">▸</span></div><div class="cl-b">
+同步更新CS2服务器游戏文件。修复核心插件API接口。备份服务器文件。<br>
+2025年11月26日更新CS服务端文件。2025年12月9日更新CS服务端文件。2025年12月13日开服成功，插件API已修复。2025年12月19日更新CS服务端文件并完成适配。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.10.02</span><span class="cl-v">V1.0.272</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.09.26</span><span class="cl-v">V1.0.271</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.09.18</span><span class="cl-v">V1.0.270</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.09.07</span><span class="cl-v">V1.0.269</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.27</span><span class="cl-v">V1.0.268</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.19</span><span class="cl-v">V1.0.267</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.15</span><span class="cl-v">V1.0.266</span><span class="cl-a">▸</span></div><div class="cl-b">新增1v1专用cfg。调整比赛小比分间隔时间。修复服务器。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.15</span><span class="cl-v">V1.0.265</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件。<code>rcon exec 9</code> 指令新增双方自动购买AK47、头甲。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.04</span><span class="cl-v">V1.0.264</span><span class="cl-a">▸</span></div><div class="cl-b">现阶段平台已恢复所有功能。修复核心插件的API接口。备份服务器文件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.03</span><span class="cl-v">V1.0.263</span><span class="cl-a">▸</span></div><div class="cl-b">平台已恢复部分功能，其他模式正在努力适应中。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.08.01</span><span class="cl-v">V1.0.262</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件。新增背水对战平台自研一键进服器正式上架。优化反作弊程序的执行逻辑。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.07.29</span><span class="cl-v">V1.0.260</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件。由于CS更新，背水对战平台正在紧急更新适配中。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.07.16</span><span class="cl-v">V1.0.259</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.07.12</span><span class="cl-v">V1.0.258</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件，以适配最新版本</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.06.19</span><span class="cl-v">V1.0.257</span><span class="cl-a">▸</span></div><div class="cl-b">
+修复CS2开始对战时左下角显示不正确的问题。修复CS2的部分平台呈现问题。修复练习模式中的诱饵飞行时间。添加命令用于在刀局后选择队伍 <code>.ct</code> <code>.t</code>。Dread Hunger增加初始背包格数、开局沉默、狼率平衡和调整。优化整体服务器性能调度逻辑。优化CS2平台整体美观度。备份重要文件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.06.06</span><span class="cl-v">V1.0.255</span><span class="cl-a">▸</span></div><div class="cl-b">优化了中心广告的触发逻辑，使竞技更加纯粹。调整了比赛ID的记录方式，玩家们不会看到比赛ID了。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.06.06</span><span class="cl-v">V1.0.254</span><span class="cl-a">▸</span></div><div class="cl-b">新增Dread Hunger服务器。Dread Hunger服务端插件大量部署。Dread Hunger服务端已完成反作弊研发。优化了网页排版。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.30</span><span class="cl-v">V1.0.252</span><span class="cl-a">▸</span></div><div class="cl-b">调整了服务器调度逻辑。新增C4倒计时。同步更新CS2服务器游戏文件。新增欢迎提示。新增广告机（仅平台宣传内容）。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.23</span><span class="cl-v">V1.0.249</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件。调整了反作弊提示词。更新了网页排版。更新了赞助榜。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.21</span><span class="cl-v">V1.0.248</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件。调整热身模式的语音通话，开麦将会双方互通。调整热身模式的刀、枪、其他物品无法丢出的问题。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.16</span><span class="cl-v">V1.0.247</span><span class="cl-a">▸</span></div><div class="cl-b">优化服务器整体CPU核心亲核性及调度逻辑，性能大幅度提升。优化我的世界服务器设置文件。我的世界新增2025愚人节服务端。备份服务器重要文件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.16</span><span class="cl-v">V1.0.246</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件（于当天下午5点左右完成适配）</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.08</span><span class="cl-v">V1.0.245</span><span class="cl-a">▸</span></div><div class="cl-b">同步更新CS2服务器游戏文件。优化了反作弊逻辑，多数为赛后封禁。优化了网页排版。调整了我的世界反作弊的封禁条件。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.05.02</span><span class="cl-v">V1.0.239</span><span class="cl-a">▸</span></div><div class="cl-b">CS2调整了友军伤害和发刀逻辑。BAC3.0反作弊软件上架。我的世界新增暮色森林新版整合包。CS2优化了服务器性能。非正式比赛（1v1等）所使用的道具默认在投掷后不会减少。网站外观内容进行了大面积的优化和修改。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.04.15</span><span class="cl-v">V1.0.231</span><span class="cl-a">▸</span></div><div class="cl-b">加入我们。修复了一些网站内容的问题。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.04.15</span><span class="cl-v">V1.0.230</span><span class="cl-a">▸</span></div><div class="cl-b">更新并修复发刀插件。修复对局不自动判定胜利方的问题。修复tab比分扳中间不显示对局数的问题。新增了一条比赛开始的提示文字。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.04.06</span><span class="cl-v">V1.0.229</span><span class="cl-a">▸</span></div><div class="cl-b">更新适配插件至官网最新版。由于主要核心插件的API接口发生了更新，正在全力研制新的发刀插件。优化了比赛开始的提示文字。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.04.05</span><span class="cl-v">V1.0.130</span><span class="cl-a">▸</span></div><div class="cl-b">新增服务器提示语，此次新增不会损耗服务器性能。修复当13比分时服务器不自动判定胜利方的问题。新增比赛开始的提示文字。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.04.04</span><span class="cl-v">V1.0.100</span><span class="cl-a">▸</span></div><div class="cl-b">删除了损耗性能的服务器欢迎提示语，以提升整体性能表现。举报功能(.report)将没有对话框，仅作后台记录。玩家输入!drop就可以发出5把一样的刀。更新服务器游戏版本号。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.03.15</span><span class="cl-v">V1.0.86</span><span class="cl-t" style="background:rgba(217,45,74,0.1);color:var(--danger)">里程碑</span><span class="cl-a">▸</span></div><div class="cl-b">新增服务器欢迎提示语。新增服务器举报功能(.report)。服务器正式接入VAC3.0和自研BAC3.0。反作弊正常部署不会影响用户帧率。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.02.26</span><span class="cl-v">V1.0.75</span><span class="cl-a">▸</span></div><div class="cl-b">新增自动demo录制，每一场demo都可保存。新增自动化demo下载，用户可依据网盘链接自助获取demo文件。调整了娱乐模式中服务器的调度策略，修复了部分场景下在服务器中被异常踢出的问题。</div></div>
+      <div class="cl-i"><div class="cl-h" onclick="t(this)"><span class="cl-d">2025.02.25</span><span class="cl-v">V1.0.3</span><span class="cl-a">▸</span></div><div class="cl-b">修复投票问题，投票现已禁用。优化服务器性能。优化玩家链接速度。优化服务器游戏库逻辑。</div></div>
+    </div>
+  </div>
+</div>
+
+	<!-- ===== 命令 ===== -->
+	<div class="page" id="p-cmds">
+	  <div class="sec">
+	    <div class="sec-hd rv"><h2>命令速查</h2><p>背水平台 CS2 服务器 · 玩家指令大全</p></div>
+	    <div class="tbl-wrap rv rv-d1">
+	      <table>
+	        <thead><tr><th>指令</th><th width="60%">说明</th><th>示例</th></tr></thead>
+	        <tbody>
+	          <tr><td>.1v1</td><td>发起单挑</td><td>.1v1</td></tr>
+	          <tr><td>.stop1v1</td><td>停止单挑</td><td>.stop1v1</td></tr>
+	          <tr><td>.d</td><td>发刀给队友</td><td>.d</td></tr>
+	          <tr><td>.p</td><td>暂停比赛</td><td>.p</td></tr>
+	          <tr><td>.r</td><td>举报玩家</td><td>.r</td></tr>
+	          <tr><td>.zb</td><td>准备就绪</td><td>.zb</td></tr>
+	          <tr><td>.ct / .t</td><td>选择阵营</td><td>.ct</td></tr>
+	          <tr><td>random / fixed</td><td>单挑模式切换</td><td>random</td></tr>
+	          <tr><td>.tz 手枪 3</td><td>固定模式设置武器</td><td>.tz 步枪 2</td></tr>
+	          <tr><td>5 rifle 3 pistol ..</td><td>设置单挑顺序</td><td>5 rifle 3 pistol 2 sniper</td></tr>
+	          <tr><td>jh [卡密]</td><td>激活会员卡密</td><td>jh KAMI-888888</td></tr>
+	          <tr><td>cx</td><td>查询会员信息</td><td>cx</td></tr>
+	          <tr><td>ph</td><td>全服贡献榜</td><td>ph</td></tr>
+	          <tr><td>!drop</td><td>发出5把一样的刀</td><td>!drop</td></tr>
+	          <tr><td>.report</td><td>举报（后台记录）</td><td>.report</td></tr>
+	        </tbody>
+	      </table>
+	    </div>
+	    <div class="sec-hd rv" style="margin-top:44px"><h2>FAQ · 常见问题</h2></div>
+	    <div class="block rv rv-d1"><strong>Q：输入 .1v1 没反应？</strong><br>A：先设置顺序，且至少2个活着的玩家。</div>
+	    <div class="block rv rv-d2"><strong>Q：C4还在吗？</strong><br>A：在，不会删你的C4。</div>
+	    <div class="block rv rv-d3"><strong>Q：打完了怎么再开一局？</strong><br>A：重新输入 .1v1。</div>
+	    <div class="block rv rv-d4"><strong>Q：房主怎么强制结束？</strong><br>A：输入 .stop1v1</div>
+	    <div class="block rv rv-d5"><strong>Q：离开太久会被记录吗？</strong><br>A：超过6分钟未连接会被记录。</div>
+	  </div>
+	</div>
+
+<!-- ===== 赞助 ===== -->
+<div class="page" id="p-sp">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>赞助</h2><p>服务器运营依赖社区支持</p></div>
+    <div class="sps">
+      <a class="sp gd rv rv-d1" href="https://hsfaka.cn/shop/BSP" target="_blank">CS2赞助链接</a>
+      <a class="sp gd rv rv-d2" href="https://afdian.com/a/Bade-Gusi" target="_blank">赞助链接</a>
+      <a class="sp rv rv-d3" href="https://hsfaka.cn/shop/BSP" target="_blank">赞助榜</a>
+      <a class="sp rv rv-d4" href="#" onclick="sw('cl')">更新日志</a>
+      <a class="sp rv rv-d5" href="#">延迟测试</a>
+    </div>
+    <div class="block rv" style="text-align:center">
+      QQ：<strong style="color:var(--primary);font-size:17px;font-family:var(--font-mono)">2994938720</strong><br>
+      <span style="font-size:13px;color:var(--text3)">服务器管理 · 购买定制</span>
+    </div>
+
+    <!-- ===== 赞助榜 ===== -->
+    <div class="sec-hd rv" style="margin-top:44px"><h2>赞助榜</h2><p>背水工作室全平台赞助大榜 · 费用公示</p></div>
+
+    <div class="block rv rv-d1" style="font-size:12px;color:var(--text3);text-align:center">
+      数据截止 2025年5月23日 · 截至目前，我平台共计收到
+      <strong style="color:var(--primary);font-size:16px;font-family:var(--font-mono)"><span class="ct" data-to="20">0</span></strong> 元
+    </div>
+
+    <div class="tbl-wrap rv rv-d2">
+      <table>
+        <thead>
+          <tr><th>排名</th><th>账号姓名</th><th>赞助总金额</th><th>愿望</th><th>平台是否完成</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Azeri</td><td>10 元</td><td>屏幕中心广告</td><td style="color:var(--primary)">已完成</td></tr>
+          <tr><td>2</td><td>龙井茶</td><td>10 元</td><td>无</td><td style="color:var(--text3)">无</td></tr>
+          <tr><td>3</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td></tr>
+          <tr><td>4</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td></tr>
+          <tr><td>5</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block rv rv-d3" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div>
+        <strong style="color:var(--text);font-size:14px">参与方式公示</strong>
+        <p style="margin:6px 0 8px;font-size:12px;color:var(--text3);line-height:1.6">用户使用以下方式的，即可累计参与到公示名单上，全时间段可查订单皆可。</p>
+        <ul class="lst">
+          <li>直接赞助的</li>
+          <li>购买相关服务产生费用的</li>
+          <li>购买相关产品产生费用的</li>
+          <li>充值产生费用的</li>
+        </ul>
+      </div>
+      <div>
+        <strong style="color:var(--text);font-size:14px">赞助款用途</strong>
+        <p style="margin:6px 0 8px;font-size:12px;color:var(--text3);line-height:1.6">收到赞助后如何支配使用</p>
+        <ul class="lst">
+          <li>交电费</li>
+          <li>IPV4地址续费</li>
+          <li>服务器配置升级</li>
+          <li>服务器反作弊</li>
+          <li>游戏相关插件开发</li>
+          <li>买盒饭吃</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Demo ===== -->
+<div class="page" id="p-demo">
+  <div class="sec">
+    <div class="sec-hd rv"><h2>Demo 回放</h2><p>全比赛demo下载</p></div>
+
+    <div class="block rv rv-d1">
+      <strong>下载方式</strong><br>
+      <a href="https://pan.quark.cn/s/dcdb0dfa4b89" target="_blank">【夸克网盘实时更新，标准速度】</a><br>
+      （截至2025年11月26日23:21前的demo现已完成上传供大家下载）<br>
+      <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" style="color:var(--accent)">【123云盘管理员手动更新，不限速下载】</a><br>
+      <span style="font-size:12px;color:var(--text3)">（一般情况不更新，除非有重大赛事下载需求才会更新的）</span>
+    </div>
+
+    <div class="block rv rv-d2">
+      <strong>如何播放demo进行观看？</strong>
+      <div class="steps">
+        <div class="st"><div class="n">1</div><h4>下载demo</h4><p>下载链接的demo文件，无需解压。</p></div>
+        <div class="st"><div class="n">2</div><h4>定位steam</h4><p>单击CS2界面向右看，选择管理→浏览本地文件。</p></div>
+        <div class="st"><div class="n">3</div><h4>放入csgo</h4><p>打开game→csgo文件夹，放入demo文件。</p></div>
+        <div class="st"><div class="n">4</div><h4>控制台播放</h4><p>输入 <code style="color:var(--primary);font-family:var(--font-mono);background:var(--bg-alt);padding:1px 6px;border-radius:4px">playdemo </code> 选择文件。</p></div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-top:10px">文件路径：G:\steam\steamapps\common\Counter-Strike Global Offensive\game\csgo</div>
+    </div>
+
+    <div class="block rv rv-d3">
+      <strong>如何开启demo语音？</strong><br>
+      在Demo播放过程中，按 ~ 呼出控制台，输入以下命令：<br>
+      <code style="color:var(--primary);font-family:var(--font-mono);background:var(--bg-alt);padding:1px 6px;border-radius:4px">voice_enable 1</code>：启用所有语音频道（默认可能为0，即关闭）<br>
+      <code style="color:var(--accent);font-family:var(--font-mono);background:var(--bg-alt);padding:1px 6px;border-radius:4px">demo_timescale 1</code>：Demo播放速度
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ========== Toast Notification ========== */
+let tt;
+function nt(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('sh');
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('sh'),3000);
+}
+
+/* ========== Page switching with transitions ========== */
+function sw(id) {
+  const current = document.querySelector('.page.act');
+  const next = document.getElementById('p-' + id);
+  if (current === next) return;
+
+  current.classList.remove('act', 'enter');
+  current.classList.add('exit');
+  current.style.display = 'none';
+
+  next.style.display = 'block';
+  next.classList.remove('exit');
+  next.classList.add('act');
+  void next.offsetWidth;
+  next.classList.add('enter');
+
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('act'));
+  const ls = ['home','games','cmds','cl','sp','demo'];
+  const i = ls.indexOf(id);
+  if (i >= 0) document.querySelectorAll('.nav-links a')[i].classList.add('act');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ========== Accordion (Changelog) ========== */
+function t(h) {
+  const i = h.closest('.cl-i');
+  const op = i.classList.contains('op');
+  document.querySelectorAll('.cl-i.op').forEach(e => e.classList.remove('op'));
+  if (!op) i.classList.add('op');
+}
+
+/* ========== Copy IP ========== */
+function cp(el) {
+  const ip = el.textContent.trim();
+  navigator.clipboard.writeText(ip).then(() => {
+    const o = el.textContent;
+    el.textContent = '已复制';
+    el.style.color = 'var(--primary)';
+    setTimeout(() => {
+      el.textContent = o;
+      el.style.color = '';
+    }, 900);
+  });
+}
+
+/* ========== Scroll Reveal + Counter ========== */
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute('data-to'), 10);
+  if (isNaN(target) || target <= 0) return;
+  const duration = 1200;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target);
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(tick);
+}
+
+const ro = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      if (entry.target.classList.contains('rv')) {
+        entry.target.querySelectorAll('.ct[data-to]').forEach(animateCounter);
+      }
+      ro.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+  document.querySelectorAll('.he:not(.in)').forEach(el => el.classList.add('in'));
+  // Floating particles
+  (function(){
+    const c=document.getElementById('pts');if(!c)return;
+    for(let i=0;i<16;i++){
+      const p=document.createElement('div');p.className='pt';
+      const s=2+Math.random()*3;
+      p.style.cssText='left:'+(Math.random()*100)+'%;width:'+s+'px;height:'+s+'px;animation-duration:'+(18+Math.random()*24)+'s;animation-delay:'+(Math.random()*20)+'s';
+      c.appendChild(p);
+    }
+  })();
+  // Back to top
+  window.addEventListener('scroll',()=>{document.getElementById('btt').classList.toggle('sh',window.scrollY>400)},{passive:true});
+  // Auto-open latest changelog
+  const fc=document.querySelector('.cl-i');if(fc)fc.classList.add('op');
+});
+</script>
+</body>
+</html>
