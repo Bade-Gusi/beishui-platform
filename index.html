@@ -431,14 +431,6 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 .btt.sh{opacity:1;transform:translateY(0);pointer-events:auto}
 .btt:hover{border-color:var(--primary);color:var(--primary)}
 
-/* Scroll Progress Bar */
-#prog{
-  position:fixed;top:52px;left:0;height:2px;
-  background:linear-gradient(90deg,var(--primary),var(--accent));
-  z-index:99;width:0%;transition:width .1s linear;
-  border-radius:0 2px 2px 0;
-}
-
 /* Floating Particles */
 #pts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .pt{
@@ -452,163 +444,6 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
   90%{opacity:0.04}
   100%{transform:translateY(-5vh) scale(1);opacity:0}
 }
-
-/* Card hover 3D tilt */
-.tilt{transition:transform .3s ease-out;transform-style:preserve-3d;perspective:800px}
-.tilt:hover{transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(4px)}
-
-/* Counter pulse on finish */
-@keyframes countPulse{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
-.cp{display:inline-block}
-.cp.done{animation:countPulse .3s ease-out}
-
-/* Button magnetic */
-.btn,.sp,.ip,.cl-h,.card{cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1)}
-.btn:active,.sp:active{transform:scale(.96)}
-
-/* Scroll hint bounce */
-@keyframes bounce{0%,100%,to{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:20px;animation:bounce 2s ease-in-out infinite;opacity:.2;color:var(--text);pointer-events:none}
-
-/* Glow pulse on cards */
-.glow-hover{position:relative;overflow:hidden}
-.glow-hover::after{
-  content:'';position:absolute;top:var(--my,0);left:var(--mx,0);
-  width:200px;height:200px;background:radial-gradient(circle,rgba(26,138,72,0.06) 0%,transparent 60%);
-  border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);
-  opacity:0;transition:opacity .3s;
-}
-.glow-hover:hover::after{opacity:1}
-
-/* List item stagger */
-@keyframes popIn{
-  0%{opacity:0;transform:scale(.92) translateY(12px)}
-  100%{opacity:1;transform:scale(1) translateY(0)}
-}
-.stagger>*{animation:popIn .4s ease-out both}
-.stagger>*:nth-child(1){animation-delay:.02s}
-.stagger>*:nth-child(2){animation-delay:.06s}
-.stagger>*:nth-child(3){animation-delay:.10s}
-.stagger>*:nth-child(4){animation-delay:.14s}
-.stagger>*:nth-child(5){animation-delay:.18s}
-.stagger>*:nth-child(6){animation-delay:.22s}
-.stagger>*:nth-child(7){animation-delay:.26s}
-.stagger>*:nth-child(8){animation-delay:.30s}
-.stagger>*:nth-child(9){animation-delay:.34s}
-.stagger>*:nth-child(10){animation-delay:.38s}
-
-/* ========== Custom Cursor ========== */
-#cursor{
-  position:fixed;pointer-events:none;z-index:9999;
-  width:8px;height:8px;border-radius:50%;
-  background:var(--primary);mix-blend-mode:difference;
-  transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;
-  will-change:transform;
-}
-#ctrail{
-  position:fixed;pointer-events:none;z-index:9998;
-  width:4px;height:4px;border-radius:50%;
-  background:var(--accent);mix-blend-mode:difference;
-  transform:translate(-50%,-50%);will-change:transform;
-  opacity:0.35;transition:opacity .3s;
-}
-
-/* ========== Navigation underline ========== */
-.nav-links a::after{
-  content:'';position:absolute;bottom:2px;left:50%;width:0;
-  height:2px;border-radius:1px;
-  background:var(--primary);
-  transition:width .25s ease-out,left .25s ease-out;
-}
-.nav-links a:hover::after{width:calc(100% - 24px);left:12px}
-.nav-links a.act::after{width:calc(100% - 24px);left:12px;background:var(--primary)}
-
-/* ========== Enhanced page transitions ========== */
-.page.exit{opacity:0;transform:translateY(-8px) scale(.98);transition-duration:.2s;transition-timing-function:ease-in}
-.page.enter{opacity:1;transform:translateY(0) scale(1)}
-
-/* ========== Ripple effect ========== */
-.ripple{position:relative;overflow:hidden}
-.ripple::after{
-  content:'';position:absolute;border-radius:50%;
-  background:rgba(255,255,255,0.25);
-  width:100px;height:100px;margin-top:-50px;margin-left:-50px;
-  top:50%;left:50%;
-  transform:scale(0);opacity:1;
-}
-.ripple:active::after{animation:rippleAnim .5s ease-out}
-@keyframes rippleAnim{
-  0%{transform:scale(0);opacity:1}
-  100%{transform:scale(4);opacity:0}
-}
-
-/* ========== Floating decorative icons ========== */
-.deco-icon{
-  position:absolute;pointer-events:none;font-size:24px;
-  opacity:0.06;animation:iconFloat 12s ease-in-out infinite;
-}
-@keyframes iconFloat{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  25%{transform:translateY(-12px) rotate(3deg)}
-  50%{transform:translateY(-6px) rotate(-2deg)}
-  75%{transform:translateY(-16px) rotate(4deg)}
-}
-
-/* ========== Confetti ========== */
-@keyframes confettiFall{
-  0%{transform:translateY(-10vh) rotate(0deg);opacity:1}
-  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
-}
-.confetti-piece{
-  position:fixed;width:8px;height:8px;top:-10px;
-  pointer-events:none;z-index:9999;
-  animation:confettiFall linear forwards;
-}
-
-/* ========== Border glow ========== */
-@keyframes borderGlow{
-  0%,100%{border-color:var(--border)}
-  50%{border-color:var(--primary)}
-}
-.border-glow{animation:borderGlow 2.5s ease-in-out infinite}
-
-/* ========== Sparkle on cards ========== */
-@keyframes sparkle{
-  0%{opacity:0;transform:scale(0) rotate(0deg)}
-  50%{opacity:0.7;transform:scale(1) rotate(180deg)}
-  100%{opacity:0;transform:scale(0) rotate(360deg)}
-}
-.card .sparkle{
-  position:absolute;top:-4px;right:-4px;
-  width:16px;height:16px;
-  animation:sparkle 2s ease-in-out infinite;
-  opacity:0;pointer-events:none;
-  font-size:14px;line-height:16px;text-align:center;
-}
-.card:hover .sparkle{animation:sparkle .8s ease-in-out forwards}
-
-/* ========== Shimmer loading ========== */
-@keyframes shLoad{
-  0%{background-position:-200px 0}
-  100%{background-position:calc(200px + 100%) 0}
-}
-.shimmer{
-  background:linear-gradient(90deg,var(--bg-alt) 25%,var(--surface-hover) 37%,var(--bg-alt) 63%);
-  background-size:200px 100%;
-  animation:shLoad 1.4s ease-in-out infinite;
-}
-
-/* ========== Error shake ========== */
-@keyframes shake{
-  0%,100%{transform:translateX(0)}
-  10%,50%,90%{transform:translateX(-4px)}
-  30%,70%{transform:translateX(4px)}
-}
-.shake{animation:shake .4s ease-out}
-
-/* ========== Image pulse placeholder ========== */
-@keyframes imgPulse{0%,100%{opacity:.6}50%{opacity:.3}}
-.img-loading{background:var(--bg-alt);animation:imgPulse 1.2s ease-in-out infinite;border-radius:var(--radius-sm)}
 
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{
@@ -649,17 +484,13 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     </div>
     <h1 class="he" style="transition-delay:.1s">我们始终坚持，<br>您每一个 <span class="hl">Tick</span> 的操作<br>都应该被值得看到</h1>
     <div class="hero-divider he" style="transition-delay:.18s" aria-hidden="true"></div>
-    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V1.0.380（推荐电脑浏览）</div>
+    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V1.0.370（推荐电脑浏览）</div>
     <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
     <div class="acts he" style="transition-delay:.36s">
       <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
-      <a href="https://1821451126.share.123865.com/123pan/VrDpjv-vibBd" target="_blank" class="btn btn-o">配套软件下载（先解压再运行）</a>
+      <a href="https://www.123912.com/s/VrDpjv-bpsfd" target="_blank" class="btn btn-o">配套软件下载（先解压再运行）</a>
       <a href="#" onclick="sw('sp');nt('谢谢你的好意，但是我们确实没有这个需求')" class="btn btn-o">加入我们</a>
     </div>
-    <div class="deco-icon" style="top:15%;left:-5%;animation-delay:0s">🎮</div>
-    <div class="deco-icon" style="top:45%;right:-8%;animation-delay:2s">⚔️</div>
-    <div class="deco-icon" style="bottom:10%;left:5%;animation-delay:4s">🛡️</div>
-    <div class="deco-icon" style="top:60%;left:-3%;animation-delay:6s">🎯</div>
   </div>
 
   <div class="sec">
@@ -700,7 +531,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     <p>背水对战平台 · 背水工作室</p>
     <p>服务器管理/购买定制请联系QQ：2994938720</p>
     <p class="cp">版权所有@侵权必究 · 不要源代码公开</p>
-    <p class="ver">网站版本 V2.1</p>
+    <p class="ver">网站版本 V2.0</p>
   </footer>
 </div>
 
@@ -755,53 +586,30 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 <!-- ===== 更新日志 ===== -->
 <div class="page" id="p-cl">
   <div class="sec">
-    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V1.0.380 · 时间使一切发生着变化 ——埃斯库罗斯</p></div>
+    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V1.0.370 · 时间使一切发生着变化 ——埃斯库罗斯</p></div>
     <div class="cl">
-      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.06.05</span><span class="cl-v">V1.0.380</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">网站</span><span class="cl-a">▸</span></div><div class="cl-b">
-<b>官方网站动画大更新</b><br><br>
-1.【网站】自定义光标：绿色主光标+琥珀色拖尾，mix-blend-mode 自动反色。<br>
-2.【网站】导航下划线：悬停时从中间向两端展开动画。<br>
-3.【网站】页面切换缩放：退出 scale(0.98)+淡出，进入缩放恢复。<br>
-4.【网站】涟漪点击：按钮点击水波纹扩散效果。<br>
-5.【网站】浮动装饰图标：Hero 区域 🎮⚔️🛡️🎯 缓慢浮动。<br>
-6.【网站】五彩纸屑：赞助/Hero 徽章点击触发彩色纸屑下落。<br>
-7.【网站】边框呼吸光效：首个信息区块自动边框发光动画。<br>
-8.【网站】卡片闪烁：指标卡悬停时右上角 ✦ 闪烁。<br>
-9.【网站】新增 shimmer/shake/img-loading 等备用动效类。<br>
-10.【网站】版本号 V2.0→V2.1，总版本号 V1.0.370→V1.0.380。</div></div>
-      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.05.30</span><span class="cl-v">V1.0.322</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
-<b>WPF客户端 + Web端 全面更新</b><br><br>
-1.【WPF客户端】反作弊 v3.4 重构，移除所有 user32.dll 调用（EnumWindows/GetWindowText/GetClassName），零VAC触发风险。<br>
-2.【WPF客户端】Obfuscar 混淆打包，防 dnSpy/ILSpy 反编译。<br>
-3.【WPF客户端】单文件自包含发布，无需安装 .NET 运行库。<br>
-4.【WPF客户端】广播系统：发送窗口密码验证+防抖冷却+历史记录+刷新按钮。<br>
-5.【WPF客户端】广播接收弹窗：管理员推送服务器地址时弹出，支持一键连接/复制。<br>
-6.【WPF客户端】好友请求轮询（15秒）+ Toast 通知。<br>
-7.【WPF客户端】聊天消息 JSON 文件缓存，刷新页面不丢消息。<br>
-8.【WPF客户端】配色+按钮UI全面优化。<br>
-9.【Web端】31个页面全部完成，编译通过。<br>
-10.【Web端】聊天系统接入 SignalR ChatHub 实时收发，消息方向修正（自己右侧/对方左侧），去重防重复。<br>
-11.【Web端】消息持久化 localStorage 200条缓存 + 后端 GET /api/messages 历史拉取。<br>
-12.【Web端】好友系统：搜索/添加/删除/私聊/邀请对战，全部真实 API。<br>
-13.【Web端】好友请求每10秒轮询 + 新好友Toast通知。<br>
-14.【Web端】广播系统：管理员发广播需密码验证，所有用户顶部横幅展示，首页广播记录模块。<br>
-15.【Web端】广播历史页面，自动轮询 GET /api/admin/latest-broadcast。<br>
-16.【Web端】个人中心 /profile：查看/编辑昵称/手机/生日，真实 API 保存。<br>
-17.【Web端】版本号集中管理，侧边栏+个人页显示。<br>
-18.【Web端】更新日志页面。<br>
-19.【Web端】语音房间：创建/加入/离开走真实 API。<br>
-20.【Web端】1v1单挑：匹配队列/发起邀约/接受拒绝。<br>
-21.【Web端·完整应用】管理中心：服务器添加/编辑/删除/连接 + 数据管理。<br>
-22.【Web端】反应测试小游戏（跟WPF一致：等待绿色→点击→毫秒+分段颜色+历史记录）。<br>
-23.【Web端】游戏启动按钮 steam://rungameid/730。<br>
-24.【Web端】CS2服务器连接 steam://connect/{address}。<br>
-25.【后端】新增 MessagesController（消息历史API）。<br>
-26.【后端】新增 AdminController（广播发送+历史列表+最新查询）。<br>
-27.【后端】新增 BroadcastHub SignalR 推送。<br>
-28.【后端】新增 RateLimitMiddleware 速率限制（登录10次/分钟、注册5次/分钟、广播6次/分钟）。<br>
-29.【后端】暴力破解防护：登录失败5次IP锁定15分钟。<br>
-30.【后端】忘记密码：验证码生成+校验+密码重置 API。<br>
-31.【后端】WPF/AntiCheat/ApiGateway 全部编译0错误。</div></div>
+      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.06.29</span><span class="cl-v">V2.2.0</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【背水对战平台 v2.2.0】内嵌反作弊 + 毛玻璃 UI</b><br><br>
+<b>🛡️ 反作弊系统（全新内嵌式）</b><br>
+· 启动 CS2 前自动执行 6 项环境检测（调试器/虚拟机/虚拟化/PCIe/运行时间/多屏）<br>
+· 检测窗口实时滚动进度，不通过则弹出定制拒绝窗口<br>
+· 4 项阻断 + 2 项提示上报<br>
+· 拒绝后可联系客服 → 人脸核身 → 上门穿机检查<br><br>
+<b>🎨 界面大更新</b><br>
+· Mineradio 风格毛玻璃效果全局集成<br>
+· 翠绿深色主题，告别纯黑背景<br>
+· 所有操作 Toast 通知提示<br>
+· 全局按钮统一尺寸<br><br>
+<b>📡 实时同步</b><br>
+· 房间列表实时同步（SignalR + 版本号增量）<br>
+· 好友在线状态实时推送<br>
+· 管理员广播系统（Redis + 一键加服）<br><br>
+<b>🔧 其他</b><br>
+· 服务端 RoomSyncService + Redis Backplane<br>
+· 8 项后端单元测试<br>
+· 修复反作弊误报<br>
+· 支持离线模式<br><br>
+</div></div>
       <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.05.29</span><span class="cl-v">V1.0.370</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【背水平台】1v1 单挑插件 - 玩家说明书</b><br><br>
 <b>一、怎么开始一把单挑？</b><br>
@@ -1152,11 +960,7 @@ A：从你完全连接成功开始，到断开连接为止。<br><br>
 </div>
 
 <div class="toast" id="toast"></div>
-<div id="prog"></div>
 <button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-<div class="scroll-hint">⌄</div>
-<div id="cursor"></div>
-<div id="ctrail"></div>
 
 <script>
 /* ========== Toast Notification ========== */
@@ -1258,105 +1062,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll',()=>{document.getElementById('btt').classList.toggle('sh',window.scrollY>400)},{passive:true});
   // Auto-open latest changelog
   const fc=document.querySelector('.cl-i');if(fc)fc.classList.add('op');
-  // Scroll progress bar
-  window.addEventListener('scroll',()=>{
-    const h=document.documentElement;
-    const p=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;
-    document.getElementById('prog').style.width=p+'%';
-  },{passive:true});
-  // Card 3D tilt effect
-  document.querySelectorAll('.card,.g,.block').forEach(el=>{
-    el.classList.add('tilt');
-    el.addEventListener('mousemove',e=>{
-      const r=el.getBoundingClientRect();
-      const x=e.clientX-r.left,y=e.clientY-r.top;
-      const cx=r.width/2,cy=r.height/2;
-      const rx=((y-cy)/cy)*-6,ry=((x-cx)/cx)*6;
-      el.style.setProperty('--rx',rx+'deg');
-      el.style.setProperty('--ry',ry+'deg');
-    });
-    el.addEventListener('mouseleave',()=>{
-      el.style.setProperty('--rx','0deg');
-      el.style.setProperty('--ry','0deg');
-    });
-  });
-  // Glow following cursor on cards
-  document.querySelectorAll('.block,.card,.g').forEach(el=>{
-    el.classList.add('glow-hover');
-    el.addEventListener('mousemove',e=>{
-      const r=el.getBoundingClientRect();
-      el.style.setProperty('--mx',(e.clientX-r.left)+'px');
-      el.style.setProperty('--my',(e.clientY-r.top)+'px');
-    });
-  });
-  // Counter finish pulse
-  setInterval(()=>{
-    document.querySelectorAll('.ct[data-to]').forEach(el=>{
-      const t=parseInt(el.getAttribute('data-to'),10);
-      const v=parseInt(el.textContent,10);
-      if(!isNaN(t)&&!isNaN(v)&&v>=t&&!el.classList.contains('done')){
-        el.classList.add('done');
-        setTimeout(()=>el.classList.remove('done'),400);
-      }
-    });
-  },500);
-  // Stagger entrance for lists
-  document.querySelectorAll('.cards,.gl,.sps,.steps,.cl').forEach(el=>el.classList.add('stagger'));
-
-  // Custom cursor follower
-  const cursor=document.getElementById('cursor');
-  const ctrail=document.getElementById('ctrail');
-  if(cursor&&ctrail){
-    let mx=0,my=0,tx=0,ty=0;
-    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-    function animCursor(){
-      tx+=(mx-tx)*.15;ty+=(my-ty)*.15;
-      cursor.style.transform=`translate(${tx-4}px,${ty-4}px)`;
-      ctrail.style.transform=`translate(${mx-2}px,${my-2}px)`;
-      requestAnimationFrame(animCursor);
-    }
-    animCursor();
-    document.querySelectorAll('a,.btn,.sp,.ip,.cl-h,.card,.g').forEach(el=>{
-      el.addEventListener('mouseenter',()=>{cursor.style.width='14px';cursor.style.height='14px';cursor.style.background='var(--accent)'});
-      el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';cursor.style.background='var(--primary)'});
-    });
-    document.addEventListener('mouseleave',()=>{cursor.style.opacity='0';ctrail.style.opacity='0'});
-    document.addEventListener('mouseenter',()=>{cursor.style.opacity='1';ctrail.style.opacity='1'});
-  }
-
-  // Ripple on buttons
-  document.querySelectorAll('.btn,.sp').forEach(el=>el.classList.add('ripple'));
-
-  // Confetti burst
-  function confetti(count=30){
-    const colors=['#1A8A48','#B8860B','#D92D4A','#3366CC','#1A9C8C','#FF6B35'];
-    for(let i=0;i<count;i++){
-      const p=document.createElement('div');p.className='confetti-piece';
-      const c=colors[Math.floor(Math.random()*colors.length)];
-      const size=4+Math.random()*6;
-      const left=Math.random()*100;
-      const dur=2+Math.random()*3;
-      const delay=Math.random()*.5;
-      const rot=Math.random()*360;
-      p.style.cssText=`left:${left}%;width:${size}px;height:${size}px;background:${c};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${dur}s;animation-delay:${delay}s;transform:rotate(${rot}deg)`;
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(),(dur+delay)*1000);
-    }
-  }
-  document.querySelectorAll('.sp.gd').forEach(el=>{el.addEventListener('click',()=>confetti(40))});
-  const hb=document.querySelector('.hero-badge');
-  if(hb)hb.addEventListener('click',()=>confetti(50));
-
-  // Border glow on first block
-  const fb=document.querySelector('.block');
-  if(fb)fb.classList.add('border-glow');
-
-  // Sparkle elements on metric cards
-  document.querySelectorAll('.card').forEach(card=>{
-    const s=document.createElement('span');
-    s.className='sparkle';s.textContent='✦';
-    card.appendChild(s);
-  });
 });
 </script>
 </body>
