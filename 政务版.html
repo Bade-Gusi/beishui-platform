@@ -484,8 +484,8 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="slides" id="slides">
         <div class="slide s1 on">
           <span class="tagline">正 式 发 布</span>
-          <h2>背水对战平台 V2.2.0<br>内嵌反作弊 · 毛玻璃 UI</h2>
-          <p>启动前 6 项环境检测、全局 Toast 提示、房间列表实时同步，平台客户端迎来全面重写。</p>
+          <h2>背水对战平台 V2.3.0<br>更新中心 · 性能模式 · 发刀安全加固</h2>
+          <p>全新更新中心支持自动检测与一键更新，性能模式一键提速，发刀插件完成安全加固；客户端与 CS2 服务端同步升级。</p>
           <span class="wm">背水</span>
         </div>
         <div class="slide s2">
@@ -523,13 +523,14 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
         <div class="focus-main rv">
           <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.2</span></div>
           <div class="focus-body">
-            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.2.0 发布：内嵌反作弊与毛玻璃 UI 全面上线</a></h3>
-            <p>本次更新围绕「公平」与「体验」两条主线：反作弊端新增调试器、虚拟机、PCIe、多屏等 6 项环境检测；界面端采用毛玻璃风格与翠绿主题，并将所有操作统一为 Toast 提示。</p>
-            <div class="focus-meta"><span>2026.06.29</span><span>版本 V2.2.0</span><span>来源：背水工作室</span></div>
+            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.3.0 发布：更新中心、性能模式与发刀安全加固</a></h3>
+            <p>本次更新围绕「更新体验」与「运行稳定性」两条主线：新增专业更新中心，支持滚动日志与一键自动更新；新增性能模式，低配电脑一键提升流畅度；并彻底修复发刀插件的拒绝服务漏洞与刷刀卡服问题。</p>
+            <div class="focus-meta"><span>2026.09.11</span><span>版本 V2.3.0</span><span>来源：背水工作室</span></div>
           </div>
         </div>
         <ul class="newslist rv rv-d2">
-          <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">1v1 单挑插件玩家说明书：设置顺序、随机/固定模式与换枪</a><time>2026.05.29</time></li>
+          <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.3.0 发布：一键更新中心与性能模式上线</a><time>2026.09.11</time></li>
+          <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">1v1 单挑插件玩家说明书：设置顺序、随机/固定模式与换枪</a><time>2026.05.29</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">反作弊心跳系统上线，信号中断自动请出对局</a><time>2026.03.27</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">会员系统底层架构升级：Steam64ID 绑定与贡献值排行</a><time>2026.02.25</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">C4 倒计时逻辑重构，15 秒后屏幕中心实时播报</a><time>2026.02.24</time></li>
@@ -730,8 +731,50 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 <div class="page" id="p-cl">
   <section class="sec">
     <div class="wrap">
-      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.2.0 · 背水对战平台 WPF 客户端重写</span></div>
+      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.3.0 · 更新中心 / 性能模式 / 发刀安全加固</span></div>
       <div class="cl">
+        <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.11</span><span class="cl-v">V2.3.0</span><span class="cl-t">重大</span><span class="cl-tt">更新中心 · 性能模式 · 发刀安全加固</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【2026年09月11日更新内容】背水对战平台 &amp; CS2[总版本号 V2.3.0]</b><br><br>
+1.【新增】全新专业更新中心！启动后自动检测新版本，清晰展示当前版本与最新版本，一眼看清是否需要更新。<br>
+2.【新增】更新内容一目了然：支持滚动查看完整更新日志，新功能、修复项不再错过。<br>
+3.【新增】一键更新：点击"立即更新"即可自动下载更新包，实时显示下载进度与百分比，下载完成后自动安装并重启平台，无需手动解压替换。<br>
+4.【新增】主界面顶部新增更新横幅，发现新版本时醒目提示"立即更新 / 稍后"。<br>
+5.【优化】更新提示更人性化：每个版本仅自动弹窗提醒一次，点击"稍后提醒"后不再反复打扰。<br>
+6.【修复】修复了更新检查仓库地址前后不一致的问题，更新检测更可靠。<br>
+7.【优化】启动环境检测（调试器、虚拟机、显卡设备、显示器等）全面改为"仅提示不拦截"：检测到情况只作友善提醒，游戏照常启动，不再因误报挡住玩家。<br>
+8.【优化】重复启动优化：检测到平台已在运行时不再强制结束进程，仅提示"平台已在运行"，允许继续使用。<br>
+9.【优化】首次启动引导可跳过：服务器地址可"跳过，稍后设置"，取消配置也能直接进入登录界面。<br>
+10.【修复】修复了部分玩家点击启动后游戏无法拉起的问题——该问题由一处启动判断逻辑错误导致，现已彻底修复。<br>
+11.【修复】修复了取消服务器配置后无法进入登录界面的问题，首次使用更顺畅。<br>
+12.【优化】启动异常时自动降级：即使检测流程出错也会尽力拉起游戏，并防止重复启动。<br>
+13.【新增】全新"性能模式"开关（设置 → 显示）：低配电脑一键开启，立竿见影地提升流畅度。<br>
+14.【优化】性能模式下自动关闭背景粒子特效，降低显卡与 CPU 占用。<br>
+15.【优化】性能模式下自动关闭卡片 3D 鼠标跟随倾斜效果，减少渲染负担。<br>
+16.【优化】性能模式下自动跳过逐元素入场动画与窗口循环光晕，界面切换干脆利落。<br>
+17.【优化】性能模式切换即时生效，无需重启平台。<br>
+18.【优化】提前预渲染：登录后平台会在后台空闲时预热常用窗口（服务器管理、快速匹配、游戏中心等），首次打开不再卡顿。<br>
+19.【优化】WebView2 运行环境全平台复用，只初始化一次，多个窗口打开更快、更省内存。<br>
+20.【优化】设置读取加入内存缓存，减少重复读写磁盘，界面响应更快。<br>
+21.【优化】系统资源监控改用更轻量的托管算法，移除高开销的性能计数器，后台占用更低。<br>
+22.【优化】系统状态刷新频率由 3 秒调整为 5 秒，窗口最小化时自动暂停刷新，游戏进程检测移至后台线程，绝不拖慢前台操作。<br>
+23.【优化】"服务器"入口移至左侧导航栏最顶部，高亮渐变 + "推荐"标识，一键直达服务器列表，找服务器再也不用翻菜单。<br>
+24.【优化】导航栏分组按操作习惯重新梳理，常用功能更靠前。<br>
+25.【修复】修复了首页页脚因负边距导致的布局错位问题，页面更整齐。<br>
+26.【修复】修复了切换语言后部分导航文字无法再次翻译的问题。<br>
+27.【优化】广播与通知事件在窗口关闭时正确退订，避免重复登录后重复弹窗与内存泄漏。<br>
+28.【优化】更新系统公告与版本信息展示。<br>
+29.【调整】客户端版本号升级至 V2.3.0。<br>
+30.【修复】修复了发刀插件存在的一处严重安全漏洞：此前个别玩家可通过高频触发 .d 指令对服务器发起拒绝服务攻击，导致全体玩家卡顿、极端情况下服务器崩溃，现已彻底修复并完成加固！<br>
+31.【优化】发刀系统全面重构：每名玩家每回合仅可发刀一次，且对每回合发刀总量进行限额，实体创建改为逐帧分摊执行，从根源上杜绝刷刀卡服！<br>
+32.【调整】现在，默认匕首不再自动发出，只有玩家携带的非默认刀具（蝴蝶刀、爪子刀、廓尔喀刀等）才会自动发到全体玩家脚下（双方阵营都发，刀主自己也有）！<br>
+33.【修复】修复了发刀插件在特定场景下可能引发的服务器崩溃问题，并修复了发刀提示重复弹出的问题。<br>
+34.【优化】发刀复制品将保留原刀的刀型与皮肤，显示效果与玩家自己丢出的刀一致！<br>
+35.【优化】同步升级核心插件 CounterStrikeSharp 至最新版本 V1.0.368，提升整体兼容性与稳定性。<br>
+36.【修复】同步更新 CS2 服务器游戏文件，以适配最新版本。<br>
+37.【优化】部分文字的内容适配进行了精细化调整。<br>
+38.【优化】删除了不必要存在的代码，调整了部分程序日志的逻辑。
+        </div></div>
+
 
         <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.06.29</span><span class="cl-v">V2.2.0</span><span class="cl-t">重大</span><span class="cl-tt">内嵌反作弊 + 毛玻璃 UI</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【背水对战平台 v2.2.0】内嵌反作弊 + 毛玻璃 UI</b><br><br>
