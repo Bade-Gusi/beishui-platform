@@ -529,7 +529,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
           </div>
         </div>
         <ul class="newslist rv rv-d2">
-          <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.3.0 发布：一键更新中心与性能模式上线</a><time>2026.09.11</time></li>
+          <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.4.0 发布：隧道访问认证与官网更新中心上线</a><time>2026.09.14</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">1v1 单挑插件玩家说明书：设置顺序、随机/固定模式与换枪</a><time>2026.05.29</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">反作弊心跳系统上线，信号中断自动请出对局</a><time>2026.03.27</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">会员系统底层架构升级：Steam64ID 绑定与贡献值排行</a><time>2026.02.25</time></li>
@@ -734,22 +734,24 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.4.0 · 隧道访问认证与官网更新中心</span></div>
       <div class="cl">
         <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.14</span><span class="cl-v">V2.4.0</span><span class="cl-t">重大</span><span class="cl-tt">隧道访问认证 + 官网更新中心</span><span class="cl-a">▸</span></div><div class="cl-b">
-<b>【2026年09月14日更新内容】背水对战平台[总版本号 V2.4.0]</b><br><br>
+<b>【2026年09月14日更新内容】背水对战平台 &amp; CS2[总版本号 V2.4.0]</b><br><br>
 1.【新增】全新「访问认证」功能：SakuraFrp 隧道开启访问密码后，只需在平台内填入隧道地址与密码，客户端自动完成认证，再也不用来回开浏览器手动认证！<br>
 2.【新增】支持 TOTP 两步验证：可填 6 位动态码，也可直接填 Base32 密钥由客户端自动算码，安全再上一台阶。<br>
 3.【新增】启动游戏前自动完成隧道认证（可在窗口内关闭此行为），认证失败也仅提示、不影响启动，稳妥省心。<br>
 4.【新增】「记住密码」「记住我(persist_auth)」均已支持，密码与密钥仅加密保存在玩家本机，绝不明文外泄。<br>
-5.【优化】访问认证窗口界面与服务器管理窗口统一风格，并内置官方教程入口与版本要求说明。<br>
-6.【修复】修复了访问认证窗口输入框点不进去、输入内容不显示的问题，输入体验恢复正常。<br>
-7.【优化】更新中心升级：更新源改为读取官网版本清单，并在下载后强制校验完整性（SHA256），校验不通过直接拒绝安装。<br>
+5.【优化】访问认证窗口界面与服务器管理窗口统一风格（标题栏 / 卡片 / 操作区），并内置官方教程入口与版本要求说明。<br>
+6.【修复】修复了访问认证窗口输入框点不进去、输入内容不显示的问题，改为自适应高度输入框，输入体验恢复正常。<br>
+7.【优化】更新中心升级：更新源改为读取官网版本清单，并在下载后强制校验文件完整性（SHA256），校验不通过直接拒绝安装，杜绝更新包被替换的风险。<br>
 8.【优化】平台数据更规范：配置、登录状态、日志、服务器列表、聊天缓存统一迁移到独立数据目录，并自动迁移旧文件，装到任何盘符都不会再丢配置。<br>
-9.【优化】登录状态改为加密保存；网络请求新增超时与自动重试，服务器抖动时不再长时间卡住界面。<br>
-10.【优化】异常处理改进：程序异常会写入日志与崩溃文件，不再"默默无反应"。<br>
-11.【优化】「官方网站」入口移至客户端顶栏醒目位置，一键直达官网。<br>
-12.【安全】移除客户端内置的管理口令，改由服务端校验。<br>
-13.【服务器】新增管理员鉴权接口；广播增加频率限制（3 次/分钟）；广播历史改为 Redis 持久化。<br>
-14.【修复】修正快速匹配确认逻辑的异步返回值问题，提升匹配稳定性。<br>
-15.【调整】客户端版本号升级至 V2.4.0。<br>
+9.【优化】登录状态（Token）改为加密保存，降低本机被读取的风险。<br>
+10.【优化】网络请求新增超时与自动重试，服务器抖动时不再长时间卡住界面。<br>
+11.【优化】异常处理改进：程序异常会写入日志与崩溃文件，便于快速定位问题，不再"默默无反应"。<br>
+12.【优化】「官方网站」入口移至客户端顶栏醒目位置，一键直达官网。<br>
+13.【安全】移除客户端内置的管理口令，改由服务端校验，避免口令随客户端外泄。<br>
+14.【安全】仓库不再跟踪本地敏感文件（登录状态、设置、日志），并补充忽略规则。<br>
+15.【服务器】新增管理员鉴权接口 POST /api/admin/auth；广播增加频率限制（3 次/分钟）；广播历史改为 Redis 持久化并保留最近 100 条。<br>
+16.【修复】修正快速匹配确认逻辑的异步返回值问题，提升匹配稳定性。<br>
+17.【调整】客户端版本号升级至 V2.4.0。<br>
 </div></div>
 
         <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.11</span><span class="cl-v">V2.3.0</span><span class="cl-t">重大</span><span class="cl-tt">更新中心 · 性能模式 · 发刀安全加固</span><span class="cl-a">▸</span></div><div class="cl-b">
