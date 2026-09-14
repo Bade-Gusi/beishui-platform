@@ -495,7 +495,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     </div>
     <h1 class="he" style="transition-delay:.1s">我们始终坚持，<br>您每一个 <span class="hl">Tick</span> 的操作<br>都应该被值得看到</h1>
     <div class="hero-divider he" style="transition-delay:.18s" aria-hidden="true"></div>
-    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V2.2.0 | 翠绿深色主题 · 内嵌反作弊</div>
+    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V2.4.0 | 翠绿深色主题 · 隧道访问认证</div>
     <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
     <div class="acts he" style="transition-delay:.36s">
       <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
@@ -597,8 +597,28 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 <!-- ===== 更新日志 ===== -->
 <div class="page" id="p-cl">
   <div class="sec">
-    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V2.2.0 · 背水对战平台 WPF 客户端重写</p></div>
+    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V2.4.0 · 隧道访问认证与官网更新中心</p></div>
     <div class="cl">
+      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.14</span><span class="cl-v">V2.4.0</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【背水对战平台 v2.4.0】隧道访问认证 + 官网更新中心</b><br><br>
+<b>🔐 SakuraFrp 访问认证</b><br>
+· 平台内填写隧道地址与访问密码即可自动完成认证，无需再开浏览器<br>
+· 支持 TOTP 两步验证（6 位动态码，或 Base32 密钥由客户端自动算码）<br>
+· 启动游戏前可自动认证，失败仅提示、不阻断启动<br>
+· 密码与密钥仅加密保存在玩家本机，绝不明文外泄<br><br>
+<b>🔄 官网更新中心</b><br>
+· 更新源改为读取官网版本清单，新版本提示更及时<br>
+· 下载更新包后强制校验完整性（SHA256），校验不通过直接拒绝安装<br><br>
+<b>🛡️ 安全与稳定</b><br>
+· 配置 / 登录状态 / 日志迁移到独立数据目录，并自动迁移旧文件<br>
+· 登录状态加密保存；网络请求增加超时与自动重试<br>
+· 程序异常写入日志与崩溃文件，不再"默默无反应"<br>
+· 移除客户端内置管理口令，改由服务端校验<br><br>
+<b>🔧 其他</b><br>
+· 「官方网站」入口移至客户端顶栏醒目位置<br>
+· 服务器端新增管理员鉴权接口、广播限流与 Redis 历史<br>
+· 修复访问认证窗口输入框不显示内容的问题<br><br>
+</div></div>
       <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.06.29</span><span class="cl-v">V2.2.0</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【背水对战平台 v2.2.0】内嵌反作弊 + 毛玻璃 UI</b><br><br>
 <b>🛡️ 反作弊系统</b><br>

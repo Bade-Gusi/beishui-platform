@@ -1,0 +1,9 @@
+{
+  "version": "2.4.0",
+  "downloadUrl": "",
+  "pageUrl": "https://www.123912.com/s/VrDpjv-bpsfd",
+  "notes": "背水对战平台 v2.4.0：新增 SakuraFrp 隧道访问认证（支持 TOTP 两步验证），可在启动游戏前自动完成认证；更新源改为官网版本清单并强制校验 SHA256；配置、登录状态与日志迁移到独立数据目录，网络与异常处理全面加固。",
+  "sha256": "",
+  "publishedAt": "2026-09-14",
+  "website": "https://bade-gusi.github.io/beishui-platform/"
+}

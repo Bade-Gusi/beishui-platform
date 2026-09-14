@@ -484,8 +484,8 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="slides" id="slides">
         <div class="slide s1 on">
           <span class="tagline">正 式 发 布</span>
-          <h2>背水对战平台 V2.2.0<br>内嵌反作弊 · 毛玻璃 UI</h2>
-          <p>启动前 6 项环境检测、全局 Toast 提示、房间列表实时同步，平台客户端迎来全面重写。</p>
+          <h2>背水对战平台 V2.4.0<br>隧道访问认证 · 官网更新中心</h2>
+          <p>平台内即可完成 SakuraFrp 隧道认证（支持 TOTP）；更新走官网版本清单并校验完整性，配置与账号数据更安全。</p>
           <span class="wm">背水</span>
         </div>
         <div class="slide s2">
@@ -521,11 +521,11 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="sec-hd rv"><h2>头条新闻</h2><a class="more" onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">更多更新日志 ›</a></div>
       <div class="focus">
         <div class="focus-main rv">
-          <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.2</span></div>
+          <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.4</span></div>
           <div class="focus-body">
-            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.2.0 发布：内嵌反作弊与毛玻璃 UI 全面上线</a></h3>
-            <p>本次更新围绕「公平」与「体验」两条主线：反作弊端新增调试器、虚拟机、PCIe、多屏等 6 项环境检测；界面端采用毛玻璃风格与翠绿主题，并将所有操作统一为 Toast 提示。</p>
-            <div class="focus-meta"><span>2026.06.29</span><span>版本 V2.2.0</span><span>来源：背水工作室</span></div>
+            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.4.0 发布：隧道访问认证与官网更新中心</a></h3>
+            <p>新增 SakuraFrp 隧道访问认证（含 TOTP 两步验证），可在启动游戏前自动完成；更新源改为官网版本清单并强制校验 SHA256；配置、登录状态与日志迁移到独立数据目录，安全与稳定性全面提升。</p>
+            <div class="focus-meta"><span>2026.09.14</span><span>版本 V2.4.0</span><span>来源：背水工作室</span></div>
           </div>
         </div>
         <ul class="newslist rv rv-d2">
@@ -730,8 +730,29 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 <div class="page" id="p-cl">
   <section class="sec">
     <div class="wrap">
-      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.2.0 · 背水对战平台 WPF 客户端重写</span></div>
+      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.4.0 · 隧道访问认证与官网更新中心</span></div>
       <div class="cl">
+
+        <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.14</span><span class="cl-v">V2.4.0</span><span class="cl-t">重大</span><span class="cl-tt">隧道访问认证 + 官网更新中心</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【背水对战平台 v2.4.0】隧道访问认证 + 官网更新中心</b><br><br>
+<b>🔐 SakuraFrp 访问认证</b><br>
+· 平台内填写隧道地址与访问密码即可自动完成认证，无需再开浏览器<br>
+· 支持 TOTP 两步验证（6 位动态码，或 Base32 密钥由客户端自动算码）<br>
+· 启动游戏前可自动认证，失败仅提示、不阻断启动<br>
+· 密码与密钥仅加密保存在玩家本机<br><br>
+<b>🔄 官网更新中心</b><br>
+· 更新源改为读取官网版本清单，新版本提示更及时<br>
+· 下载更新包后强制校验完整性（SHA256），校验不通过直接拒绝安装<br><br>
+<b>🛡️ 安全与稳定</b><br>
+· 配置 / 登录状态 / 日志迁移到独立数据目录，并自动迁移旧文件<br>
+· 登录状态加密保存；网络请求增加超时与自动重试<br>
+· 程序异常写入日志与崩溃文件，不再"默默无反应"<br>
+· 移除客户端内置管理口令，改由服务端校验<br><br>
+<b>🔧 其他</b><br>
+· 「官方网站」入口移至客户端顶栏醒目位置<br>
+· 服务器端新增管理员鉴权接口、广播限流与 Redis 历史<br>
+· 修复访问认证窗口输入框不显示内容的问题<br><br>
+</div></div>
 
         <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.06.29</span><span class="cl-v">V2.2.0</span><span class="cl-t">重大</span><span class="cl-tt">内嵌反作弊 + 毛玻璃 UI</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【背水对战平台 v2.2.0】内嵌反作弊 + 毛玻璃 UI</b><br><br>
