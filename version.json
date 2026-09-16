@@ -1,9 +1,9 @@
 {
-  "version": "2.4.0",
+  "version": "2.5.0",
   "downloadUrl": "",
-  "pageUrl": "https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd",
-  "notes": "背水对战平台 v2.4.0：新增 SakuraFrp 隧道访问认证（支持 TOTP 两步验证），可在启动游戏前自动完成认证；更新源改为官网版本清单并强制校验 SHA256；配置、登录状态与日志迁移到独立数据目录，网络与异常处理全面加固。",
+  "pageUrl": "https://1821451126.share.123pan.cn/123pan/VrDpjv-0GeFd",
+  "notes": "背水对战平台 v2.5.0：全新加载动效系统（环形 Spinner、线性/圆形进度、骨架屏+扫光、按钮加载、全屏 Page Loader）与三组形态动画（胶囊展开为信息卡、尺寸变形、反向收回），并新增「动效预览」窗口；同时包含 SakuraFrp 隧道访问认证、官网更新中心（SHA256 校验）、数据目录迁移与网络/异常加固。",
   "sha256": "",
-  "publishedAt": "2026-09-14",
+  "publishedAt": "2026-09-16",
   "website": "https://bade-gusi.github.io/beishui-platform/"
 }
