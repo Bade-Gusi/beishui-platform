@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>动效预览 · 背水对战平台</title>
+<link rel="stylesheet" href="bsp-anim.css">
+<style>
+  :root{
+    --bg:#0D1A12; --surface:#15201A; --surface-hover:#1E2822;
+    --primary:#22D97E; --accent:#06D8A0; --text:#F2F5F3; --border:#2A3330;
+    --radius:12px; --radius-sm:8px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:linear-gradient(180deg,#0E1E15,#0A1510 60%);
+    color:var(--text);font-family:"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    min-height:100vh;padding:40px 20px 80px;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  h1{font-size:28px;margin:0 0 6px}
+  .sub{color:rgba(242,245,243,.6);font-size:13px;margin-bottom:28px}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,.35);
+  }
+  .card h2{font-size:15px;margin:0 0 16px;font-weight:700}
+  .row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:10px 18px;border-radius:var(--radius-sm);border:1px solid var(--border);
+    background:var(--surface-hover);color:var(--text);font-size:13px;cursor:pointer;
+    text-decoration:none;transition:background .2s ease,border-color .2s ease;
+  }
+  .btn:hover{border-color:var(--primary)}
+  .btn--primary{background:linear-gradient(135deg,#22D97E,#06D8A0);color:#0A1510;border:0;font-weight:700}
+  .hint{color:rgba(242,245,243,.55);font-size:12px;margin-top:12px}
+  .stat{
+    width:200px;background:var(--surface-hover);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px;overflow:hidden;
+  }
+  .stat .k{font-size:12px;color:rgba(242,245,243,.6)}
+  .stat .v{font-size:32px;font-weight:800;color:var(--primary);margin-top:4px}
+  .stat .extra{font-size:11px;color:rgba(242,245,243,.45);margin-top:6px}
+  .capsule{width:210px;cursor:pointer}
+  .capsule .bsp-capsule__body{color:rgba(242,245,243,.7);font-size:12px;line-height:1.7}
+  .check{opacity:0;color:var(--primary);font-size:18px;margin-left:auto;transition:opacity .25s ease}
+  a.back{color:var(--primary);text-decoration:none;font-size:13px}
+</style>
+</head>
+<body data-bsp-page-loader data-bsp-loader-msg="正在加载动效预览..." data-bsp-loader-sub="7 个加载态 + 3 组形态动画">
+<div class="wrap">
+  <h1>动效预览</h1>
+  <div class="sub">与客户端 LoadingKit / LayoutAnimationHelper 完全对齐 · 7 个加载态 + 3 组形态动画</div>
+
+  <!-- ①③ -->
+  <div class="card">
+    <h2>① 旋转环形 Spinner　③ 圆形进度 Circular Progress</h2>
+    <div class="row">
+      <span class="bsp-ring bsp-ring--sm"></span>
+      <span class="bsp-ring"></span>
+      <span class="bsp-ring bsp-ring--lg"></span>
+      <div id="circ"></div>
+      <button class="btn" id="playProgress">播放进度</button>
+    </div>
+  </div>
+
+  <!-- ② -->
+  <div class="card">
+    <h2>② 线性进度条 Linear Progress</h2>
+    <div class="row" style="gap:14px">
+      <div class="bsp-linear" style="flex:1"><div class="bsp-linear__fill" id="linearFill"></div></div>
+      <span id="linearPct" style="font-size:12px;color:var(--primary);min-width:40px">0%</span>
+    </div>
+  </div>
+
+  <!-- ④⑤ -->
+  <div class="card">
+    <h2>④ 骨架屏 Skeleton　⑤ 扫动微光 Shimmer</h2>
+    <div id="skel"></div>
+    <button class="btn" id="toggleSkel" style="margin-top:14px">骨架 ⇄ 内容</button>
+    <div class="hint">骨架与真实内容同格重叠、透明度互换，切换时页面不抖动。</div>
+  </div>
+
+  <!-- ⑥⑦ -->
+  <div class="card">
+    <h2>⑥ 按钮加载 Button Loading　⑦ 全屏遮罩 Page Loader</h2>
+    <div class="row">
+      <button class="btn btn--primary" id="busyBtn">提交（连点无效）</button>
+      <button class="btn" id="pageLoaderBtn">显示全屏遮罩 1.5s</button>
+    </div>
+  </div>
+
+  <!-- ⑧ -->
+  <div class="card">
+    <h2>⑧ 胶囊展开为信息卡</h2>
+    <div class="bsp-capsule capsule" id="cap"
+         data-bsp-capsule data-bsp-w="300" data-bsp-h="196" data-bsp-cw="210" data-bsp-ch="52">
+      <div class="bsp-capsule__header">
+        <span class="bsp-capsule__icon">◈</span>
+        <span class="bsp-capsule__title">服务器 · 香港 01</span>
+        <span class="check" data-bsp-check>✓</span>
+      </div>
+      <div class="bsp-capsule__body bsp-reveal">
+        延迟 18ms · 12/16 人 · 竞技模式<br>点击胶囊展开查看完整信息卡
+      </div>
+      <div class="bsp-capsule__actions bsp-reveal">
+        <span class="btn btn--primary" data-bsp-no-toggle>加入服务器</span>
+      </div>
+    </div>
+    <div class="hint">先增高、再拓宽；固定图标标题，正文与按钮依次渐显；再次点击反向收回并显示 ✓。</div>
+  </div>
+
+  <!-- ⑨⑩ -->
+  <div class="card">
+    <h2>⑨ 尺寸变形（向右下拉伸 + 核心数值突出）</h2>
+    <div class="row">
+      <div class="stat" id="stat">
+        <div class="k">今日胜场</div>
+        <div class="v" id="statVal">12</div>
+        <div class="extra bsp-reveal" id="statExtra">较昨日 +3 · 连胜 2 场</div>
+      </div>
+      <button class="btn" id="morphBtn">向右下拉伸</button>
+    </div>
+  </div>
+
+  <a class="back" href="index.html">← 返回版本选择</a>
+</div>
+
+<script src="bsp-anim.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var A = window.BSPAnim;
+
+  /* 圆形进度 */
+  var circ = A.buildCircular(56, 0);
+  document.getElementById('circ').appendChild(circ);
+
+  /* 进度播放 */
+  var timer = null;
+  function play() {
+    if (timer) clearInterval(timer);
+    var t0 = Date.now();
+    timer = setInterval(function () {
+      var r = Math.min(1, (Date.now() - t0) / 1600);
+      A.linear(document.getElementById('linearFill').parentNode, r);
+      A.circular(circ, r);
+      document.getElementById('linearPct').textContent = Math.round(r * 100) + '%';
+      if (r >= 1) clearInterval(timer);
+    }, 40);
+  }
+  document.getElementById('playProgress').addEventListener('click', play);
+
+  /* 骨架屏 */
+  var skelHost = document.getElementById('skel');
+  var realHtml =
+    '<div style="font-size:13px;line-height:2.2">' +
+    '<div>真实内容：张三 · 在线</div><div>真实内容：李四 · 游戏中</div>' +
+    '<div>真实内容：王五 · 离线</div><div>真实内容：赵六 · 在线</div></div>';
+  var showingSkeleton = true;
+  var sk = A.skeleton(skelHost, 4, { twoLines: true });
+  document.getElementById('toggleSkel').addEventListener('click', function () {
+    if (showingSkeleton) {
+      sk.reveal();
+      skelHost.innerHTML = realHtml;
+      showingSkeleton = false;
+    } else {
+      sk = A.skeleton(skelHost, 4, { twoLines: true });
+      showingSkeleton = true;
+    }
+  });
+
+  /* 按钮加载 */
+  document.getElementById('busyBtn').addEventListener('click', function () {
+    var done = A.buttonLoading(this);
+    setTimeout(done, 2000);
+  });
+
+  /* 全屏遮罩 */
+  document.getElementById('pageLoaderBtn').addEventListener('click', function () {
+    A.pageLoader.show('正在加载平台数据...', '最短展示 400ms，避免一闪而过');
+    setTimeout(function () { A.pageLoader.hide(); }, 1200);
+  });
+
+  /* 尺寸变形 */
+  document.getElementById('morphBtn').addEventListener('click', function () {
+    var stat = document.getElementById('stat');
+    A.morphSize(stat, 288, 152, function () { A.popValue(document.getElementById('statVal')); });
+    document.getElementById('statExtra').classList.add('is-shown');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+/* ============================================================
+   背水对战平台 · 官网动效库（与客户端 LoadingKit / LayoutAnimationHelper 对齐）
+   7 个加载态 + 3 组形态动画
+   颜色沿用站点变量（--primary / --surface / --border …），无变量时回退到默认值
+   ============================================================ */
+
+:root {
+  --bsp-primary: var(--primary, #22D97E);
+  --bsp-surface: var(--surface, #15201A);
+  --bsp-surface-hover: var(--surface-hover, #1E2822);
+  --bsp-border: var(--border, #2A3330);
+  --bsp-text: var(--text, #F2F5F3);
+  --bsp-radius: var(--radius, 12px);
+  --bsp-radius-sm: var(--radius-sm, 8px);
+
+  --bsp-skeleton-base: rgba(255, 255, 255, .06);
+  --bsp-skeleton-shine: rgba(255, 255, 255, .16);
+  --bsp-mask: rgba(10, 26, 16, .86);
+}
+
+/* ---------- ① 旋转环形 Spinner ---------- */
+.bsp-ring {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, .12);
+  border-top-color: var(--bsp-primary);
+  animation: bsp-spin .9s linear infinite;
+  vertical-align: middle;
+}
+.bsp-ring--sm { width: 18px; height: 18px; border-width: 2px; }
+.bsp-ring--lg { width: 46px; height: 46px; border-width: 4px; }
+
+@keyframes bsp-spin { to { transform: rotate(360deg); } }
+
+/* ---------- ② 横向线性进度条 ---------- */
+.bsp-linear {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bsp-skeleton-base);
+  overflow: hidden;
+}
+.bsp-linear__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #22D97E, #06D8A0);
+  transition: width .25s cubic-bezier(.33, 1, .68, 1);
+}
+
+/* ---------- ③ 圆形进度 Circular Progress ---------- */
+.bsp-circular { position: relative; display: inline-block; width: 56px; height: 56px; }
+.bsp-circular svg { transform: rotate(-90deg); display: block; }
+.bsp-circular__track { stroke: var(--bsp-skeleton-base); }
+.bsp-circular__fill {
+  stroke: var(--bsp-primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset .25s cubic-bezier(.33, 1, .68, 1);
+}
+.bsp-circular__text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bsp-text);
+}
+
+/* ---------- ④⑤ 骨架屏 + 扫动微光 ---------- */
+.bsp-skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--bsp-radius-sm);
+  background: var(--bsp-skeleton-base);
+}
+.bsp-skeleton--text { height: 12px; margin-bottom: 12px; }
+.bsp-skeleton--circle { width: 36px; height: 36px; border-radius: 50%; }
+.bsp-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--bsp-skeleton-shine) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: bsp-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes bsp-shimmer { to { transform: translateX(100%); } }
+
+.bsp-skeleton-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.bsp-skeleton-row .bsp-skeleton--lines { flex: 1; }
+
+/* ---------- ⑥ 按钮加载 Button Loading ---------- */
+.bsp-btn { position: relative; }
+.bsp-btn.is-loading { pointer-events: none; }
+.bsp-btn.is-loading > * { visibility: hidden; }
+.bsp-btn.is-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 18px; height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .25);
+  border-top-color: currentColor;
+  animation: bsp-spin .8s linear infinite;
+}
+
+/* ---------- ⑦ 全屏遮罩 Page Loader ---------- */
+.bsp-page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--bsp-mask);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+.bsp-page-loader.is-visible { opacity: 1; }
+.bsp-page-loader__msg { font-size: 16px; font-weight: 600; color: var(--bsp-text); }
+.bsp-page-loader__sub { font-size: 12px; color: rgba(242, 245, 243, .6); }
+.bsp-page-loader .bsp-linear { width: 200px; }
+
+/* ---------- ⑧ 胶囊 ⇄ 信息卡（形态动画） ---------- */
+.bsp-capsule {
+  overflow: hidden;
+  border: 1px solid var(--bsp-border);
+  border-radius: var(--bsp-radius);
+  background: var(--bsp-surface);
+  transition: width .42s cubic-bezier(.33, 1, .68, 1),
+              height .42s cubic-bezier(.33, 1, .68, 1),
+              background .25s ease;
+}
+.bsp-capsule__header { display: flex; align-items: center; gap: 10px; padding: 14px; }
+.bsp-capsule__icon {
+  width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #22D97E, #06D8A0);
+  color: #0A1510; font-size: 13px; flex: none;
+}
+.bsp-capsule__title { font-size: 14px; font-weight: 600; color: var(--bsp-text); }
+.bsp-capsule__body { padding: 0 14px 0; }
+.bsp-capsule__actions { padding: 0 14px 14px; }
+
+/* 正文/按钮的渐显（配合 JS 逐个揭示） */
+.bsp-reveal {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .28s ease, transform .28s cubic-bezier(.33, 1, .68, 1);
+}
+.bsp-reveal.is-shown { opacity: 1; transform: none; }
+
+/* ---------- ⑨ 尺寸变形 ---------- */
+.bsp-morphable {
+  transition: width .5s cubic-bezier(.33, 1, .68, 1),
+              height .5s cubic-bezier(.33, 1, .68, 1),
+              padding .5s cubic-bezier(.33, 1, .68, 1);
+}
+.bsp-pop { animation: bsp-pop .34s cubic-bezier(.34, 1.56, .64, 1); }
+@keyframes bsp-pop {
+  0% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- 无障碍 / 低配：尊重系统"减少动态效果" ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .bsp-ring,
+  .bsp-skeleton::after,
+  .bsp-btn.is-loading::after { animation: none; }
+  .bsp-capsule, .bsp-linear__fill, .bsp-circular__fill, .bsp-reveal, .bsp-morphable { transition: none; }
+  .bsp-pop { animation: none; }
+}

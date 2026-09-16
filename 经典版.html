@@ -456,6 +456,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
   .page{opacity:1;transform:none}
 }
 </style>
+  <link rel="stylesheet" href="bsp-anim.css">
 </head>
 <body>
 
@@ -493,7 +494,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
     <div class="acts he" style="transition-delay:.36s">
       <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
-      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd" target="_blank" class="btn btn-o">配套软件下载（先解压再运行）</a>
+      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd" target="_blank" class="btn btn-o" data-bsp-loading="700">配套软件下载（先解压再运行）</a>
       <a href="#" onclick="sw('sp');nt('谢谢你的好意，但是我们确实没有这个需求')" class="btn btn-o">加入我们</a>
     </div>
   </div>
@@ -535,7 +536,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
   <footer class="rv">
     <p>背水对战平台 · 背水工作室</p>
     <p>服务器管理/购买定制请联系QQ：2994938720</p>
-    <p class="cp">版权所有@侵权必究 · 不要源代码公开</p>
+    <p class="cp">版权所有@侵权必究 · <a href="动效预览.html" style="color:var(--primary);text-decoration:none">动效预览</a> · 不要源代码公开</p>
     <p class="ver">网站版本 V2.0</p>
   </footer>
 </div>
@@ -1007,7 +1008,7 @@ A：从你完全连接成功开始，到断开连接为止。<br><br>
       <strong>下载方式</strong><br>
       <a href="https://pan.quark.cn/s/dcdb0dfa4b89" target="_blank">【夸克网盘实时更新，标准速度】</a><br>
       （截至2025年11月26日23:21前的demo现已完成上传供大家下载）<br>
-      <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" style="color:var(--accent)">【123云盘管理员手动更新，不限速下载】</a><br>
+      <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" style="color:var(--accent)" data-bsp-loading="700">【123云盘管理员手动更新，不限速下载】</a><br>
       <span style="font-size:12px;color:var(--text3)">（一般情况不更新，除非有重大赛事下载需求才会更新的）</span>
     </div>
 
@@ -1136,5 +1137,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const fc=document.querySelector('.cl-i');if(fc)fc.classList.add('op');
 });
 </script>
+  <script src="bsp-anim.js" defer></script>
 </body>
 </html>

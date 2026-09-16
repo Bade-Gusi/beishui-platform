@@ -417,6 +417,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
   .rv{opacity:1;transform:none}
 }
 </style>
+  <link rel="stylesheet" href="bsp-anim.css">
 </head>
 <body>
 
@@ -589,9 +590,9 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="link-grid">
         <a href="https://hsfaka.cn/shop/BSP" target="_blank">CS2 赞助链接</a>
         <a href="https://afdian.com/a/Bade-Gusi" target="_blank">爱发电赞助</a>
-        <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd" target="_blank">配套软件下载</a>
+        <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd" target="_blank" data-bsp-loading="700">配套软件下载</a>
         <a href="https://pan.quark.cn/s/dcdb0dfa4b89" target="_blank">夸克网盘 Demo</a>
-        <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank">123 云盘 Demo</a>
+        <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" data-bsp-loading="700">123 云盘 Demo</a>
         <a href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" target="_blank">PCL2 启动器</a>
       </div>
     </div>
@@ -1109,7 +1110,7 @@ Q：游戏时长怎么计算的？A：从你完全连接成功开始，到断开
         <strong>下载方式</strong><br>
         <a href="https://pan.quark.cn/s/dcdb0dfa4b89" target="_blank">【夸克网盘 实时更新，标准速度】</a><br>
         （截至 2025 年 11 月 26 日 23:21 前的 demo 现已完成上传供大家下载）<br>
-        <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank">【123 云盘 管理员手动更新，不限速下载】</a><br>
+        <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" data-bsp-loading="700">【123 云盘 管理员手动更新，不限速下载】</a><br>
         <span style="font-size:12.5px;color:var(--text3)">（一般情况不更新，除非有重大赛事下载需求才会更新）</span>
       </div>
 
@@ -1156,14 +1157,14 @@ Q：游戏时长怎么计算的？A：从你完全连接成功开始，到断开
       <h6>相关链接</h6>
       <a href="https://hsfaka.cn/shop/BSP" target="_blank">CS2 赞助链接</a>
       <a href="https://afdian.com/a/Bade-Gusi" target="_blank">爱发电</a>
-      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd" target="_blank">配套软件下载</a>
+      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-xuWJd" target="_blank" data-bsp-loading="700">配套软件下载</a>
       <a href="index.html">切换版本</a>
     </div>
   </div>
   <div class="wrap">
     <div class="foot-bottom">
       <div class="line">
-        <span>版权所有 @ 侵权必究</span>
+        <span>版权所有 @ 侵权必究 · <a href="动效预览.html" style="color:var(--primary);text-decoration:none">动效预览</a></span>
         <span>背水工作室</span>
         <span>不要源代码公开</span>
       </div>
@@ -1284,5 +1285,6 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 });
 </script>
+  <script src="bsp-anim.js" defer></script>
 </body>
 </html>
