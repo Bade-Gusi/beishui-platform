@@ -1,7 +1,7 @@
 {
   "version": "2.5.0",
   "downloadUrl": "",
-  "pageUrl": "https://1821451126.share.123pan.cn/123pan/VrDpjv-0GeFd",
+  "pageUrl": "https://1821451126.share.123pan.cn/123pan/VrDpjv-hfOYd",
   "notes": "背水对战平台 v2.5.0：全新加载动效系统（环形 Spinner、线性/圆形进度、骨架屏+扫光、按钮加载、全屏 Page Loader）与三组形态动画（胶囊展开为信息卡、尺寸变形、反向收回），并新增「动效预览」窗口；同时包含 SakuraFrp 隧道访问认证、官网更新中心（SHA256 校验）、数据目录迁移与网络/异常加固。",
   "sha256": "",
   "publishedAt": "2026-09-16",

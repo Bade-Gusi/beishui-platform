@@ -23,11 +23,20 @@
   --text3:#808C86;
   --border:#2A3330;
   --border2:#3A5048;
+  /* 经典版统一使用无衬线（黑体），与线上现状观感保持一致。
+     注：--font-serif / --font-mono 原先从未定义，导致引用它们的声明全部失效并回退到默认字体；
+     这里显式定义成同一套无衬线栈，渲染结果不变。
+     如需宋体标题或等宽代码，把对应那行换成 serif / monospace 栈即可。 */
+  --font-sans:'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --font-serif:'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --font-mono:'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
   --radius-sm:8px;
   --radius:12px;
   --radius-lg:16px;
   --shadow:0 4px 20px rgba(0,0,0,0.45);
-  --shadow-hover:0 8px 40px rgba(0,0,0,0.55);body{
+  --shadow-hover:0 8px 40px rgba(0,0,0,0.55);
+}
+body{
   font-family:var(--font-sans);
   background:var(--bg);
   color:var(--text);
@@ -53,7 +62,7 @@ nav{
 }
 .nav-inner{
   display:flex;align-items:center;justify-content:space-between;
-  width:100%;max-width:1000px;margin:0 auto;
+  width:100%;max-width:1120px;margin:0 auto;
 }
 .nav-brand{
   font-family:var(--font-serif);font-size:13px;font-weight:600;
@@ -90,8 +99,8 @@ nav{
 
 /* ========== Hero ========== */
 .hero{
-  text-align:center;padding:80px 24px 56px;
-  max-width:780px;margin:0 auto;position:relative;
+  text-align:center;padding:72px 24px 44px;
+  max-width:940px;margin:0 auto;position:relative;
 }
 .hero::before{
   content:'';position:absolute;top:-30%;left:50%;
@@ -108,10 +117,10 @@ nav{
 }
 .hero h1{
   font-family:var(--font-serif);
-  font-size:clamp(28px,4.5vw,44px);font-weight:700;
-  line-height:1.55;margin-bottom:0;position:relative;
+  font-size:clamp(27px,4.2vw,41px);font-weight:700;
+  line-height:1.68;margin-bottom:0;position:relative;
   letter-spacing:.02em;
-  max-width:680px;margin-left:auto;margin-right:auto;
+  max-width:860px;margin-left:auto;margin-right:auto;
 }
 .hero h1 .hl{color:var(--primary)}
 .hero-divider{
@@ -119,8 +128,8 @@ nav{
   background:var(--primary);margin:20px auto;opacity:.4;
 }
 .hero-p{
-  font-size:14.5px;color:var(--text2);
-  max-width:580px;margin:0 auto 28px;line-height:1.85;
+  font-size:15px;color:var(--text2);
+  max-width:700px;margin:0 auto 28px;line-height:1.9;
   position:relative;
 }
 .hero-sub{
@@ -148,8 +157,8 @@ nav{
 .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
 
 /* ========== Section ========== */
-.sec{max-width:900px;margin:0 auto;padding:56px 24px}
-.sec-hd{margin-bottom:32px}
+.sec{max-width:1168px;margin:0 auto;padding:48px 24px}
+.sec-hd{margin-bottom:26px}
 .sec-hd h2{
   font-family:var(--font-serif);
   font-size:24px;font-weight:600;margin-bottom:6px;
@@ -159,21 +168,22 @@ nav{
 /* ========== Block ========== */
 .block{
   border:1px solid var(--border);border-radius:var(--radius);
-  padding:20px 24px;margin-bottom:10px;
-  background:var(--surface);font-size:14px;color:var(--text2);line-height:1.9;
+  padding:22px 28px;margin-bottom:14px;
+  background:var(--surface);font-size:15px;color:var(--text2);line-height:1.95;
 }
 .block strong{color:var(--text)}
 .bullet{
-  margin-bottom:6px;padding-left:18px;position:relative
+  margin-bottom:11px;padding-left:20px;position:relative
 }
+.bullet:last-child{margin-bottom:0}
 .bullet::before{
   content:'●';position:absolute;left:0;
-  color:var(--primary);font-size:9px;top:.15em;
+  color:var(--primary);font-size:9px;top:.45em;
 }
 
 /* ========== Metric Cards ========== */
 .cards{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
   gap:10px;margin-bottom:24px;
 }
 .card{
@@ -271,6 +281,38 @@ nav{
   padding:1px 5px;background:var(--bg-alt);border-radius:4px;
   font-family:var(--font-mono);font-size:12px;color:var(--accent);
 }
+
+/* ========== 服务器 MOTD ========== */
+.motd{
+  display:flex;align-items:center;gap:14px;
+  margin:10px 0 12px;padding:14px 16px;
+  border:1px solid var(--border2);border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--bg-alt),var(--surface));
+}
+.motd-ic{
+  flex-shrink:0;width:46px;height:46px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--primary-soft);color:var(--primary);
+  font-size:13px;font-weight:700;letter-spacing:.02em;
+  border:1px solid var(--border2);
+}
+.motd-bd{min-width:0}
+.motd-l1{font-size:15px;font-weight:600;color:var(--primary);line-height:1.4}
+.motd-l2{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mtag{
+  padding:1px 8px;border-radius:4px;font-size:11px;
+  background:var(--primary-soft);color:var(--primary);
+}
+.mtxt{font-size:12px;color:var(--text3)}
+
+/* ========== 命令速查 · 分组标题 ========== */
+.cm-hd{
+  margin:0 0 14px;padding-left:12px;
+  border-left:3px solid var(--primary);
+  font-size:17px;font-weight:600;color:var(--text);line-height:1.4;
+}
+.cm-hd.mc{border-left-color:var(--accent)}
+.cm-hd small{margin-left:10px;font-size:12px;font-weight:400;color:var(--text3)}
 
 /* ========== Table ========== */
 .tbl-wrap{
@@ -490,11 +532,11 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     </div>
     <h1 class="he" style="transition-delay:.1s">我们始终坚持，<br>您每一个 <span class="hl">Tick</span> 的操作<br>都应该被值得看到</h1>
     <div class="hero-divider he" style="transition-delay:.18s" aria-hidden="true"></div>
-    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V2.4.0 | 翠绿深色主题 · 隧道访问认证</div>
+    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V2.7.0 | 翠绿深色主题 · 隧道访问认证</div>
     <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
     <div class="acts he" style="transition-delay:.36s">
       <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
-      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-0GeFd" target="_blank" class="btn btn-o" data-bsp-loading="700">配套软件下载（先解压再运行）</a>
+      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-hfOYd" target="_blank" class="btn btn-o" data-bsp-loading="700">配套软件下载（先解压再运行）</a>
       <a href="#" onclick="sw('sp');nt('谢谢你的好意，但是我们确实没有这个需求')" class="btn btn-o">加入我们</a>
     </div>
   </div>
@@ -567,6 +609,13 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 
       <div class="g mc rv rv-d3">
         <div class="gt"><h3>我的世界 · Minecraft</h3><div class="gts"><span class="tg tg-y">BAC3.0</span><span class="tg tg-y">部分 7×24H</span></div></div>
+        <div class="motd">
+          <div class="motd-ic">MC</div>
+          <div class="motd-bd">
+            <div class="motd-l1">背水专用赛级服务器</div>
+            <div class="motd-l2"><span class="mtag">支持IPV6直连</span><span class="mtag">全员实名</span><span class="mtxt">高频 · 高配 · 高流畅</span></div>
+          </div>
+        </div>
         <div class="gi">
           BAC3.0自研反作弊：服务端已部署。极高成熟度，拥有丰富的开服经验。<br>
           <a href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" target="_blank">点我下载PCL2启动器</a><br>
@@ -592,8 +641,23 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 <!-- ===== 更新日志 ===== -->
 <div class="page" id="p-cl">
   <div class="sec">
-    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V2.4.0 · 隧道访问认证与官网更新中心</p></div>
+    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V2.7.0 · 我的世界服务器上线与官网优化</p></div>
     <div class="cl">
+      <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.25</span><span class="cl-v">V2.7.0</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【2026年09月25日更新内容】背水对战平台 &amp; CS2[总版本号 V2.7.0]</b><br><br>
+1.【新增】官网「我的世界」区块新增服务器 MOTD 展示：背水专用赛级服务器 · 支持 IPV6 直连 · 全员实名 · 高频 / 高配 / 高流畅。<br>
+2.【新增】「命令速查」补齐我的世界服务器玩家指令共 19 条，涵盖注册登录、传送、家、传送点、私信与基础查询。<br>
+3.【优化】「命令速查」重构为「CS2 服务器」与「我的世界 · Minecraft」两个分区，按游戏分类，玩家查找更直观。<br>
+4.【调整】平台配套软件下载链接更新为最新网盘地址。<br>
+5.【优化】经典版整站排版调整：放宽内容宽度并与顶部导航左右对齐，同时优化标题行距、区块间距与正文可读性。<br>
+6.【修复】修复经典版样式表根节点缺失闭合符号的问题（该缺陷会导致整站基础样式声明失效）。<br>
+7.【修复】补齐经典版三个缺失的字体变量，统一字体回退表现。<br>
+8.【修复】修复经典版数据卡片行右侧出现空档的问题。<br>
+9.【新增】我的世界服务器正式部署 Paper 1.21.11 服务端，插件体系含登录注册、传送与基础命令、权限管理、防熊回滚、跨版本兼容、公告与反作弊。<br>
+10.【优化】我的世界服务器完成全站中文化，登录提示、命令说明、公告与名牌均显示中文。<br>
+11.【新增】我的世界服务器 MOTD 上线，服务器列表中即可看到线路与实名标识。<br>
+12.【调整】总版本号升级至 V2.7.0。
+</div></div>
       <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.14</span><span class="cl-v">V2.4.0</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【2026年09月14日更新内容】背水对战平台 &amp; CS2[总版本号 V2.4.0]</b><br><br>
 1.【新增】全新「访问认证」功能：SakuraFrp 隧道开启访问密码后，只需在平台内填入隧道地址与密码，客户端自动完成认证，再也不用来回开浏览器手动认证！<br>
@@ -901,7 +965,9 @@ A：从你完全连接成功开始，到断开连接为止。<br><br>
 	<!-- ===== 命令 ===== -->
 	<div class="page" id="p-cmds">
 	  <div class="sec">
-	    <div class="sec-hd rv"><h2>命令速查</h2><p>背水平台 CS2 服务器 · 玩家指令大全</p></div>
+	    <div class="sec-hd rv"><h2>命令速查</h2><p>背水平台 · CS2 与 我的世界 玩家指令大全</p></div>
+
+	    <div class="cm-hd rv rv-d1">CS2 服务器<small>背水平台 CS2 · 玩家指令</small></div>
 	    <div class="tbl-wrap rv rv-d1">
 	      <table>
 	        <thead><tr><th>指令</th><th width="60%">说明</th><th>示例</th></tr></thead>
@@ -921,6 +987,34 @@ A：从你完全连接成功开始，到断开连接为止。<br><br>
 	          <tr><td>ph</td><td>全服贡献榜</td><td>ph</td></tr>
 	          <tr><td>!drop</td><td>发出5把一样的刀</td><td>!drop</td></tr>
 	          <tr><td>.report</td><td>举报（后台记录）</td><td>.report</td></tr>
+	        </tbody>
+	      </table>
+	    </div>
+
+	    <div class="cm-hd mc rv" style="margin-top:44px">我的世界 · Minecraft<small>背水平台 MC 服务器 · 玩家指令</small></div>
+	    <div class="tbl-wrap rv rv-d2">
+	      <table>
+	        <thead><tr><th>指令</th><th width="60%">说明</th><th>示例</th></tr></thead>
+	        <tbody>
+	          <tr><td>/register 密码 密码</td><td>首次进服注册账号</td><td>/register 你的密码 你的密码</td></tr>
+	          <tr><td>/login 密码</td><td>登录账号（每次进服都要）</td><td>/login 你的密码</td></tr>
+	          <tr><td>/changepassword 旧 新</td><td>修改密码</td><td>/changepassword 旧密码 新密码</td></tr>
+	          <tr><td>/spawn</td><td>回到出生点（迷路就用它）</td><td>/spawn</td></tr>
+	          <tr><td>/tpa 玩家</td><td>请求传送到对方</td><td>/tpa Steve</td></tr>
+	          <tr><td>/tpahere 玩家</td><td>请求对方传送到你这里</td><td>/tpahere Steve</td></tr>
+	          <tr><td>/tpaccept / tpdeny</td><td>接受 / 拒绝传送请求</td><td>/tpaccept</td></tr>
+	          <tr><td>/sethome</td><td>把当前所在位置设为家</td><td>/sethome</td></tr>
+	          <tr><td>/home</td><td>回到自己的家</td><td>/home</td></tr>
+	          <tr><td>/back</td><td>回到上次传送前的位置</td><td>/back</td></tr>
+	          <tr><td>/warp 名称</td><td>传送到公共传送点</td><td>/warp 主城</td></tr>
+	          <tr><td>/tpr</td><td>随机传送（跑图找新地形）</td><td>/tpr</td></tr>
+	          <tr><td>/top / bottom / jump</td><td>到最高点 / 最低点 / 跳跃落点</td><td>/top</td></tr>
+	          <tr><td>/msg 玩家 内容</td><td>发送私信</td><td>/msg Steve 你好</td></tr>
+	          <tr><td>/r 内容</td><td>快速回复上一条私信</td><td>/r 在的</td></tr>
+	          <tr><td>/afk</td><td>标记暂离</td><td>/afk</td></tr>
+	          <tr><td>/ping</td><td>查看自己的延迟</td><td>/ping</td></tr>
+	          <tr><td>/list</td><td>查看在线玩家</td><td>/list</td></tr>
+	          <tr><td>/help</td><td>查看你能用的全部命令</td><td>/help</td></tr>
 	        </tbody>
 	      </table>
 	    </div>

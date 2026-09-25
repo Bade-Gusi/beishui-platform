@@ -263,6 +263,33 @@ a:hover{color:var(--accent)}
 .bullet::before{content:'';position:absolute;left:0;top:.68em;width:5px;height:5px;background:var(--accent);transform:rotate(45deg);opacity:.75}
 .lead{text-align:center;font-weight:700;color:#fff;background:var(--ink);border:0;font-size:15px;letter-spacing:.06em;border-radius:var(--radius-lg);padding:16px}
 
+/* ================= 服务器 MOTD ================= */
+.motd{
+  display:flex;align-items:center;gap:14px;
+  margin:10px 0 12px;padding:14px 16px;
+  border:1px solid var(--line-2);border-radius:var(--radius);
+  background:var(--bg-alt);
+}
+.motd-ic{
+  flex-shrink:0;width:46px;height:46px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink);color:#fff;font-size:13px;font-weight:700;letter-spacing:.02em;
+}
+.motd-l1{font-size:15px;font-weight:600;color:var(--ink);line-height:1.4}
+.motd-l2{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mtag{padding:1px 8px;border-radius:3px;font-size:11px;background:var(--accent-soft);color:var(--accent)}
+.mtxt{font-size:12px;color:var(--text3)}
+
+/* ================= 命令速查 · 分组标题 ================= */
+.cm-hd{
+  display:flex;align-items:center;gap:12px;
+  margin:0 0 14px;padding-left:12px;
+  border-left:4px solid var(--accent);
+  font-size:17px;font-weight:600;color:var(--ink);line-height:1.4;
+}
+.cm-hd.mc{border-left-color:var(--steel)}
+.cm-hd small{font-size:12px;font-weight:400;color:var(--text3)}
+
 /* ================= 表格 ================= */
 .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-lg);background:#fff}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -485,8 +512,8 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="slides" id="slides">
         <div class="slide s1 on">
           <span class="tagline">正 式 发 布</span>
-          <h2>背水对战平台 V2.4.0<br>隧道访问认证 · 官网更新中心</h2>
-          <p>平台内即可完成 SakuraFrp 隧道认证（支持 TOTP）；更新走官网版本清单并校验完整性，配置与账号数据更安全。</p>
+          <h2>背水对战平台 V2.7.0<br>我的世界服务器 · 官网优化</h2>
+          <p>我的世界服务器正式上线并完成全站中文化，服务器 MOTD 同步更新；官网命令速查重构为 CS2 与我的世界两个分区。</p>
           <span class="wm">背水</span>
         </div>
         <div class="slide s2">
@@ -522,11 +549,11 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="sec-hd rv"><h2>头条新闻</h2><a class="more" onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">更多更新日志 ›</a></div>
       <div class="focus">
         <div class="focus-main rv">
-          <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.4</span></div>
+          <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.7</span></div>
           <div class="focus-body">
-            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.4.0 发布：隧道访问认证与官网更新中心</a></h3>
-            <p>新增 SakuraFrp 隧道访问认证（含 TOTP 两步验证），可在启动游戏前自动完成；更新源改为官网版本清单并强制校验 SHA256；配置、登录状态与日志迁移到独立数据目录，安全与稳定性全面提升。</p>
-            <div class="focus-meta"><span>2026.09.14</span><span>版本 V2.4.0</span><span>来源：背水工作室</span></div>
+            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.7.0 发布：我的世界服务器上线与官网优化</a></h3>
+            <p>我的世界服务器正式部署 Paper 1.21.11 服务端并完成全站中文化，服务器 MOTD 上线；官网「命令速查」重构为 CS2 与我的世界两个分区，配套软件下载链接同步更新，经典版整站排版优化。</p>
+            <div class="focus-meta"><span>2026.09.25</span><span>版本 V2.7.0</span><span>来源：背水工作室</span></div>
           </div>
         </div>
         <ul class="newslist rv rv-d2">
@@ -590,7 +617,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="link-grid">
         <a href="https://hsfaka.cn/shop/BSP" target="_blank">CS2 赞助链接</a>
         <a href="https://afdian.com/a/Bade-Gusi" target="_blank">爱发电赞助</a>
-        <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-0GeFd" target="_blank" data-bsp-loading="700">配套软件下载</a>
+        <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-hfOYd" target="_blank" data-bsp-loading="700">配套软件下载</a>
         <a href="https://pan.quark.cn/s/dcdb0dfa4b89" target="_blank">夸克网盘 Demo</a>
         <a href="https://www.123912.com/s/VrDpjv-QvGfd" target="_blank" data-bsp-loading="700">123 云盘 Demo</a>
         <a href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" target="_blank">PCL2 启动器</a>
@@ -667,6 +694,13 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 
         <div class="g mc rv rv-d3">
           <div class="gt"><h3>我的世界 · Minecraft</h3><div class="gts"><span class="tg tg-y">BAC3.0</span><span class="tg tg-y">部分 7×24H</span></div></div>
+          <div class="motd">
+            <div class="motd-ic">MC</div>
+            <div class="motd-bd">
+              <div class="motd-l1">背水专用赛级服务器</div>
+              <div class="motd-l2"><span class="mtag">支持IPV6直连</span><span class="mtag">全员实名</span><span class="mtxt">高频 · 高配 · 高流畅</span></div>
+            </div>
+          </div>
           <div class="gi">
             BAC3.0 自研反作弊：服务端已部署。极高成熟度，拥有丰富的开服经验。<br>
             <a href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" target="_blank">点我下载 PCL2 启动器</a><br>
@@ -694,7 +728,9 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 <div class="page" id="p-cmds">
   <section class="sec">
     <div class="wrap">
-      <div class="sec-hd rv"><h2>命令速查</h2><span class="more">背水平台 CS2 服务器 · 玩家指令大全</span></div>
+      <div class="sec-hd rv"><h2>命令速查</h2><span class="more">背水平台 · CS2 与 我的世界 玩家指令大全</span></div>
+
+      <div class="cm-hd rv rv-d1">CS2 服务器<small>背水平台 CS2 · 玩家指令</small></div>
       <div class="tbl-wrap rv rv-d1">
         <table>
           <thead><tr><th>指令</th><th width="55%">说明</th><th>示例</th></tr></thead>
@@ -718,6 +754,34 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
         </table>
       </div>
 
+      <div class="cm-hd mc rv" style="margin-top:40px">我的世界 · Minecraft<small>背水平台 MC 服务器 · 玩家指令</small></div>
+      <div class="tbl-wrap rv rv-d2">
+        <table>
+          <thead><tr><th>指令</th><th width="55%">说明</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr><td>/register 密码 密码</td><td>首次进服注册账号</td><td>/register 你的密码 你的密码</td></tr>
+            <tr><td>/login 密码</td><td>登录账号（每次进服都要）</td><td>/login 你的密码</td></tr>
+            <tr><td>/changepassword 旧 新</td><td>修改密码</td><td>/changepassword 旧密码 新密码</td></tr>
+            <tr><td>/spawn</td><td>回到出生点（迷路就用它）</td><td>/spawn</td></tr>
+            <tr><td>/tpa 玩家</td><td>请求传送到对方</td><td>/tpa Steve</td></tr>
+            <tr><td>/tpahere 玩家</td><td>请求对方传送到你这里</td><td>/tpahere Steve</td></tr>
+            <tr><td>/tpaccept / tpdeny</td><td>接受 / 拒绝传送请求</td><td>/tpaccept</td></tr>
+            <tr><td>/sethome</td><td>把当前所在位置设为家</td><td>/sethome</td></tr>
+            <tr><td>/home</td><td>回到自己的家</td><td>/home</td></tr>
+            <tr><td>/back</td><td>回到上次传送前的位置</td><td>/back</td></tr>
+            <tr><td>/warp 名称</td><td>传送到公共传送点</td><td>/warp 主城</td></tr>
+            <tr><td>/tpr</td><td>随机传送（跑图找新地形）</td><td>/tpr</td></tr>
+            <tr><td>/top / bottom / jump</td><td>到最高点 / 最低点 / 跳跃落点</td><td>/top</td></tr>
+            <tr><td>/msg 玩家 内容</td><td>发送私信</td><td>/msg Steve 你好</td></tr>
+            <tr><td>/r 内容</td><td>快速回复上一条私信</td><td>/r 在的</td></tr>
+            <tr><td>/afk</td><td>标记暂离</td><td>/afk</td></tr>
+            <tr><td>/ping</td><td>查看自己的延迟</td><td>/ping</td></tr>
+            <tr><td>/list</td><td>查看在线玩家</td><td>/list</td></tr>
+            <tr><td>/help</td><td>查看你能用的全部命令</td><td>/help</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="sec-hd rv" style="margin-top:44px"><h2>FAQ · 常见问题</h2><span class="more">玩家高频疑问</span></div>
       <div class="block rv rv-d1"><strong>Q：输入 .1v1 没反应？</strong><br>A：先设置顺序，且至少 2 个活着的玩家。</div>
       <div class="block rv rv-d2"><strong>Q：C4 还在吗？</strong><br>A：在，不会删你的 C4。</div>
@@ -732,8 +796,23 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 <div class="page" id="p-cl">
   <section class="sec">
     <div class="wrap">
-      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.4.0 · 隧道访问认证与官网更新中心</span></div>
+      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.7.0 · 我的世界服务器上线与官网优化</span></div>
       <div class="cl">
+        <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.25</span><span class="cl-v">V2.7.0</span><span class="cl-t">重大</span><span class="cl-tt">我的世界服务器上线 + 官网优化</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【2026年09月25日更新内容】背水对战平台 &amp; CS2[总版本号 V2.7.0]</b><br><br>
+1.【新增】官网「我的世界」区块新增服务器 MOTD 展示：背水专用赛级服务器 · 支持 IPV6 直连 · 全员实名 · 高频 / 高配 / 高流畅。<br>
+2.【新增】「命令速查」补齐我的世界服务器玩家指令共 19 条，涵盖注册登录、传送、家、传送点、私信与基础查询。<br>
+3.【优化】「命令速查」重构为「CS2 服务器」与「我的世界 · Minecraft」两个分区，按游戏分类，玩家查找更直观。<br>
+4.【调整】平台配套软件下载链接更新为最新网盘地址。<br>
+5.【优化】经典版整站排版调整：放宽内容宽度并与顶部导航左右对齐，同时优化标题行距、区块间距与正文可读性。<br>
+6.【修复】修复经典版样式表根节点缺失闭合符号的问题（该缺陷会导致整站基础样式声明失效）。<br>
+7.【修复】补齐经典版三个缺失的字体变量，统一字体回退表现。<br>
+8.【修复】修复经典版数据卡片行右侧出现空档的问题。<br>
+9.【新增】我的世界服务器正式部署 Paper 1.21.11 服务端，插件体系含登录注册、传送与基础命令、权限管理、防熊回滚、跨版本兼容、公告与反作弊。<br>
+10.【优化】我的世界服务器完成全站中文化，登录提示、命令说明、公告与名牌均显示中文。<br>
+11.【新增】我的世界服务器 MOTD 上线，服务器列表中即可看到线路与实名标识。<br>
+12.【调整】总版本号升级至 V2.7.0。
+</div></div>
         <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.14</span><span class="cl-v">V2.4.0</span><span class="cl-t">重大</span><span class="cl-tt">隧道访问认证 + 官网更新中心</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【2026年09月14日更新内容】背水对战平台 &amp; CS2[总版本号 V2.4.0]</b><br><br>
 1.【新增】全新「访问认证」功能：SakuraFrp 隧道开启访问密码后，只需在平台内填入隧道地址与密码，客户端自动完成认证，再也不用来回开浏览器手动认证！<br>
@@ -1157,7 +1236,7 @@ Q：游戏时长怎么计算的？A：从你完全连接成功开始，到断开
       <h6>相关链接</h6>
       <a href="https://hsfaka.cn/shop/BSP" target="_blank">CS2 赞助链接</a>
       <a href="https://afdian.com/a/Bade-Gusi" target="_blank">爱发电</a>
-      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-0GeFd" target="_blank" data-bsp-loading="700">配套软件下载</a>
+      <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-hfOYd" target="_blank" data-bsp-loading="700">配套软件下载</a>
       <a href="index.html">切换版本</a>
     </div>
   </div>
