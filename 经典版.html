@@ -532,7 +532,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     </div>
     <h1 class="he" style="transition-delay:.1s">我们始终坚持，<br>您每一个 <span class="hl">Tick</span> 的操作<br>都应该被值得看到</h1>
     <div class="hero-divider he" style="transition-delay:.18s" aria-hidden="true"></div>
-    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V2.7.0 | 翠绿深色主题 · 隧道访问认证</div>
+    <div class="hero-sub he" style="transition-delay:.22s">1w+ 自研代码插件 · 助力电竞赛事 · 总版本号 V2.8.0 | 比赛系统升级 · 两个新插件 · 溢出问题修复</div>
     <p class="hero-p he" style="transition-delay:.28s">基于高性能服务器架构的电竞对战平台。自研代码插件体系，持续优化中的对局体验。</p>
     <div class="acts he" style="transition-delay:.36s">
       <a href="#" onclick="sw('games')" class="btn btn-p">游戏列表</a>
@@ -579,7 +579,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
     <p>背水对战平台 · 背水工作室</p>
     <p>服务器管理/购买定制请联系QQ：2994938720</p>
     <p class="cp">版权所有@侵权必究 · <a href="动效预览.html" style="color:var(--primary);text-decoration:none">动效预览</a> · 不要源代码公开</p>
-    <p class="ver">网站版本 V2.0</p>
+    <p class="ver">网站版本 V2.1</p>
   </footer>
 </div>
 
@@ -657,21 +657,23 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 <!-- ===== 更新日志 ===== -->
 <div class="page" id="p-cl">
   <div class="sec">
-    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V2.7.0 · 我的世界服务器上线与官网优化</p></div>
+    <div class="sec-hd rv"><h2>更新日志</h2><p>总版本号 V2.8.0 · 比赛系统升级 · 两个新插件 · 溢出问题修复</p></div>
     <div class="cl">
-        <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.10.07</span><span class="cl-v">V2.8.0</span><span class="cl-t">重大</span><span class="cl-tt">比赛系统升级 + 战况播报 / 全员透视 + 溢出问题说明</span><span class="cl-a">▸</span></div><div class="cl-b">
+        <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.10.07</span><span class="cl-v">V2.8.0</span><span class="cl-t">重大</span><span class="cl-tt">比赛系统升级 + 战况播报 / 全员透视 + 溢出问题修复</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【2026年10月07日更新内容】背水对战平台 &amp; CS2[总版本号 V2.8.0]</b><br><br>
-1.【新增】全新「战况播报」功能：阵亡后只需输入 .hp，就能把自己本回合打中了谁、打中几枪、对面还剩多少血，自动报给还活着的队友，报点再也不用靠喊了！<br>
+1.【新增】全新「战况播报」功能：阵亡后只需输入 .hp，就能把自己本回合打中了谁、打中几枪、对面还剩多少血，自动报给还活着的队友，报点再也不用靠喊了！快来试试看！<br>
 2.【新增】新增「全员透视」娱乐模式：管理员一条指令即可开关全场穿墙轮廓，开透视服、练枪服一句话的事！颜色、可见距离、可见队伍与播报文案均可在配置文件中调整，改完重载即刻生效。<br>
 3.【优化】比赛系统同步升级至上游最新版 MatchZy 0.9.1：地图加载、比分统计、暂停与回合回溯等一批问题一并修复，比赛更加稳定！<br>
 4.【优化】比赛系统完成品牌与中文化适配：插件名改为「背水比赛系统」，聊天前缀「背水平台」、管理前缀「背水管理」，服务器名格式一并更换，伤害报告与准备提示全部中文化。<br>
 5.【优化】比赛指令按国内习惯重新排布：准备改为 .zb、重开改为 .ck、比赛模式改为 .jj，且 ! 前缀（!zb / !ck / !jj）同样可用，怎么顺手怎么来！<br>
 6.【修复】修复了提示文案与实际指令不一致的问题：此前提示玩家输入 .ready，但该指令早已改名，照着打没有反应；现已同步 12 个语言文件，不会再出现这种情况。<br>
-7.【修复】修复了 C4 倒计时可能把玩家挤出服务器的问题：原版在炸弹最后 15 秒会每帧为每名玩家刷新中心倒计时（每秒 64 次），会占满客户端的网络消息通道；现已改为每秒刷新一次，显示效果不变，发送量降至原来的 1/64！<br>
-8.【说明】关于部分玩家遇到的「溢出错误」：近期有玩家在进服时被服务器断开，提示「溢出」或 NETWORK_DISCONNECT_OVERFLOW。这不是你的网络问题，也不是被误判作弊 —— CS2 引擎对「服务端待发给客户端的网络消息」有数量上限，当服务器在某一瞬间卡顿（切换地图、执行配置、开始录制 demo 等）、而恰好有玩家正在加载地图时，这名玩家排队待收的消息就会堆满，被引擎判定为溢出并断开连接。本次已修复其中一处确实会造成「消息洪水」的原因（即上一条的 C4 倒计时），其余卡顿来源仍在继续排查。遇到这种情况重新连接即可，不影响账号与对局数据。<br>
-9.【优化】针对本次 CS2 更新后的新运行环境（.NET 10 / CounterStrikeSharp V1.0.376）提前完成插件适配，新增插件同时提供新旧两套编译产物，服务器升级时即插即用，无需等待。<br>
-10.【优化】插件源码统一编码规范，杜绝中文字符在部分环境下被编译成乱码的问题。<br>
-11.【调整】总版本号升级至 V2.8.0。
+7.【修复】修复了 C4 倒计时可能把玩家挤出服务器的问题：原版在炸弹最后 15 秒会每帧为每名玩家刷新中心倒计时（每秒 64 次），会大量占用服务端发往客户端的网络消息；现已改为每秒刷新一次，显示效果不变，发送量降至原来的 1/64！<br>
+8.【修复】修复了部分玩家进服时被服务器踢出（提示「溢出」或 NETWORK_DISCONNECT_OVERFLOW）的问题：这次终于找到根因了 —— CS2 引擎会统计「服务端处理某名玩家消息花了多少 CPU 时间」，一旦超过阈值就直接断开这名玩家，而官方默认阈值卡得很紧：服务端自己切地图、执行配置、开始录制 demo 就会有 140~250 毫秒的卡顿，进服那一瞬间这笔开销正好记在正在加载地图的玩家头上，于是一次卡顿就被判成「溢出」踢下线。现已把引擎的突发阈值从 200 毫秒放宽到 1500 毫秒（持续阈值 20→50），正常进服不会再被误踢，恶意刷屏依然会被拦住。<br>
+9.【说明】如果你之前遇到过进服被踢：那不是你的网络问题，也不是被误判作弊。现在这条误踢路径已经堵上，重新连接即可，不影响账号与对局数据。<br>
+10.【优化】针对本次 CS2 更新后的新运行环境（.NET 10 / CounterStrikeSharp V1.0.376）提前完成插件适配，新增插件同时提供新旧两套编译产物，服务器升级时即插即用，无需等待。<br>
+11.【优化】插件源码统一编码规范，杜绝中文字符在部分环境下被编译成乱码的问题。<br>
+12.【网站】官网更新日志与全站版本号同步至 V2.8.0，网站版本号 V2.0→V2.1。<br>
+13.【调整】总版本号升级至 V2.8.0。
 </div></div>
       <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.09.25</span><span class="cl-v">V2.7.0</span><span class="cl-t" style="background:var(--primary-soft);color:var(--primary)">重大</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【2026年09月25日更新内容】背水对战平台 &amp; CS2[总版本号 V2.7.0]</b><br><br>
