@@ -603,7 +603,7 @@
 
     if (!list.length) {
       var msg = state.base.length === 0
-        ? '还没有配置任何服务器。打开「数据与设置」添加服务器，或导入平台导出的 servers.json。'
+        ? '还没有服务器。线上列表由管理员维护；你也可以在「本地设置」中添加仅本机可见的服务器。'
         : '当前筛选条件下没有匹配的服务器。试试清空搜索或关闭部分筛选。';
       els.serverList.innerHTML =
         '<div class="empty-state">' +
@@ -719,18 +719,22 @@
     }).join('');
     var modes = ['满十', '混战', '死斗', '回防', '刀战', '娱乐', '社区服'];
 
-    var html = modalHead('数据与设置', '服务器清单、导入导出与实时检测') +
+    var html = modalHead('本地设置', '增删只影响当前浏览器，不会修改线上服务器列表') +
       '<div class="modal-body">' +
+        '<div class="local-notice">' +
+          icon('info') +
+          '<div><b>仅本机</b> · 这里的添加、修改、删除只写入当前浏览器的 localStorage，不会影响其他玩家，也不会修改线上 <code>room/data/servers.js</code>。线上列表由管理员通过 GitHub 仓库维护。</div>' +
+        '</div>' +
         '<div class="settings-section">' +
           '<div class="settings-title">' + icon('info') + '数据源</div>' +
           '<div class="source-note">' +
             icon('check') +
-            '<div>配置写入浏览器本地存储，并优先于 <code>data/servers.js</code>。使用 <code>node serve.mjs</code> 启动时，页面会通过 A2S 查询真实的地图、人数与延迟；直接双击打开则使用静态配置。</div>' +
+            '<div>本地覆盖只对当前浏览器生效；恢复线上列表后会重新读取部署的 <code>data/servers.js</code>。运行 <code>start.cmd</code> 时还会通过 A2S 查询真实人数与延迟。</div>' +
           '</div>' +
           '<div class="settings-row" style="margin-top:12px">' +
-            '<button class="btn" data-action="import">' + icon('upload') + '导入 servers.json</button>' +
-            '<button class="btn" data-action="export">' + icon('download') + '导出配置</button>' +
-            '<button class="btn" data-action="reset">' + icon('refresh') + '恢复配置文件</button>' +
+            '<button class="btn" data-action="import">' + icon('upload') + '导入本地 servers.json</button>' +
+            '<button class="btn" data-action="export">' + icon('download') + '导出本地配置</button>' +
+            '<button class="btn" data-action="reset">' + icon('refresh') + '恢复线上列表</button>' +
           '</div>' +
           '<div class="source-note" style="margin-top:10px">' +
             icon('gamepad') +
@@ -739,12 +743,12 @@
         '</div>' +
 
         '<div class="settings-section">' +
-          '<div class="settings-title">' + icon('server') + '当前服务器 <span class="tag" id="editorCount">' + state.base.length + '</span></div>' +
+          '<div class="settings-title">' + icon('server') + '本地列表（仅本机） <span class="tag" id="editorCount">' + state.base.length + '</span></div>' +
           '<div class="editor-list" id="editorList">' + editorRows() + '</div>' +
         '</div>' +
 
         '<div class="settings-section">' +
-          '<div class="settings-title">' + icon(state.editingId ? 'settings' : 'plus') + (state.editingId ? '编辑服务器' : '添加服务器') + '</div>' +
+          '<div class="settings-title">' + icon(state.editingId ? 'settings' : 'plus') + (state.editingId ? '编辑本地服务器' : '添加本地服务器') + '</div>' +
           '<form data-form="server" id="serverForm">' +
             '<div class="field-grid">' +
               '<div class="field full"><label>名称</label><input name="name" required maxlength="60" placeholder="例如：背水 · 主服"></div>' +
@@ -759,7 +763,7 @@
               '<div class="field full"><label>备注 <span>可选</span></label><textarea name="note" maxlength="300" placeholder="例如：由 FRP 隧道转发，进服前请确认隧道已启动"></textarea></div>' +
             '</div>' +
             '<div class="settings-row">' +
-              '<button type="submit" class="btn btn-primary">' + icon('check') + (state.editingId ? '保存修改' : '添加服务器') + '</button>' +
+              '<button type="submit" class="btn btn-primary">' + icon('check') + (state.editingId ? '保存本地修改' : '添加到本地') + '</button>' +
               (state.editingId ? '<button type="button" class="btn" data-action="cancelEdit">取消编辑</button>' : '') +
             '</div>' +
           '</form>' +
@@ -774,7 +778,7 @@
   }
 
   function editorRows() {
-    if (!state.base.length) return '<div class="field-hint" style="padding:8px 2px">暂无服务器，请在下方添加。</div>';
+    if (!state.base.length) return '<div class="field-hint" style="padding:8px 2px">当前浏览器没有本地服务器，请在下方添加。</div>';
     return state.base.map(function (s) {
       return '<div class="editor-row" data-edit-id="' + esc(s.id) + '">' +
         '<div class="er-icon">' + icon('server') + '</div>' +
@@ -991,7 +995,7 @@
         renderAll();
         openSettings();
         refresh(false);
-        toast('已导入 ' + state.base.length + ' 个服务器', 'ok');
+        toast('已导入 ' + state.base.length + ' 个服务器到当前浏览器', 'ok');
       } catch (e) {
         toast('导入失败：文件不是有效的 servers.json', 'error');
       }
@@ -1065,7 +1069,7 @@
     }
 
     state.editingId = null;
-    persistAndRefresh('服务器已保存');
+    persistAndRefresh('已保存到当前浏览器');
     openSettings();
   }
 
@@ -1108,16 +1112,16 @@
   function deleteServer(id) {
     var s = state.base.filter(function (x) { return x.id === id; })[0];
     if (!s) return;
-    if (!window.confirm('确定删除「' + s.name + '」？')) return;
+    if (!window.confirm('确定从当前浏览器删除「' + s.name + '」？不会影响线上列表。')) return;
     state.base = state.base.filter(function (x) { return x.id !== id; });
     state.favorites.delete(id);
     writeJSON(LS_FAV, Array.from(state.favorites));
-    persistAndRefresh('已删除服务器');
+    persistAndRefresh('已从当前浏览器删除');
     openSettings();
   }
 
   function resetConfig() {
-    if (!window.confirm('恢复 data/servers.js 中的配置？本地修改将被丢弃。')) return;
+    if (!window.confirm('恢复线上列表？只会清除当前浏览器的本地覆盖。')) return;
     try { localStorage.removeItem(LS_SERVERS); } catch (e) { /* ignore */ }
     state.localBase = false;
     state.base = normalizeList(window.BEISHUI_SERVERS || []);
@@ -1126,7 +1130,7 @@
     renderAll();
     refresh(false);
     openSettings();
-    toast('已恢复配置文件', 'ok');
+    toast('已恢复线上列表', 'ok');
   }
 
   function toast(message, type) {
