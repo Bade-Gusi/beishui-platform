@@ -160,10 +160,28 @@ footer{
 footer .kbd{display:inline-block;font-family:var(--font-mono);font-size:11px;border:1px solid var(--line-2);border-radius:4px;padding:1px 7px;margin:0 3px;color:var(--text2)}
 footer .cp{color:rgba(217,45,74,.6);font-size:11px}
 
+/* 社区服入口 */
+.quick-room{margin-top:22px}
+.quick-room a{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 20px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(34,217,126,.13),rgba(6,216,160,.05));
+  border:1px solid rgba(34,217,126,.35);
+  color:var(--text);text-decoration:none;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
+}
+.quick-room a:hover{transform:translateY(-2px);border-color:rgba(34,217,126,.7);box-shadow:0 14px 36px rgba(34,217,126,.16)}
+.qr-icon{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:12px;background:rgba(34,217,126,.14);border:1px solid rgba(34,217,126,.3);font-size:20px;flex-shrink:0}
+.qr-text{display:flex;flex-direction:column;line-height:1.35;min-width:0}
+.qr-text b{font-size:14px;letter-spacing:.03em}
+.qr-text small{font-size:11px;color:var(--text2);margin-top:2px}
+.qr-arrow{margin-left:auto;font-size:20px;color:var(--green);transition:transform .25s}
+.quick-room a:hover .qr-arrow{transform:translateX(4px)}
+
 /* 入场动画 */
 .anim{opacity:0;transform:translateY(18px);animation:up .7s ease-out forwards}
 @keyframes up{to{opacity:1;transform:translateY(0)}}
-.d1{animation-delay:.05s}.d2{animation-delay:.14s}.d3{animation-delay:.24s}.d4{animation-delay:.34s}
+.d1{animation-delay:.05s}.d2{animation-delay:.14s}.d3{animation-delay:.24s}.d4{animation-delay:.34s}.d5{animation-delay:.44s}
 
 @media(max-width:820px){
   .pick{grid-template-columns:1fr;gap:18px}
@@ -247,10 +265,18 @@ footer .cp{color:rgba(217,45,74,.6);font-size:11px}
       </div>
     </a>
   </div>
+
+  <div class="quick-room anim d5">
+    <a href="room/" target="_blank" rel="noopener">
+      <span class="qr-icon">🎮</span>
+      <span class="qr-text"><b>社区服大厅</b><small>CS2 服务器列表 · 查看人数 · 一键进服</small></span>
+      <span class="qr-arrow">→</span>
+    </a>
+  </div>
 </main>
 
 <footer>
-  <div>按 <span class="kbd">1</span> 进入政务版 · 按 <span class="kbd">2</span> 进入经典版</div>
+  <div>按 <span class="kbd">1</span> 政务版 · <span class="kbd">2</span> 经典版 · <span class="kbd">3</span> 社区服</div>
   <div>背水对战平台 · 背水工作室 · 服务器管理 / 购买定制 QQ 2994938720</div>
   <div class="cp">版权所有 @ 侵权必究 · <a href="动效预览.html" style="color:var(--primary);text-decoration:none">动效预览</a> · 不要源代码公开</div>
 </footer>
@@ -269,10 +295,11 @@ footer .cp{color:rgba(217,45,74,.6);font-size:11px}
       try{localStorage.setItem('bsp_version',c.getAttribute('data-v'))}catch(e){}
     });
   });
-  /* 键盘 1 / 2 快捷键 */
+  /* 键盘 1 / 2 / 3 快捷键 */
   document.addEventListener('keydown',function(e){
     if(e.key==='1')location.href='政务版.html';
     if(e.key==='2')location.href='经典版.html';
+    if(e.key==='3')window.open('room/','_blank','noopener');
   });
 })();
 </script>

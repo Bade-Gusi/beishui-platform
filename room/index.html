@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0D1A12">
+<title>背水对战平台 · 社区服</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/room.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h2M11 16.5h2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6h.09a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9v.09a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 21V9m0 0 4 4m-4-4-4 4M4 3h16"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+    <symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 20h.01M8 16v4M12 12v8M16 8v12M20 4v16"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M6 12h4M8 10v4M15 12h.01M18 14h.01"/><path d="M17.3 5H6.7A4.7 4.7 0 0 0 2 9.7v4.6A4.7 4.7 0 0 0 6.7 19h1.9c.8 0 1.5-.4 1.9-1l.5-.9h2l.5.9c.4.6 1.1 1 1.9 1h1.9A4.7 4.7 0 0 0 22 14.3V9.7A4.7 4.7 0 0 0 17.3 5Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M20 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"><img src="assets/logo.png" alt="背水对战平台"></div>
+      <div class="brand-text">
+        <strong>背水对战平台</strong>
+        <span>BEISHUI · AURORA</span>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="主导航">
+      <button class="nav-item is-active" data-nav="servers">
+        <svg><use href="#i-server"/></svg><span>社区服</span><em class="nav-dot"></em>
+      </button>
+      <button class="nav-item" data-nav="favorites">
+        <svg><use href="#i-star"/></svg><span>我的收藏</span><b id="navFavCount" class="nav-count">0</b>
+      </button>
+      <button class="nav-item" data-nav="settings">
+        <svg><use href="#i-settings"/></svg><span>数据与设置</span>
+      </button>
+      <a class="nav-item" href="https://bade-gusi.github.io/beishui-platform/" target="_blank" rel="noopener">
+        <svg><use href="#i-external"/></svg><span>返回官网</span>
+      </a>
+    </nav>
+
+    <div class="side-panel">
+      <div class="side-panel-title"><span class="pulse"></span>服务器状态</div>
+      <div class="side-stat"><span>在线玩家</span><b id="sidePlayers">—</b></div>
+      <div class="side-stat"><span>在线服务器</span><b id="sideServers">—</b></div>
+      <div class="side-stat"><span>可用空位</span><b id="sideSlots">—</b></div>
+      <div class="side-meter"><i id="sideMeterFill"></i></div>
+      <p class="side-hint" id="sideHint">正在读取服务器配置…</p>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="ver-chip"><span class="ver-dot"></span>V2.7.0 · AURORA</div>
+      <p id="launchMode">一键进服 · Steam 协议</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-head">
+        <div class="eyebrow">COMMUNITY SERVERS</div>
+        <h1>社区服大厅</h1>
+      </div>
+
+      <label class="search">
+        <svg><use href="#i-search"/></svg>
+        <input id="searchInput" type="search" autocomplete="off" spellcheck="false"
+               placeholder="搜索服务器名、地址、地图或模式…" aria-label="搜索服务器">
+        <kbd>/</kbd>
+      </label>
+
+      <div class="top-actions">
+        <span class="source-badge" id="sourceBadge" title="数据来源">
+          <span class="source-dot"></span><b id="sourceText">静态配置</b>
+        </span>
+        <button class="icon-btn" id="refreshBtn" title="刷新服务器列表" aria-label="刷新服务器列表">
+          <svg><use href="#i-refresh"/></svg>
+        </button>
+        <div class="segmented" role="group" aria-label="视图切换">
+          <button class="seg is-active" data-view="grid" title="网格视图" aria-label="网格视图"><svg><use href="#i-grid"/></svg></button>
+          <button class="seg" data-view="list" title="列表视图" aria-label="列表视图"><svg><use href="#i-list"/></svg></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero" aria-label="总览">
+      <article class="stat-card">
+        <div class="stat-icon"><svg><use href="#i-users"/></svg></div>
+        <div class="stat-body"><span>在线玩家</span><b id="statPlayers">—</b><small id="statPlayersSub">配置数据</small></div>
+        <div class="stat-spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon"><svg><use href="#i-server"/></svg></div>
+        <div class="stat-body"><span>服务器</span><b id="statServers">—</b><small id="statServersSub">共 0 个</small></div>
+        <div class="stat-ring" id="statRing" aria-hidden="true"><span></span></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon"><svg><use href="#i-gamepad"/></svg></div>
+        <div class="stat-body"><span>可用空位</span><b id="statSlots">—</b><small id="statSlotsSub">等待检测</small></div>
+        <div class="stat-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      </article>
+      <article class="stat-card stat-card--accent">
+        <div class="stat-icon"><svg><use href="#i-star"/></svg></div>
+        <div class="stat-body"><span>我的收藏</span><b id="statFav">0</b><small>点击卡片星标收藏</small></div>
+        <button class="stat-link" id="openSettings">数据设置<svg><use href="#i-chevron"/></svg></button>
+      </article>
+    </section>
+
+    <section class="filterbar" aria-label="筛选">
+      <div class="chips" id="modeChips"></div>
+      <div class="filter-tools">
+        <button class="toggle" data-filter="notFull"><span></span>仅看未满</button>
+        <button class="toggle" data-filter="hasPlayers"><span></span>有人在线</button>
+        <button class="toggle" data-filter="onlyFav"><span></span>只看收藏</button>
+        <label class="sort">
+          <svg><use href="#i-filter"/></svg>
+          <select id="sortSelect" aria-label="排序方式">
+            <option value="default">默认排序</option>
+            <option value="players">人数最多</option>
+            <option value="slots">空位最多</option>
+            <option value="map">按地图</option>
+            <option value="name">按名称</option>
+          </select>
+          <svg class="chev"><use href="#i-chevron"/></svg>
+        </label>
+      </div>
+    </section>
+
+    <div class="result-bar">
+      <p>已发现 <b id="resultCount" aria-live="polite">0</b> 个服务器 <span id="filterSummary"></span></p>
+      <p class="updated" id="updatedText">尚未刷新</p>
+    </div>
+
+    <section id="serverList" class="server-grid" aria-busy="true">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </section>
+
+    <footer class="pagefoot">
+      <p><svg><use href="#i-info"/></svg>本地服务运行时直接启动 CS2 并连接；未运行时自动回退到 Steam 协议。</p>
+      <p class="foot-right">数据源：<span id="footSource">背水服务器配置</span> · <button class="link-btn" id="footSettings">本地设置</button> · <a class="foot-link" href="https://bade-gusi.github.io/beishui-platform/" target="_blank" rel="noopener">官网</a></p>
+    </footer>
+  </main>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toastRoot" class="toasts" aria-live="polite"></div>
+
+<script src="data/servers.js"></script>
+<script src="assets/room.js"></script>
+</body>
+</html>

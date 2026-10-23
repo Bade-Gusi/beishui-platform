@@ -78,6 +78,9 @@ nav{
 }
 .nav-links a:hover{color:var(--text);background:var(--primary-soft)}
 .nav-links a.act{color:var(--primary);background:var(--primary-soft)}
+.nav-links a.nav-community{color:var(--primary)}
+.nav-links a.nav-community:hover{color:var(--text);background:var(--primary-soft)}
+.nav-new{font-size:8.5px;font-family:var(--font-mono);letter-spacing:.08em;color:var(--accent);margin-left:4px;vertical-align:2px}
 .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .nav-switch{
   padding:6px 14px;font-size:12px;color:var(--text2);
@@ -442,7 +445,9 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
 /* ========== Responsive ========== */
 @media(max-width:768px){
   nav{padding:0 14px;height:48px}
-  .nav-brand{font-size:12px;margin-right:8px}
+  .nav-brand{display:none}
+  .nav-center{min-width:0;overflow-x:auto;scrollbar-width:none}
+  .nav-center::-webkit-scrollbar{display:none}
   .nav-links a{padding:5px 8px;font-size:12px}
   .hero{padding:60px 16px 40px}
   .hero::before{width:100vw;height:280px;top:-20%}
@@ -515,6 +520,7 @@ footer .ver{font-size:10px;color:var(--text3);opacity:.4;margin-top:4px;letter-s
         <a onclick="sw('cl')">更新日志</a>
         <a onclick="sw('sp')">赞助</a>
         <a onclick="sw('demo')">Demo</a>
+        <a class="nav-community" href="room/" target="_blank" rel="noopener">社区服<span class="nav-new">NEW</span></a>
       </div>
     </div>
     <div class="nav-actions">
