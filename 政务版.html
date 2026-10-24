@@ -499,7 +499,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <a onclick="sw('cl',this)">更新日志</a>
       <a onclick="sw('sp',this)">赞助</a>
       <a onclick="sw('demo',this)">Demo 下载</a>
-      <a class="nav-community" href="room/" target="_blank" rel="noopener">社区服<span class="nav-new">NEW</span></a>
+      <a class="nav-community" href="room/" target="_blank" rel="noopener">进服大厅<span class="nav-new">NEW</span></a>
     </div>
     <div class="nav-right">
       <a href="index.html" class="nav-switch" title="返回版本选择">⇄ 切换版本</a>
@@ -516,8 +516,8 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="slides" id="slides">
         <div class="slide s1 on">
           <span class="tagline">正 式 发 布</span>
-          <h2>背水对战平台 V2.9.0<br>进服被踢（溢出）问题根因修复</h2>
-          <p>定位并修复了困扰多日的「进服被踢」问题：引擎对「处理单玩家消息的 CPU 时间」默认阈值过紧，服务端一切图或录 demo 就会误踢正在进服的玩家；现已放宽突发阈值。</p>
+          <h2>背水对战平台 V2.10.0<br>用户专用进服大厅上线</h2>
+          <p>「背水平台用户专用进服大厅」正式上线：官网三个入口一键直达，支持本地直连启动 CS2 与 Steam 协议回退；主服 30355 保留，新增二服 30356，列表清理为仅保留正式节点。</p>
           <span class="wm">背水</span>
         </div>
         <div class="slide s2">
@@ -553,15 +553,16 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
       <div class="sec-hd rv"><h2>头条新闻</h2><a class="more" onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">更多更新日志 ›</a></div>
       <div class="focus">
         <div class="focus-main rv">
-          <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.9</span></div>
+          <div class="focus-img"><span class="badge">平台要闻</span><span class="glyph">BSP V2.10</span></div>
           <div class="focus-body">
-            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.9.0 发布：进服被踢（溢出）问题根因修复</a></h3>
-            <p>定位并修复了困扰多日的「进服被踢」问题：CS2 引擎对「处理单玩家消息的 CPU 时间」设了过紧的默认阈值，服务端一切图、录 demo 就会误踢正在进服的玩家；现已放宽突发阈值，正常进服不再掉线。</p>
-            <div class="focus-meta"><span>2026.10.08</span><span>版本 V2.9.0</span><span>来源：背水工作室</span></div>
+            <h3><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.10.0 发布：用户专用进服大厅上线与双服节点更新</a></h3>
+            <p>「背水平台用户专用进服大厅」正式上线：官网三个入口一键直达，支持本地直连启动 CS2 与 Steam 协议回退；主服 30355 保留，新增二服 30356，列表清理为仅保留正式节点。</p>
+            <div class="focus-meta"><span>2026.10.24</span><span>版本 V2.10.0</span><span>来源：背水工作室</span></div>
           </div>
         </div>
         <ul class="newslist rv rv-d2">
-          <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.8.0 发布：比赛系统升级与两个新插件上线</a><time>2026.10.07</time></li>
+          <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.9.0 发布：进服被踢（溢出）问题根因修复</a><time>2026.10.08</time></li>
+          <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.8.0 发布：比赛系统升级与两个新插件上线</a><time>2026.10.07</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.7.0 发布：我的世界服务器上线与官网优化</a><time>2026.09.25</time></li>
           <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.4.0 发布：隧道访问认证与官网更新中心上线</a><time>2026.09.14</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">1v1 单挑插件玩家说明书：设置顺序、随机/固定模式与换枪</a><time>2026.05.29</time></li>
@@ -818,8 +819,21 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 <div class="page" id="p-cl">
   <section class="sec">
     <div class="wrap">
-      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.9.0 · 进服被踢（溢出）问题根因修复</span></div>
+      <div class="sec-hd rv"><h2>更新日志</h2><span class="more">总版本号 V2.10.0 · 用户专用进服大厅上线</span></div>
       <div class="cl">
+        <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.10.24</span><span class="cl-v">V2.10.0</span><span class="cl-t">重大</span><span class="cl-tt">用户专用进服大厅上线 + 双服节点与官网入口</span><span class="cl-a">▸</span></div><div class="cl-b">
+<b>【2026年10月24日更新内容】背水对战平台 &amp; CS2[总版本号 V2.10.0]</b><br><br>
+1.【新增】「背水平台用户专用进服大厅」正式上线：官网首页、经典版、政务版顶部均新增入口，进入后也能一键返回官网，来回切换不用再记地址！<br>
+2.【新增】进服大厅支持本地直连启动 CS2：运行 start.cmd 后点击「进服」，会优先直接启动 cs2.exe 并带上 -steam +connect 参数；本地服务未运行时自动回退到 Steam 协议，两种方式都能进服！<br>
+3.【新增】服务器节点更新：保留主服 frp-hip.com:30355，新增二服 frp-hip.com:30356，玩家可按需选择；使用本地服务时大厅会通过 A2S 自动同步在线人数、地图与延迟。<br>
+4.【优化】清理服务器列表：移除本地测试服、局域网服等玩家用不到的条目，只保留可对外连接的正式节点，列表更干净，不容易误点。<br>
+5.【优化】进服大厅品牌统一：页面由「社区服大厅」更名为「背水平台用户专用进服大厅」，标题、侧边栏、官网入口与页脚文案全部同步。<br>
+6.【优化】图片资源大幅压缩：logo 从约 1MB 压缩到约 70KB，页面加载更快，对低配置设备和手机流量更友好。<br>
+7.【修复】修复了玩家误以为网页「本地设置」能修改线上服务器的问题：现在明确标注「仅本机」，并提示线上列表由管理员通过 GitHub 仓库维护，避免误解。<br>
+8.【安全】进服大厅新增启动接口校验：只允许本机页面调用直接启动 CS2，并校验服务器地址与密码字符；公开网页仍为只读，玩家无法在线增删全局服务器。<br>
+9.【说明】本地直连仅在运行 start.cmd 时可用；通过 GitHub Pages 访问时会自动使用 Steam 协议进服。如无法唤起 Steam，请确认 Steam 已安装并登录，或复制 connect 指令到控制台。<br>
+10.【调整】总版本号升级至 V2.10.0，官网首页、经典版、政务版与更新日志版本号同步更新。
+</div></div>
         <div class="cl-i rv rv-d1"><div class="cl-h" onclick="t(this)"><span class="cl-d">2026.10.08</span><span class="cl-v">V2.9.0</span><span class="cl-t">重大</span><span class="cl-tt">进服被踢（溢出）问题根因修复</span><span class="cl-a">▸</span></div><div class="cl-b">
 <b>【2026年10月08日更新内容】背水对战平台 &amp; CS2[总版本号 V2.9.0]</b><br><br>
 1.【修复】彻底修复了部分玩家进服时被服务器踢出（提示「溢出」或 NETWORK_DISCONNECT_OVERFLOW）的问题：这次终于揪出根因了 —— CS2 引擎会统计「服务端处理某名玩家消息花了多少 CPU 时间」，一旦超过阈值就直接断开这名玩家，而官方默认阈值卡得很紧：服务端自己切地图、执行配置、开始录制 demo 就会有 140~250 毫秒的卡顿，进服那一瞬间这笔开销正好记在正在加载地图的玩家头上，于是一次卡顿就被判成「溢出」踢下线。现已把引擎的突发阈值从 200 毫秒放宽到 1500 毫秒（持续阈值 20→50），正常进服不会再被误踢，恶意刷屏依然会被拦住！<br>
@@ -1280,7 +1294,7 @@ Q：游戏时长怎么计算的？A：从你完全连接成功开始，到断开
       <a href="https://hsfaka.cn/shop/BSP" target="_blank">CS2 赞助链接</a>
       <a href="https://afdian.com/a/Bade-Gusi" target="_blank">爱发电</a>
       <a href="https://1821451126.share.123pan.cn/123pan/VrDpjv-hfOYd" target="_blank" data-bsp-loading="700">配套软件下载</a>
-      <a href="room/" target="_blank" rel="noopener">社区服大厅</a>
+      <a href="room/" target="_blank" rel="noopener">进服大厅</a>
       <a href="index.html">切换版本</a>
     </div>
   </div>

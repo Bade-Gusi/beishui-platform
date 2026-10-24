@@ -1,9 +1,9 @@
 /*
- * 背水对战平台 · 社区服配置
+ * 背水平台 · 用户专用进服大厅配置
  * ---------------------------------------------------------------
- * 直接编辑本文件即可增减服务器。启动 serve.mjs 后，页面会通过
- * A2S 查询自动补全真实的在线人数、地图与延迟；直接双击打开
- * index.html 时则使用下面填写的静态数据。
+ * 只保留玩家实际可用的正式节点。启动 serve.mjs 后，页面会通过
+ * A2S 查询自动补全真实的在线人数、地图与延迟；静态部署时显示
+ * 下面填写的配置。
  *
  * 字段说明：
  *   id              唯一标识（可省略，页面会自动生成）
@@ -37,33 +37,18 @@ window.BEISHUI_SERVERS = [
     "note": "由 FRP 隧道转发。进服前请确认隧道已启动；如果连接失败，请检查 30355/UDP 是否畅通。"
   },
   {
-    "id": "bsp-local",
-    "name": "背水 · 本地测试服",
-    "address": "127.0.0.1:27015",
+    "id": "bsp-second",
+    "name": "背水 · 二服",
+    "address": "frp-hip.com:30356",
     "map": "de_dust2",
-    "mode": "娱乐",
-    "region": "本机",
-    "players": null,
-    "maxPlayers": 20,
-    "password": "",
-    "requirePassword": false,
-    "appId": 730,
-    "tags": ["本地", "测试"],
-    "note": "本机运行的测试服务器。"
-  },
-  {
-    "id": "bsp-lan",
-    "name": "背水 · 局域网服",
-    "address": "192.168.1.100:27015",
-    "map": "de_inferno",
     "mode": "混战",
-    "region": "局域网",
+    "region": "远程",
     "players": null,
     "maxPlayers": 20,
     "password": "",
     "requirePassword": false,
     "appId": 730,
-    "tags": ["局域网"],
-    "note": "局域网内的服务器，按实际 IP 修改后再使用。"
+    "tags": ["二服", "混战", "FRP"],
+    "note": "由 FRP 隧道转发；请确认 30356/UDP 已放行。"
   }
 ];
