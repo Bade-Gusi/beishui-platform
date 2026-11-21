@@ -9,7 +9,11 @@
   var LS_SERVERS = 'bsp-room.servers.v1';
   var LS_FAV = 'bsp-room.favorites.v1';
   var LS_PREFS = 'bsp-room.prefs.v1';
-  var REFRESH_MS = 20000;
+  var LS_NOTICE = 'bsp-room.notice.v1';
+  var LS_SHORTCUT = 'bsp-room.shortcut.v1';
+  var REFRESH_MS = 30000;
+  var SHORTCUT_URL = 'https://bade-gusi.github.io/beishui-platform/room/';
+  var STATUS_URL = String(window.BEISHUI_STATUS_URL || '').trim();
 
   var MAPS = {
     de_dust2:    { name: '炙热沙城 II', a: '#8A6A2F', b: '#C9A24E' },
@@ -64,7 +68,13 @@
     lastFocus: null,
     lastSig: '',
     modesSig: '',
-    localLaunch: null
+    localLaunch: null,
+    quickSig: '',
+    quickPickId: null,
+    deferredPrompt: null,
+    shortcutState: null,
+    standalone: false,
+    promptTimer: null
   };
 
   var els = {};
@@ -208,7 +218,7 @@
 
   /* ---------------- 数据刷新 ---------------- */
 
-  function adoptApiServers(apiList) {
+  function adoptApiServers(apiList, statusOnly) {
     var api = normalizeList(apiList);
     var byAddress = {};
     var byId = {};
@@ -218,8 +228,9 @@
       byId[s.id] = s;
     });
 
-    // 没有本地覆盖时，配置文件才是权威来源，跟随文件更新元数据与 ID。
-    if (!state.localBase) state.base = api.map(stripLive);
+    // 状态服务只提供在线人数，不覆盖本地服务器元数据；
+    // 完整后台接口仍保持原来的“接口即权威”行为。
+    if (!state.localBase && !statusOnly) state.base = api.map(stripLive);
 
     state.servers = state.base.map(function (s) {
       var source = byAddress[s.address] || byId[s.id];
@@ -243,7 +254,13 @@
       els.refreshBtn.disabled = true;
     }
 
-    fetch('api/servers', { cache: 'no-store', signal: controller ? controller.signal : undefined })
+    var endpoint = STATUS_URL || 'api/servers';
+    var useCache = endpoint !== 'api/servers' && !manual;
+
+    fetch(endpoint, {
+      cache: useCache ? 'default' : 'no-store',
+      signal: controller ? controller.signal : undefined
+    })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
@@ -268,10 +285,10 @@
 
         state.lastSig = signature;
         state.cloud = true;
-        state.origin = data.origin || '';
+        state.origin = data.origin || (STATUS_URL ? 'status' : 'local');
         state.live = data.source === 'a2s' && hasLiveData;
         state.lastUpdated = new Date();
-        adoptApiServers(data.servers);
+        adoptApiServers(data.servers, data.statusOnly === true);
         state.loading = false;
 
         if (changed || wasLoading || manual || !wasCloud || state.live !== wasLive) renderAll();
@@ -316,7 +333,7 @@
   function scheduleRefresh() {
     if (state.timer) clearInterval(state.timer);
     state.timer = setInterval(function () {
-      if (document.visibilityState === 'visible' && state.cloud) refresh(false);
+      if (document.visibilityState === 'visible' && (state.cloud || STATUS_URL)) refresh(false);
     }, REFRESH_MS);
   }
 
@@ -394,6 +411,7 @@
 
   function renderAll() {
     renderStats();
+    renderQuickEntry();
     renderChips();
     renderList();
     renderSource();
@@ -425,12 +443,18 @@
     setText(els.navFavCount, state.favorites.size);
 
     if (els.sideHint) {
-      els.sideHint.textContent = state.live
-        ? (state.origin === 'cloud' ? '云端实时检测已连接' : '本地实时检测已连接') +
-          ' · 每 ' + (REFRESH_MS / 1000) + ' 秒自动刷新'
-        : state.cloud
-          ? '已连接云端后台 · 配置由管理后台下发'
-          : '静态配置模式 · 运行 serve.mjs 可检测实时人数';
+      if (state.origin === 'status') {
+        els.sideHint.textContent = state.live
+          ? '状态服务已连接 · 每 ' + (REFRESH_MS / 1000) + ' 秒自动刷新'
+          : '状态服务已连接 · 等待服务器响应';
+      } else if (state.live) {
+        els.sideHint.textContent = (state.origin === 'cloud' ? '云端实时检测已连接' : '本地实时检测已连接') +
+          ' · 每 ' + (REFRESH_MS / 1000) + ' 秒自动刷新';
+      } else if (state.cloud) {
+        els.sideHint.textContent = '已连接云端后台 · 配置由管理后台下发';
+      } else {
+        els.sideHint.textContent = '静态配置模式 · 运行 serve.mjs 可检测实时人数';
+      }
     }
   }
 
@@ -438,15 +462,18 @@
     if (!els.sourceBadge) return;
     els.sourceBadge.classList.toggle('is-live', state.live);
     els.sourceBadge.classList.toggle('is-cloud', state.cloud && !state.live);
-    setText(els.sourceText, state.live ? '实时检测' : (state.cloud ? '云端配置' : '静态配置'));
+    setText(els.sourceText,
+      state.live ? '实时检测' : state.origin === 'status' ? '状态服务' : state.cloud ? '云端配置' : '静态配置');
     setText(els.footSource,
-      state.origin === 'cloud' ? '云端后台（D1）' : '本地服务器配置');
+      state.origin === 'cloud' ? '云端后台（D1）' : state.origin === 'status' ? '状态服务' : '本地服务器配置');
 
     if (els.updatedText) {
       if (!state.lastUpdated) {
         els.updatedText.textContent = '尚未刷新';
       } else if (state.live) {
         els.updatedText.textContent = '更新于 ' + state.lastUpdated.toLocaleTimeString('zh-CN', { hour12: false }) + ' · 每 ' + (REFRESH_MS / 1000) + ' 秒刷新';
+      } else if (state.origin === 'status') {
+        els.updatedText.textContent = '状态服务 · ' + state.lastUpdated.toLocaleTimeString('zh-CN', { hour12: false }) + ' · 每 ' + (REFRESH_MS / 1000) + ' 秒刷新';
       } else if (state.cloud) {
         els.updatedText.textContent = '云端同步 · ' + state.lastUpdated.toLocaleTimeString('zh-CN', { hour12: false }) + ' · 每 ' + (REFRESH_MS / 1000) + ' 秒刷新';
       } else {
@@ -533,6 +560,115 @@
     }
     if (s.online === false) return { cls: '', text: '未响应' };
     return { cls: '', text: '未检测' };
+  }
+
+  function freeSlots(s) {
+    return typeof s.players === 'number' ? Math.max(0, (s.maxPlayers || 0) - s.players) : null;
+  }
+
+  function recommendRank(s) {
+    var free = freeSlots(s);
+    if (s.online === true && (free === null || free > 0)) return 0;
+    if (s.online !== false && (free === null || free > 0)) return 1;
+    if (s.online === true) return 3;
+    return 2;
+  }
+
+  function sortedQuickServers() {
+    return state.servers.map(effective).map(function (s, i) {
+      return { s: s, i: i };
+    }).sort(function (a, b) {
+      var ra = recommendRank(a.s), rb = recommendRank(b.s);
+      if (ra !== rb) return ra - rb;
+      var fa = freeSlots(a.s), fb = freeSlots(b.s);
+      if (fa !== fb) return (fb == null ? -1 : fb) - (fa == null ? -1 : fa);
+      return a.i - b.i;
+    }).map(function (x) { return x.s; });
+  }
+
+  function quickCardHTML(s, rec) {
+    var mi = mapInfo(s.map);
+    var st = statusInfo(s);
+    var free = freeSlots(s);
+    var meta;
+    if (typeof s.players === 'number') {
+      meta = '<b>' + s.players + '</b> / ' + s.maxPlayers + ' 人 · ' +
+        (free > 0 ? free + ' 个空位' : '已满') +
+        (s.ping != null ? ' · ' + s.ping + ' ms' : '');
+    } else {
+      meta = '状态未检测 · 可直接尝试进入' + (s.ping != null ? ' · ' + s.ping + ' ms' : '');
+    }
+
+    return '' +
+      '<article class="quick-card' + (rec ? ' is-rec' : '') + '" data-id="' + esc(s.id) + '" style="--map-a:' + mi.a + ';--map-b:' + mi.b + '">' +
+        '<div class="quick-art">' +
+          '<div class="quick-art-top">' +
+            '<span class="mode-badge" data-mode="' + esc(s.mode) + '">' + esc(s.mode) + '</span>' +
+            '<span class="state-badge ' + st.cls + '"><i class="dot"></i>' + st.text + '</span>' +
+            (rec ? '<span class="quick-rec">' + icon('star') + '推荐</span>' : '') +
+          '</div>' +
+          '<div class="quick-map"><strong>' + esc(mi.name) + '</strong><span>' + esc((s.map || 'unknown').replace(/^de_/, '')) + '</span></div>' +
+        '</div>' +
+        '<div class="quick-body">' +
+          '<div class="quick-head-row">' +
+            '<h3 title="' + esc(s.name) + '">' + esc(s.name) + '</h3>' +
+            (s.password || s.requirePassword ? '<span class="tag" title="需要密码">' + icon('lock') + '</span>' : '') +
+          '</div>' +
+          '<p class="quick-meta">' + meta + '</p>' +
+          '<div class="quick-addr">' +
+            '<span class="addr" title="' + esc(s.address) + '">' + esc(s.address) + '</span>' +
+            '<button class="copy-btn" data-action="copy" data-id="' + esc(s.id) + '" title="复制连接指令" aria-label="复制连接指令">' + icon('copy') + '</button>' +
+          '</div>' +
+          '<div class="quick-btns">' +
+            '<button class="btn btn-primary btn-join-lg" data-action="join" data-id="' + esc(s.id) + '">' + icon('play') + '进入服务器</button>' +
+            '<button class="btn" data-action="detail" data-id="' + esc(s.id) + '">详情</button>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+  }
+
+  function renderQuickEntry() {
+    if (!els.quickServers) return;
+
+    if (state.loading) {
+      els.quickServers.innerHTML = '<div class="quick-skeleton"></div><div class="quick-skeleton"></div>';
+      if (els.quickJoinBtn) els.quickJoinBtn.disabled = true;
+      setText(els.quickJoinName, '读取中');
+      state.quickSig = '';
+      return;
+    }
+
+    var list = sortedQuickServers();
+    if (!list.length) {
+      state.quickPickId = null;
+      setText(els.quickJoinName, '暂无服务器');
+      if (els.quickJoinBtn) els.quickJoinBtn.disabled = true;
+      if (state.quickSig !== 'empty') {
+        state.quickSig = 'empty';
+        els.quickServers.innerHTML =
+          '<div class="quick-empty">' +
+            '<div class="quick-empty-icon">' + icon('server') + '</div>' +
+            '<div><b>还没有可用的服务器</b><p>线上列表由管理员维护；你也可以在「本地设置」中添加仅本机可见的服务器。</p></div>' +
+            '<button class="btn" data-action="settings">' + icon('settings') + '打开设置</button>' +
+          '</div>';
+      }
+      return;
+    }
+
+    var pick = list[0];
+    state.quickPickId = pick.id;
+    setText(els.quickJoinName, pick.name);
+    if (els.quickJoinBtn) els.quickJoinBtn.disabled = false;
+
+    var sig = list.slice(0, 2).map(function (s) {
+      return [s.id, s.name, s.address, s.map, s.mode, s.players, s.maxPlayers, s.online === true ? 1 : s.online === false ? 0 : -1, s.ping].join('|');
+    }).join(';');
+    if (sig === state.quickSig) return;
+    state.quickSig = sig;
+
+    els.quickServers.innerHTML = list.slice(0, 2).map(function (s, i) {
+      return quickCardHTML(s, i === 0 && recommendRank(s) <= 1);
+    }).join('');
   }
 
   function cardHTML(s, i) {
@@ -710,6 +846,234 @@
         '</div>' +
       '</form>';
     openModal(html, 'modal-sm');
+  }
+
+  /* ---------------- 快捷方式 / 公告 / 帮助 ---------------- */
+
+  function isStandalone() {
+    return state.standalone ||
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+      navigator.standalone === true;
+  }
+
+  function setShortcutState(value) {
+    state.shortcutState = value;
+    writeJSON(LS_SHORTCUT, { state: value, at: Date.now() });
+  }
+
+  function showShortcutPrompt() {
+    if (!els.shortcutPrompt || state.shortcutState || isStandalone()) return;
+    if (els.modalRoot && els.modalRoot.innerHTML) {
+      state.promptTimer = setTimeout(showShortcutPrompt, 4000);
+      return;
+    }
+    els.shortcutPrompt.hidden = false;
+    document.body.classList.add('has-shortcut-prompt');
+  }
+
+  function hideShortcutPrompt() {
+    if (els.shortcutPrompt) els.shortcutPrompt.hidden = true;
+    document.body.classList.remove('has-shortcut-prompt');
+  }
+
+  function openShortcutModal() {
+    if (isStandalone()) {
+      toast('当前已在桌面应用模式运行', 'ok');
+      hideShortcutPrompt();
+      return;
+    }
+
+    var installed = state.shortcutState === 'installed';
+    var canInstall = !!state.deferredPrompt && !installed;
+    var html = modalHead('桌面快捷方式', '由你确认后才会创建') +
+      '<div class="modal-body">' +
+        '<div class="shortcut-hero">' +
+          '<div class="sp-icon">' + icon('desktop') + '</div>' +
+          '<b>背水进服大厅</b>' +
+          '<p>' + (installed ? '桌面快捷方式已创建。' : '创建桌面快捷方式，下次一步直达进服大厅。') + '</p>' +
+        '</div>' +
+        '<ul class="shortcut-points">' +
+          '<li>仅创建网站快捷方式，不安装后台程序。</li>' +
+          '<li>不读取、不上传任何个人数据。</li>' +
+          '<li>可随时从桌面删除，不影响游戏与账号。</li>' +
+        '</ul>' +
+        (canInstall
+          ? '<div class="shortcut-steps">点击下方「创建快捷方式」后，浏览器会弹出安装确认。同意后，桌面会生成「背水进服大厅」快捷方式，可像普通应用一样打开。</div>'
+          : installed
+            ? '<div class="shortcut-steps"><b>桌面快捷方式已创建。</b><br>如果没有在桌面看到图标，可下载快捷方式文件，保存到桌面后使用。</div>'
+            : '<div class="shortcut-steps"><b>当前浏览器未提供一键安装，可手动添加：</b><br>' +
+              '1. 电脑端：打开浏览器右上角菜单，选择「应用」或「安装此站点」。<br>' +
+              '2. iPhone / iPad：在 Safari 分享菜单中选择「添加到主屏幕」。<br>' +
+              '3. 也可以下载快捷方式文件，保存到桌面后使用。</div>') +
+        '<p class="shortcut-note">桌面快捷方式只指向本页面，不会在后台运行，也不会修改游戏文件。</p>' +
+      '</div>' +
+      '<div class="modal-foot">' +
+        '<button class="btn" data-action="close">取消</button>' +
+        (canInstall
+          ? '<button class="btn btn-primary" data-action="installShortcut">' + icon('desktop') + '创建快捷方式</button>'
+          : '<button class="btn btn-primary" data-action="downloadShortcut">' + icon('download') + '下载快捷方式文件</button>') +
+      '</div>';
+
+    openModal(html, 'modal-sm');
+  }
+
+  function installShortcut() {
+    if (isStandalone()) {
+      hideShortcutPrompt();
+      toast('当前已在桌面应用模式运行', 'ok');
+      return;
+    }
+
+    if (!state.deferredPrompt) {
+      openShortcutModal();
+      return;
+    }
+
+    var promptEvent = state.deferredPrompt;
+    state.deferredPrompt = null;
+    var promptResult;
+    try {
+      promptResult = promptEvent.prompt();
+    } catch (e) {
+      openShortcutModal();
+      return;
+    }
+    if (promptResult && typeof promptResult.catch === 'function') {
+      promptResult.catch(function () { openShortcutModal(); });
+    }
+
+    promptEvent.userChoice.then(function (choice) {
+      if (choice && choice.outcome === 'accepted') {
+        setShortcutState('installed');
+        hideShortcutPrompt();
+        closeModal();
+        toast('桌面快捷方式已创建', 'ok');
+      } else {
+        setShortcutState('declined');
+        hideShortcutPrompt();
+        closeModal();
+        toast('已取消创建快捷方式', 'warn');
+      }
+    }).catch(function () {
+      openShortcutModal();
+      toast('浏览器未能完成安装，可下载快捷方式文件', 'warn');
+    });
+  }
+
+  function downloadShortcutFile() {
+    var page = location.href.split('#')[0];
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') page = SHORTCUT_URL;
+    var iconUrl = new URL('assets/favicon.ico', page).href;
+    var content = '[InternetShortcut]\r\nURL=' + page + '\r\nIconFile=' + iconUrl + '\r\nIconIndex=0\r\n';
+    var blob = new Blob([content], { type: 'application/octet-stream' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = '背水平台进服大厅.url';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    setShortcutState('downloaded');
+    hideShortcutPrompt();
+    closeModal();
+    toast('快捷方式文件已下载，请保存到桌面', 'ok');
+  }
+
+  function setupShortcut() {
+    state.standalone = isStandalone();
+    var saved = readJSON(LS_SHORTCUT, null);
+    state.shortcutState = saved && saved.state ? saved.state : null;
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      state.deferredPrompt = e;
+    });
+
+    window.addEventListener('appinstalled', function () {
+      state.deferredPrompt = null;
+      setShortcutState('installed');
+      hideShortcutPrompt();
+      toast('桌面快捷方式已创建', 'ok');
+    });
+
+    if (!state.standalone && !state.shortcutState) {
+      state.promptTimer = setTimeout(function () {
+        if (!state.shortcutState && !isStandalone()) showShortcutPrompt();
+      }, 2800);
+    }
+  }
+
+  function renderNotice() {
+    if (!els.noticeBar) return;
+    var id = els.noticeBar.getAttribute('data-notice-id') || '';
+    var seen = readJSON(LS_NOTICE, '');
+    if (id && seen === id) els.noticeBar.classList.add('is-hidden');
+    else els.noticeBar.classList.remove('is-hidden');
+  }
+
+  function dismissNotice() {
+    if (!els.noticeBar) return;
+    var id = els.noticeBar.getAttribute('data-notice-id') || 'notice';
+    writeJSON(LS_NOTICE, id);
+    els.noticeBar.classList.add('is-hidden');
+  }
+
+  function openGuide() {
+    var sample = state.base[0] ? state.base[0].address : 'frp-hip.com:30355';
+    var html = modalHead('进服指南', '首次进服与常见问题') +
+      '<div class="modal-body">' +
+        '<ol class="guide-list">' +
+          '<li><b>准备 Steam 与 CS2</b><span>确认 Steam 已登录，并已安装 Counter-Strike 2。服务器使用 Steam 账号，不需要额外注册。</span></li>' +
+          '<li><b>选择服务器</b><span>在首屏选择标有「推荐」的节点，或点击「浏览全部服务器」按模式、人数和延迟挑选。</span></li>' +
+          '<li><b>点击进入服务器</b><span>本地服务运行时将直接启动 CS2；未运行时自动回退到 Steam 协议。首次加载地图可能需要几十秒，请耐心等待。</span></li>' +
+          '<li><b>连接失败怎么办</b><span>先重试一次；仍失败时检查加速器、网络与服务器是否满员。也可以复制下方 connect 指令，在游戏控制台手动连接。</span></li>' +
+        '</ol>' +
+        '<div class="guide-cmd">' +
+          '<code>connect ' + esc(sample) + '</code>' +
+          '<button class="copy-btn" data-action="copyconnect" data-address="' + esc(sample) + '" title="复制连接指令" aria-label="复制连接指令">' + icon('copy') + '</button>' +
+        '</div>' +
+        '<p class="field-hint" style="margin-top:10px">控制台可在 CS2 设置中启用。若服务器有密码，请向管理员获取后再进入。</p>' +
+      '</div>' +
+      '<div class="modal-foot"><button class="btn btn-primary" data-action="close">知道了</button></div>';
+    openModal(html, 'modal-lg');
+  }
+
+  function openContact() {
+    var html = modalHead('联系管理员', '账号、满员与连接问题') +
+      '<div class="modal-body">' +
+        '<div class="contact-card">' +
+          '<div class="sp-icon">' + icon('message') + '</div>' +
+          '<p class="contact-sub">遇到无法进服、服务器满员、密码或账号问题时，请携带服务器名称与报错截图联系管理员。</p>' +
+          '<div class="contact-qq">2994938720</div>' +
+          '<p class="contact-sub">管理员 QQ</p>' +
+          '<button class="btn btn-primary" data-action="copyqq">' + icon('copy') + '复制 QQ 号</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="modal-foot"><button class="btn" data-action="close">关闭</button></div>';
+    openModal(html, 'modal-sm');
+  }
+
+  function copyQQ() {
+    copyText('2994938720').then(function (ok) {
+      toast(ok ? 'QQ 号已复制' : '复制失败，请手动记录 QQ 2994938720', ok ? 'ok' : 'error');
+    });
+  }
+
+  function copyConnectAddress(address) {
+    copyText('connect ' + address).then(function (ok) {
+      toast(ok ? '连接指令已复制' : '复制失败，请手动输入 connect ' + address, ok ? 'ok' : 'error');
+    });
+  }
+
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {
+        /* 离线能力不可用时不打扰玩家 */
+      });
+    });
   }
 
   function openSettings(focusForm) {
@@ -936,9 +1300,15 @@
             ? '本地直连：' + data.exe
             : (data && data.reason) || '未运行本地服务，使用 Steam 协议进服';
         }
+        if (els.asideLaunchMode) {
+          els.asideLaunchMode.textContent = state.localLaunch
+            ? '本地直连已就绪，点击即可启动 CS2。'
+            : 'Steam 协议模式，点击后将唤起 Steam。';
+        }
       })
       .catch(function () {
         state.localLaunch = null;
+        if (els.asideLaunchMode) els.asideLaunchMode.textContent = 'Steam 协议模式，点击后将唤起 Steam。';
       })
       .finally(function () { if (timer) clearTimeout(timer); });
   }
@@ -1202,6 +1572,32 @@
         if (act === 'export') { exportConfig(); return; }
         if (act === 'reset') { resetConfig(); return; }
         if (act === 'cancelEdit') { state.editingId = null; openSettings(); return; }
+        if (act === 'quickjoin') { if (state.quickPickId) requestJoin(state.quickPickId); return; }
+        if (act === 'browse') {
+          if (els.serverList) els.serverList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        if (act === 'guide') { openGuide(); return; }
+        if (act === 'contact') { openContact(); return; }
+        if (act === 'shortcut') { openShortcutModal(); return; }
+        if (act === 'installShortcut') { installShortcut(); return; }
+        if (act === 'downloadShortcut') { downloadShortcutFile(); return; }
+        if (act === 'dismissShortcut') {
+          setShortcutState('declined');
+          hideShortcutPrompt();
+          closeModal();
+          toast('已选择暂不创建桌面快捷方式', 'warn');
+          return;
+        }
+        if (act === 'dismissNotice') { dismissNotice(); return; }
+        if (act === 'copyqq') { copyQQ(); return; }
+        if (act === 'copyconnect') { copyConnectAddress(action.getAttribute('data-address') || ''); return; }
+      }
+
+      var quickCard = e.target.closest('.quick-card');
+      if (quickCard && !e.target.closest('button')) {
+        openDetail(quickCard.getAttribute('data-id'));
+        return;
       }
 
       var card = e.target.closest('.server-card');
@@ -1267,7 +1663,7 @@
     if (els.footSettings) els.footSettings.addEventListener('click', function () { openSettings(); });
 
     document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'visible' && state.cloud) refresh(false);
+      if (document.visibilityState === 'visible' && (state.cloud || STATUS_URL)) refresh(false);
     });
 
     window.addEventListener('hashchange', function () {
@@ -1320,6 +1716,13 @@
       openSettings: document.getElementById('openSettings'),
       footSettings: document.getElementById('footSettings'),
       launchMode: document.getElementById('launchMode'),
+      quickServers: document.getElementById('quickServers'),
+      quickJoinBtn: document.getElementById('quickJoinBtn'),
+      quickJoinName: document.getElementById('quickJoinName'),
+      noticeBar: document.getElementById('noticeBar'),
+      shortcutPrompt: document.getElementById('shortcutPrompt'),
+      asideLaunchMode: document.getElementById('asideLaunchMode'),
+      launchHint: document.getElementById('launchHint'),
       main: document.querySelector('.main')
     };
 
@@ -1340,6 +1743,9 @@
 
     bind();
     renderAll();
+    renderNotice();
+    setupShortcut();
+    registerServiceWorker();
     checkLocalLaunch();
     refresh(false);
   }

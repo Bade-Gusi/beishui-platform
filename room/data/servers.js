@@ -19,7 +19,14 @@
  *   appId           Steam AppID，CS2 固定为 730
  *   tags            标签数组
  *   note            详情页备注
+ *
+ * 状态服务：
+ *   把内网穿透或 Worker 暴露出来的 status.json 完整地址填到下面；
+ *   留空时使用本地 api/servers（适合运行 serve.mjs 的本机玩家）。
+ *   配置后，大厅进入页面会自动读取，并每 30 秒刷新一次。
  */
+window.BEISHUI_STATUS_URL = window.BEISHUI_STATUS_URL || '';
+
 window.BEISHUI_SERVERS = [
   {
     "id": "bsp-main",

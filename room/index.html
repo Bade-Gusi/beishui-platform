@@ -5,8 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0D1A12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="背水进服大厅">
 <title>背水平台 · 用户专用进服大厅</title>
-<link rel="icon" href="assets/logo.png">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="assets/room.css">
 </head>
 <body>
@@ -40,6 +46,12 @@
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M20 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5"/></symbol>
     <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-desktop" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5Z"/><path d="M8 7h8M8 11h8"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6Z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
   </defs>
 </svg>
 
@@ -63,6 +75,9 @@
       <button class="nav-item" data-nav="settings">
         <svg><use href="#i-settings"/></svg><span>本地设置</span>
       </button>
+      <button class="nav-item" data-action="shortcut">
+        <svg><use href="#i-desktop"/></svg><span>桌面快捷方式</span>
+      </button>
       <a class="nav-item" href="https://bade-gusi.github.io/beishui-platform/" target="_blank" rel="noopener">
         <svg><use href="#i-external"/></svg><span>返回官网</span>
       </a>
@@ -78,7 +93,7 @@
     </div>
 
     <div class="sidebar-foot">
-      <div class="ver-chip"><span class="ver-dot"></span>V2.10.0 · AURORA</div>
+      <div class="ver-chip"><span class="ver-dot"></span>V2.11.0 · AURORA</div>
       <p id="launchMode">一键进服 · Steam 协议</p>
     </div>
   </aside>
@@ -87,7 +102,7 @@
     <header class="topbar">
       <div class="page-head">
         <div class="eyebrow">BEISHUI MEMBER ENTRY</div>
-        <h1>用户专用进服大厅</h1>
+        <h1>进服大厅</h1>
       </div>
 
       <label class="search">
@@ -98,6 +113,9 @@
       </label>
 
       <div class="top-actions">
+        <button class="shortcut-btn" data-action="shortcut" title="创建桌面快捷方式">
+          <svg><use href="#i-desktop"/></svg><span>桌面快捷方式</span>
+        </button>
         <span class="source-badge" id="sourceBadge" title="数据来源">
           <span class="source-dot"></span><b id="sourceText">静态配置</b>
         </span>
@@ -111,63 +129,145 @@
       </div>
     </header>
 
-    <section class="hero" aria-label="总览">
-      <article class="stat-card">
-        <div class="stat-icon"><svg><use href="#i-users"/></svg></div>
-        <div class="stat-body"><span>在线玩家</span><b id="statPlayers">—</b><small id="statPlayersSub">配置数据</small></div>
-        <div class="stat-spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      </article>
-      <article class="stat-card">
-        <div class="stat-icon"><svg><use href="#i-server"/></svg></div>
-        <div class="stat-body"><span>服务器</span><b id="statServers">—</b><small id="statServersSub">共 0 个</small></div>
-        <div class="stat-ring" id="statRing" aria-hidden="true"><span></span></div>
-      </article>
-      <article class="stat-card">
-        <div class="stat-icon"><svg><use href="#i-gamepad"/></svg></div>
-        <div class="stat-body"><span>可用空位</span><b id="statSlots">—</b><small id="statSlotsSub">等待检测</small></div>
-        <div class="stat-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      </article>
-      <article class="stat-card stat-card--accent">
-        <div class="stat-icon"><svg><use href="#i-star"/></svg></div>
-        <div class="stat-body"><span>我的收藏</span><b id="statFav">0</b><small>点击卡片星标收藏</small></div>
-        <button class="stat-link" id="openSettings">数据设置<svg><use href="#i-chevron"/></svg></button>
-      </article>
+    <section class="notice-bar" id="noticeBar" data-notice-id="v2.11.0" aria-label="公告">
+      <span class="notice-tag"><svg><use href="#i-bell"/></svg>公告</span>
+      <p><b>V2.11.0 进服大厅改版上线</b><span>首屏快速进服、桌面快捷方式；CS2 服务器已同步最新雪地更新。</span></p>
+      <a class="notice-link" href="../经典版.html" target="_blank" rel="noopener">查看更新日志<svg><use href="#i-chevron"/></svg></a>
+      <button class="notice-close" data-action="dismissNotice" aria-label="关闭公告"><svg><use href="#i-x"/></svg></button>
     </section>
 
-    <section class="filterbar" aria-label="筛选">
-      <div class="chips" id="modeChips"></div>
-      <div class="filter-tools">
-        <button class="toggle" data-filter="notFull"><span></span>仅看未满</button>
-        <button class="toggle" data-filter="hasPlayers"><span></span>有人在线</button>
-        <button class="toggle" data-filter="onlyFav"><span></span>只看收藏</button>
-        <label class="sort">
-          <svg><use href="#i-filter"/></svg>
-          <select id="sortSelect" aria-label="排序方式">
-            <option value="default">默认排序</option>
-            <option value="players">人数最多</option>
-            <option value="slots">空位最多</option>
-            <option value="map">按地图</option>
-            <option value="name">按名称</option>
-          </select>
-          <svg class="chev"><use href="#i-chevron"/></svg>
-        </label>
+    <section class="launchpad" aria-label="快速进服">
+      <div class="launch-head">
+        <div class="launch-copy">
+          <div class="eyebrow">QUICK ENTRY</div>
+          <h2>选择服务器，直接进入游戏</h2>
+          <p>推荐节点已置顶。点击「快速进入」将启动 CS2 并连接推荐服务器。</p>
+        </div>
+        <div class="launch-actions">
+          <button class="btn btn-primary btn-xl" id="quickJoinBtn" data-action="quickjoin">
+            <svg><use href="#i-play"/></svg>
+            <span>快速进入</span>
+            <b id="quickJoinName">—</b>
+          </button>
+          <button class="btn btn-xl" data-action="browse">
+            <svg><use href="#i-grid"/></svg>浏览全部服务器
+          </button>
+        </div>
+      </div>
+
+      <div class="quick-grid" id="quickServers" aria-live="polite">
+        <div class="quick-skeleton"></div><div class="quick-skeleton"></div>
+      </div>
+
+      <div class="launch-foot">
+        <div class="launch-stats">
+          <div class="ls-item"><span>在线玩家</span><b id="statPlayers">—</b><small id="statPlayersSub">配置数据</small></div>
+          <div class="ls-item"><span>服务器</span><b id="statServers">—</b><small id="statServersSub">共 0 个</small></div>
+          <div class="ls-item"><span>可用空位</span><b id="statSlots">—</b><small id="statSlotsSub">等待检测</small></div>
+          <div class="ls-item"><span>我的收藏</span><b id="statFav">0</b><small>点击卡片星标收藏</small></div>
+        </div>
+        <p class="launch-hint" id="launchHint"><svg><use href="#i-info"/></svg>本地服务运行时将直接启动 CS2；未运行时自动回退 Steam 协议。</p>
       </div>
     </section>
 
-    <div class="result-bar">
-      <p>已发现 <b id="resultCount" aria-live="polite">0</b> 个服务器 <span id="filterSummary"></span></p>
-      <p class="updated" id="updatedText">尚未刷新</p>
-    </div>
-
-    <section id="serverList" class="server-grid" aria-busy="true">
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <section class="quick-tools" aria-label="快捷操作">
+      <button class="tool" data-action="guide">
+        <span class="tool-icon"><svg><use href="#i-book"/></svg></span>
+        <span class="tool-text"><b>进服指南</b><small>首次进服先看这里</small></span>
+        <svg class="tool-arrow"><use href="#i-chevron"/></svg>
+      </button>
+      <button class="tool" data-action="shortcut">
+        <span class="tool-icon"><svg><use href="#i-desktop"/></svg></span>
+        <span class="tool-text"><b>桌面快捷方式</b><small>下次一步直达大厅</small></span>
+        <svg class="tool-arrow"><use href="#i-chevron"/></svg>
+      </button>
+      <button class="tool" data-action="contact">
+        <span class="tool-icon"><svg><use href="#i-message"/></svg></span>
+        <span class="tool-text"><b>联系管理员</b><small>QQ 2994938720</small></span>
+        <svg class="tool-arrow"><use href="#i-chevron"/></svg>
+      </button>
+      <a class="tool" href="../经典版.html" target="_blank" rel="noopener">
+        <span class="tool-icon"><svg><use href="#i-bolt"/></svg></span>
+        <span class="tool-text"><b>更新日志</b><small>V2.11.0 已发布</small></span>
+        <svg class="tool-arrow"><use href="#i-chevron"/></svg>
+      </a>
     </section>
+
+    <div class="content-grid">
+      <div class="content-main">
+        <section class="filterbar" aria-label="筛选">
+          <div class="chips" id="modeChips"></div>
+          <div class="filter-tools">
+            <button class="toggle" data-filter="notFull"><span></span>仅看未满</button>
+            <button class="toggle" data-filter="hasPlayers"><span></span>有人在线</button>
+            <button class="toggle" data-filter="onlyFav"><span></span>只看收藏</button>
+            <label class="sort">
+              <svg><use href="#i-filter"/></svg>
+              <select id="sortSelect" aria-label="排序方式">
+                <option value="default">默认排序</option>
+                <option value="players">人数最多</option>
+                <option value="slots">空位最多</option>
+                <option value="map">按地图</option>
+                <option value="name">按名称</option>
+              </select>
+              <svg class="chev"><use href="#i-chevron"/></svg>
+            </label>
+          </div>
+        </section>
+
+        <div class="result-bar">
+          <p>已发现 <b id="resultCount" aria-live="polite">0</b> 个服务器 <span id="filterSummary"></span></p>
+          <p class="updated" id="updatedText">尚未刷新</p>
+        </div>
+
+        <section id="serverList" class="server-grid" aria-busy="true">
+          <div class="skeleton"></div><div class="skeleton"></div>
+        </section>
+      </div>
+
+      <aside class="content-aside" aria-label="进服帮助">
+        <section class="aside-card">
+          <div class="aside-title"><svg><use href="#i-book"/></svg>进服步骤</div>
+          <ol class="steps">
+            <li><b>准备环境</b><span>确认 Steam 已登录，并已安装 CS2。</span></li>
+            <li><b>选择服务器</b><span>优先选择标有「推荐」的节点。</span></li>
+            <li><b>连接游戏</b><span>点击进入服务器，首次加载可能需要几十秒。</span></li>
+          </ol>
+          <button class="aside-link" data-action="guide">查看完整进服指南<svg><use href="#i-chevron"/></svg></button>
+        </section>
+
+        <section class="aside-card">
+          <div class="aside-title"><svg><use href="#i-signal"/></svg>连接方式</div>
+          <p class="aside-mode" id="asideLaunchMode">正在检测本地服务…</p>
+          <p class="aside-note">本地服务运行时直接启动 CS2；公开页面自动使用 Steam 协议。若无法唤起 Steam，请复制连接指令手动进入。</p>
+        </section>
+
+        <section class="aside-card">
+          <div class="aside-title"><svg><use href="#i-shield"/></svg>进服提示</div>
+          <p class="aside-note">服务器由 FRP 隧道转发，进服前请确认加速器或网络状态。遇到满员、密码或账号问题，联系管理员处理。</p>
+          <button class="btn aside-btn" data-action="contact"><svg><use href="#i-message"/></svg>联系管理员</button>
+        </section>
+      </aside>
+    </div>
 
     <footer class="pagefoot">
       <p><svg><use href="#i-info"/></svg>背水平台用户专用进服大厅 · 本地服务运行时直接启动 CS2 并连接；未运行时自动回退到 Steam 协议。</p>
       <p class="foot-right">数据源：<span id="footSource">背水服务器配置</span> · <button class="link-btn" id="footSettings">本地设置</button> · <a class="foot-link" href="https://bade-gusi.github.io/beishui-platform/" target="_blank" rel="noopener">官网</a></p>
     </footer>
   </main>
+</div>
+
+<div class="shortcut-prompt" id="shortcutPrompt" role="region" aria-label="创建桌面快捷方式" hidden>
+  <div class="sp-icon"><svg><use href="#i-desktop"/></svg></div>
+  <div class="sp-copy">
+    <b>把进服大厅放到桌面？</b>
+    <p>同意后创建桌面快捷方式，下次可直接打开。仅创建快捷方式，不安装后台程序，不收集任何数据。</p>
+  </div>
+  <div class="sp-actions">
+    <button class="btn btn-primary" data-action="installShortcut">创建快捷方式</button>
+    <button class="btn btn-ghost" data-action="dismissShortcut">暂不</button>
+  </div>
+  <button class="sp-close" data-action="dismissShortcut" aria-label="关闭"><svg><use href="#i-x"/></svg></button>
 </div>
 
 <div id="modalRoot"></div>
