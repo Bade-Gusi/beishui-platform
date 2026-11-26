@@ -560,6 +560,162 @@
 #quickJoinBtn.is-loading .m-dots { display: inline-flex; }
 
 /* ============================================================
+   平台理念
+   ============================================================ */
+
+.bsp-motto {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 7px 10px;
+  max-width: min(760px, calc(100% - 20px));
+  margin: 16px auto 14px;
+  color: var(--m-ink);
+  font-size: 13px;
+  line-height: 1.7;
+  letter-spacing: .01em;
+  text-align: center;
+}
+
+.bsp-motto-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--m-glow);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  line-height: 1.7;
+  opacity: .82;
+  white-space: nowrap;
+}
+
+.bsp-motto-kicker::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.bsp-motto-text {
+  color: var(--m-ink);
+  opacity: .78;
+}
+
+.bsp-motto-text em {
+  font-style: normal;
+  font-weight: 650;
+  color: var(--m-glow);
+  background-image: linear-gradient(var(--m-glow), var(--m-glow));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size .55s var(--m-ease-out);
+}
+
+.bsp-motto:hover .bsp-motto-text em {
+  background-size: 100% 1px;
+}
+
+.bsp-motto--pill {
+  padding: 8px 15px;
+  border: 1px solid rgba(34, 217, 126, .18);
+  border-radius: 14px;
+  background: rgba(34, 217, 126, .055);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+}
+
+.bsp-motto--quote {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  max-width: none;
+  margin: 0 0 22px;
+  padding: 18px 22px;
+  border: 0;
+  border-left: 4px solid var(--m-glow);
+  border-radius: 0 var(--radius-lg, 14px) var(--radius-lg, 14px) 0;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(22, 35, 61, .06);
+  color: var(--ink, #1B2738);
+  font-family: var(--font-serif, var(--font-sans, serif));
+  text-align: left;
+}
+
+.bsp-motto--quote .bsp-motto-kicker {
+  font-family: var(--font-sans, inherit);
+}
+
+.bsp-motto--quote .bsp-motto-text {
+  color: var(--ink, #1B2738);
+  opacity: 1;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.bsp-motto--quote .bsp-motto-text em {
+  background-size: 100% 2px;
+}
+
+.bsp-motto.anim {
+  animation: m-blur-up .8s var(--m-ease-out) .24s both;
+}
+
+.pagefoot .foot-motto {
+  flex-basis: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px 10px;
+  max-width: none;
+  margin: 0 0 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-soft);
+  font-size: 11.5px;
+  text-align: left;
+}
+
+.pagefoot .foot-motto .bsp-motto-kicker {
+  font-size: 9px;
+}
+
+.pagefoot .foot-motto .bsp-motto-text {
+  font-size: 11.5px;
+  opacity: .92;
+}
+
+@media (max-width: 720px) {
+  .bsp-motto {
+    gap: 6px 8px;
+    font-size: 12px;
+  }
+
+  .bsp-motto--quote {
+    padding: 15px 16px;
+    margin-bottom: 18px;
+  }
+
+  .bsp-motto--quote .bsp-motto-text {
+    font-size: 16px;
+  }
+
+  .pagefoot .foot-motto {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* ============================================================
    加载 / 进度 / 状态
    ============================================================ */
 
