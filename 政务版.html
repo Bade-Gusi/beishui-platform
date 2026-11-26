@@ -448,8 +448,9 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
 }
 </style>
   <link rel="stylesheet" href="bsp-anim.css">
+  <link rel="stylesheet" href="motion.css">
 </head>
-<body>
+<body data-motion="lite">
 
 <!-- ===== 顶部工具条 ===== -->
 <div class="topbar">
@@ -560,7 +561,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
             <div class="focus-meta"><span>2026.11.21</span><span>版本 V2.11.0</span><span>来源：背水工作室</span></div>
           </div>
         </div>
-        <ul class="newslist rv rv-d2">
+        <ul class="newslist rv rv-d2 m-stagger">
           <li class="hot"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.11.0 发布：进服大厅改版与桌面快捷方式上线</a><time>2026.11.21</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.10.0 发布：用户专用进服大厅上线与双服节点更新</a><time>2026.10.24</time></li>
           <li><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">背水对战平台 v2.9.0 发布：进服被踢（溢出）问题根因修复</a><time>2026.10.08</time></li>
@@ -593,7 +594,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
         </div>
         <div class="rv rv-d2">
           <div class="sec-hd"><h2>数据概览</h2><span class="more">数据实时统计</span></div>
-          <div class="stats" style="grid-template-columns:1fr 1fr">
+          <div class="stats rv m-stagger" style="grid-template-columns:1fr 1fr">
             <div class="stat"><div class="k">服务器配置</div><div class="v"><em>14</em> 核 / <em>24</em> 线程</div><div class="s">3.2GHz · 16GB 三星 ECC</div></div>
             <div class="stat"><div class="k">最低延迟</div><div class="v"><em>6</em> ms</div><div class="s">中国辽宁联通</div></div>
             <div class="stat"><div class="k">自研插件</div><div class="v"><em>4000</em>+ /场</div><div class="s">每场比赛运行</div></div>
@@ -652,7 +653,7 @@ footer .wrap{display:flex;gap:36px;flex-wrap:wrap;justify-content:space-between}
         <div class="bullet"><a onclick="sw('cl',document.querySelectorAll('.navlist a')[4])">服务器更新日志</a> · 点我跳转</div>
       </div>
 
-      <div class="stats" style="margin:20px 0">
+      <div class="stats rv m-stagger" style="margin:20px 0">
         <div class="stat rv rv-d1"><div class="k">归属</div><div class="v">背水工作室</div><div class="s">高性能统一布控中心 · 公网 IPv4</div></div>
         <div class="stat rv rv-d2"><div class="k">网络</div><div class="v">中国联通</div><div class="s">优先带宽 · TCP/UDP 超宽频道</div></div>
         <div class="stat rv rv-d3"><div class="k">服务器配置</div><div class="v"><em>14</em> 核 / <em>24</em> 线程</div><div class="s">3.2GHz · 16GB 三星 ECC · 400W</div></div>
@@ -1439,5 +1440,6 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
   <script src="bsp-anim.js" defer></script>
+  <script src="motion.js" defer></script>
 </body>
 </html>

@@ -14,8 +14,9 @@
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="assets/room.css">
+<link rel="stylesheet" href="assets/motion.css">
 </head>
-<body>
+<body data-motion="full">
 <div class="aurora" aria-hidden="true"></div>
 
 <svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -148,6 +149,7 @@
             <svg><use href="#i-play"/></svg>
             <span>快速进入</span>
             <b id="quickJoinName">—</b>
+            <span class="m-dots" aria-hidden="true"><i></i><i></i><i></i></span>
           </button>
           <button class="btn btn-xl" data-action="browse">
             <svg><use href="#i-grid"/></svg>浏览全部服务器
@@ -274,6 +276,7 @@
 <div id="toastRoot" class="toasts" aria-live="polite"></div>
 
 <script src="data/servers.js"></script>
+<script src="assets/motion.js"></script>
 <script src="assets/room.js"></script>
 </body>
 </html>

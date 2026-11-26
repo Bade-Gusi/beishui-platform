@@ -1,0 +1,795 @@
+/* ============================================================
+   背水对战平台 · 非线性动效层
+   设计参考 StyleKit 动画分类，重新配比后用于官网与进服大厅。
+   原则：transform / opacity 为主；指针效果仅精确指针设备；
+   所有持续动效支持 prefers-reduced-motion。
+   ============================================================ */
+
+@property --m-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+:root {
+  --m-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --m-ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --m-ease-elastic: cubic-bezier(.68, -.55, .27, 1.55);
+  --m-ease-smooth: cubic-bezier(.4, 0, .2, 1);
+  --m-glow: var(--primary, var(--accent, #22D97E));
+  --m-glow-soft: rgba(34, 217, 126, .16);
+  --m-ink: var(--text, #F2F5F3);
+  --m-dur-fast: .22s;
+  --m-dur: .45s;
+  --m-dur-slow: .8s;
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  :root {
+    --m-glow-soft: color-mix(in srgb, var(--m-glow) 18%, transparent);
+  }
+}
+
+/* ============================================================
+   关键帧：入场 / 退场 / 状态
+   ============================================================ */
+
+@keyframes m-fade-up {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); filter: blur(6px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes m-fade-down {
+  from { opacity: 0; transform: translate3d(0, -18px, 0); filter: blur(5px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes m-scale-in {
+  from { opacity: 0; transform: scale(.88); filter: blur(4px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes m-slide-left {
+  from { opacity: 0; transform: translate3d(-30px, 0, 0); filter: blur(6px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes m-slide-right {
+  from { opacity: 0; transform: translate3d(30px, 0, 0); filter: blur(6px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes m-bounce-in {
+  0% { opacity: 0; transform: scale(.72) translate3d(0, 16px, 0); }
+  58% { opacity: 1; transform: scale(1.045) translate3d(0, 0, 0); }
+  76% { transform: scale(.975); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes m-zoom-in {
+  from { opacity: 0; transform: scale(.84); filter: blur(10px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes m-elastic-in {
+  0% { opacity: 0; transform: scale(.3); }
+  52% { opacity: 1; transform: scale(1.08); }
+  70% { transform: scale(.94); }
+  86% { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+@keyframes m-rotate-in {
+  from { opacity: 0; transform: rotate(-6deg) scale(.9); filter: blur(6px); }
+  to { opacity: 1; transform: rotate(0) scale(1); filter: blur(0); }
+}
+@keyframes m-blur-up {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); filter: blur(12px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes m-card-in {
+  from { opacity: 0; transform: translate3d(0, 20px, 0) scale(.955); filter: blur(7px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+}
+@keyframes m-page-in {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); filter: blur(10px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes m-notice-in {
+  from { opacity: 0; transform: translate3d(0, -12px, 0) scale(.99); filter: blur(4px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+}
+@keyframes m-modal-in {
+  from { opacity: 0; transform: translate3d(0, 20px, 0) scale(.955); filter: blur(8px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+}
+@keyframes m-modal-out {
+  to { opacity: 0; transform: translate3d(0, 10px, 0) scale(.975); filter: blur(5px); }
+}
+@keyframes m-shortcut-in {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(.97); filter: blur(4px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+}
+@keyframes m-shortcut-out {
+  to { opacity: 0; transform: translate3d(0, 10px, 0) scale(.98); filter: blur(3px); }
+}
+@keyframes m-toast-in {
+  from { opacity: 0; transform: translate3d(14px, 0, 0) scale(.97); filter: blur(3px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+}
+@keyframes m-shake {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  12% { transform: translate3d(-6px, 0, 0); }
+  24% { transform: translate3d(6px, 0, 0); }
+  36% { transform: translate3d(-4px, 0, 0); }
+  48% { transform: translate3d(4px, 0, 0); }
+  60% { transform: translate3d(-2px, 0, 0); }
+  72% { transform: translate3d(2px, 0, 0); }
+}
+@keyframes m-elastic-rebound {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.22); }
+  60% { transform: scale(.92); }
+  80% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+@keyframes m-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes m-text-reveal {
+  from { clip-path: inset(0 100% 0 0); opacity: .3; }
+  to { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+@keyframes m-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@keyframes m-pulse-ring {
+  0% { box-shadow: 0 0 0 0 var(--m-glow-soft); }
+  70% { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@keyframes m-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -10px, 0) scale(1.015); }
+}
+@keyframes m-blob {
+  0%, 100% {
+    border-radius: 42% 58% 63% 37% / 46% 35% 65% 54%;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    border-radius: 58% 42% 38% 62% / 55% 64% 36% 45%;
+    transform: translate3d(12px, -14px, 0) rotate(8deg) scale(1.04);
+  }
+}
+@keyframes m-bg-flow {
+  0%, 100% { background-position: 0% 46%; }
+  50% { background-position: 100% 58%; }
+}
+@keyframes m-aurora-drift {
+  from { transform: translate3d(-1%, -0.5%, 0) scale(1.04); }
+  to { transform: translate3d(1%, 0.8%, 0) scale(1.06); }
+}
+@keyframes m-border-spin {
+  to { --m-angle: 360deg; }
+}
+@keyframes m-ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+@keyframes m-caret {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+@keyframes m-dots {
+  0%, 80%, 100% { transform: scale(.55); opacity: .3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+@keyframes m-count-pop {
+  0% { transform: scale(1); }
+  38% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes m-confetti {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(.4); }
+}
+
+/* ============================================================
+   入场：站点 Hero / 页面 / 大厅模块
+   ============================================================ */
+
+/* 站点 hero：在原有 .he 基础上加模糊、方向与弹簧感 */
+.he {
+  filter: blur(8px);
+  transition:
+    opacity .78s var(--m-ease-out),
+    transform .78s var(--m-ease-out),
+    filter .78s var(--m-ease-out);
+}
+.hero h1.he { transform: translate3d(0, 26px, 0) scale(.985); }
+.hero-sub.he { transform: translate3d(-20px, 0, 0); }
+.hero-p.he { transform: translate3d(0, 16px, 0); }
+.acts.he { transform: scale(.94); }
+.he.in {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* 页面切换：模糊到清晰 + 上浮 */
+.page.act {
+  animation: m-page-in .72s var(--m-ease-out) both;
+}
+
+/* 官网首页入口 */
+.quick-room.anim {
+  animation: m-blur-up .9s var(--m-ease-out) .24s both;
+}
+.quick-room a {
+  transition:
+    transform .45s var(--m-ease-spring),
+    border-color .3s var(--m-ease-out),
+    box-shadow .45s var(--m-ease-out);
+}
+
+/* 大厅模块入场 */
+.launchpad { animation: m-blur-up .9s var(--m-ease-out) both; }
+.notice-bar { animation: m-notice-in .65s var(--m-ease-out) both; }
+.quick-card { animation: m-card-in .7s var(--m-ease-spring) backwards; }
+.quick-card:nth-child(2) { animation-delay: .08s; }
+.server-card {
+  opacity: 1;
+  transform: none;
+  animation: m-card-in .65s var(--m-ease-out) backwards;
+}
+.server-grid.no-intro .server-card {
+  opacity: 1;
+  transform: none;
+}
+.tool { animation: m-fade-up .65s var(--m-ease-out) backwards; }
+.tool:nth-child(2) { animation-delay: .06s; }
+.tool:nth-child(3) { animation-delay: .12s; }
+.tool:nth-child(4) { animation-delay: .18s; }
+.aside-card { animation: m-slide-right .7s var(--m-ease-out) backwards; }
+.aside-card:nth-child(2) { animation-delay: .08s; }
+.aside-card:nth-child(3) { animation-delay: .16s; }
+.acts .btn {
+  animation: m-bounce-in .62s var(--m-ease-spring) backwards;
+}
+.acts .btn:nth-child(2) { animation-delay: .07s; }
+.acts .btn:nth-child(3) { animation-delay: .14s; }
+.acts .btn:nth-child(4) { animation-delay: .21s; }
+
+/* 首页版本卡：保留原入场，但让 hover 可接管 transform */
+.card.anim {
+  opacity: 1;
+  transform: none;
+  animation-fill-mode: backwards;
+}
+
+/* 滚动显现：更慢、更柔、带模糊 */
+.rv {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(.985);
+  filter: blur(8px);
+  transition:
+    opacity .82s var(--m-ease-out),
+    transform .82s var(--m-ease-out),
+    filter .82s var(--m-ease-out);
+}
+.rv.in {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+.rv-d1 { transition-delay: .06s; }
+.rv-d2 { transition-delay: .12s; }
+.rv-d3 { transition-delay: .18s; }
+.rv-d4 { transition-delay: .24s; }
+.rv-d5 { transition-delay: .30s; }
+
+/* 子元素错开：父级 .in 后依次入场 */
+.motion-ready .m-stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0) scale(.985);
+  filter: blur(4px);
+  transition:
+    opacity .62s var(--m-ease-out),
+    transform .62s var(--m-ease-out),
+    filter .62s var(--m-ease-out);
+}
+.motion-ready .m-stagger.in > * {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+.m-stagger.in > *:nth-child(1) { transition-delay: .02s; }
+.m-stagger.in > *:nth-child(2) { transition-delay: .08s; }
+.m-stagger.in > *:nth-child(3) { transition-delay: .14s; }
+.m-stagger.in > *:nth-child(4) { transition-delay: .20s; }
+.m-stagger.in > *:nth-child(5) { transition-delay: .26s; }
+.m-stagger.in > *:nth-child(6) { transition-delay: .32s; }
+.m-stagger.in > *:nth-child(7) { transition-delay: .38s; }
+.m-stagger.in > *:nth-child(8) { transition-delay: .44s; }
+.m-stagger.in > *:nth-child(n+9) { transition-delay: .5s; }
+
+/* ============================================================
+   悬停 / 指针：抬升、聚光、3D 倾斜、磁吸、涟漪、下划线
+   ============================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+  .m-tilt {
+    position: relative;
+    transform:
+      perspective(1000px)
+      rotateX(var(--m-rx, 0deg))
+      rotateY(var(--m-ry, 0deg))
+      translate3d(0, var(--m-lift, 0px), 0);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transition:
+      transform .55s var(--m-ease-out),
+      box-shadow .55s var(--m-ease-out),
+      border-color .3s var(--m-ease-out),
+      filter .55s var(--m-ease-out);
+  }
+  .card.anim.m-tilt,
+  .server-grid .server-card.m-tilt {
+    transform:
+      perspective(1000px)
+      rotateX(var(--m-rx, 0deg))
+      rotateY(var(--m-ry, 0deg))
+      translate3d(0, var(--m-lift, 0px), 0);
+  }
+  .m-tilt:hover {
+    --m-lift: -4px;
+    box-shadow: 0 22px 48px rgba(0, 0, 0, .32), 0 0 0 1px var(--m-glow-soft);
+  }
+  .m-tilt::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+      radial-gradient(
+        260px circle at var(--m-mx, 50%) var(--m-my, 50%),
+        var(--m-glow-soft),
+        transparent 68%
+      );
+    opacity: 0;
+    transition: opacity .25s var(--m-ease-out);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .m-tilt:hover::before { opacity: 1; }
+
+  .m-hover-lift {
+    transition:
+      transform .42s var(--m-ease-spring),
+      box-shadow .42s var(--m-ease-out),
+      border-color .3s var(--m-ease-out);
+  }
+  .m-hover-lift:hover {
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .18);
+  }
+
+  .m-magnetic {
+    transform: translate3d(var(--m-tx, 0px), var(--m-ty, 0px), 0);
+    transition: transform .38s var(--m-ease-spring);
+    will-change: transform;
+  }
+  .m-magnetic:active {
+    transform: translate3d(var(--m-tx, 0px), var(--m-ty, 0px), 0) scale(.965);
+  }
+
+  .m-cursor-glow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 360px;
+    height: 360px;
+    margin: -180px 0 0 -180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--m-glow-soft), transparent 66%);
+    filter: blur(16px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: screen;
+    transition: opacity .45s var(--m-ease-out);
+    will-change: transform;
+  }
+  .m-cursor-glow.on { opacity: .55; }
+}
+
+/* 下划线绘制 */
+.m-underline {
+  position: relative;
+}
+.m-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--m-glow);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform .34s var(--m-ease-out);
+}
+.m-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* 边框光束：仅用于推荐卡与引导入口 */
+.m-beam {
+  position: relative;
+}
+.m-beam::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background:
+    conic-gradient(
+      from var(--m-angle),
+      transparent 0 68%,
+      var(--m-glow) 78%,
+      transparent 88%
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  animation: m-border-spin 4.5s linear infinite;
+  transition: opacity .3s var(--m-ease-out);
+}
+.m-beam:hover::after,
+.m-beam.is-always::after { opacity: 1; }
+
+/* 涟漪 */
+.m-ripple-host {
+  position: relative;
+  overflow: hidden;
+}
+.m-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .24;
+  transform: scale(0);
+  pointer-events: none;
+  animation: m-ripple .65s var(--m-ease-out) forwards;
+}
+
+/* ============================================================
+   文字：渐变流动、揭示、打字机、数字滚动、加载点
+   ============================================================ */
+
+.m-gradient-text {
+  background:
+    linear-gradient(
+      100deg,
+      var(--m-ink) 0%,
+      var(--m-glow) 34%,
+      var(--m-ink) 58%,
+      var(--m-ink) 100%
+    );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: m-gradient 7s ease-in-out infinite;
+}
+
+.launch-copy h2 {
+  background:
+    linear-gradient(
+      100deg,
+      #F2F5F3 0%,
+      var(--m-glow) 36%,
+      #F2F5F3 62%,
+      #F2F5F3 100%
+    );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    m-text-reveal .9s var(--m-ease-out) .08s both,
+    m-gradient 7s ease-in-out infinite;
+}
+
+.hero h1 .hl {
+  background:
+    linear-gradient(
+      100deg,
+      var(--m-glow) 0%,
+      #CFFFE4 38%,
+      var(--m-glow) 62%,
+      var(--m-glow) 100%
+    );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: m-gradient 6s ease-in-out infinite;
+}
+
+.m-typing::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  border-radius: 1px;
+  background: currentColor;
+  vertical-align: -2px;
+  animation: m-caret .8s step-end infinite;
+}
+
+.m-count-pop {
+  display: inline-block;
+  animation: m-count-pop .5s var(--m-ease-spring);
+}
+
+.m-dots {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.m-dots i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: m-dots 1.4s var(--m-ease-smooth) infinite;
+}
+.m-dots i:nth-child(2) { animation-delay: .16s; }
+.m-dots i:nth-child(3) { animation-delay: .32s; }
+#quickJoinBtn.is-loading .m-dots { display: inline-flex; }
+
+/* ============================================================
+   加载 / 进度 / 状态
+   ============================================================ */
+
+.player-bar i,
+.side-meter i {
+  background-size: 220% 100%;
+  animation: m-shimmer 2.8s var(--m-ease-smooth) infinite;
+}
+
+.state-badge.is-live .dot,
+.pulse {
+  animation: m-pulse-ring 2.2s var(--m-ease-out) infinite;
+}
+
+.fav-btn.is-on {
+  animation: m-elastic-rebound .55s var(--m-ease-elastic);
+}
+
+.toast.is-error {
+  animation:
+    m-toast-in .3s var(--m-ease-spring) both,
+    m-shake .48s var(--m-ease-out) .04s;
+}
+
+/* ============================================================
+   背景：流动、漂浮、形状变形
+   ============================================================ */
+
+.aurora {
+  animation: m-aurora-drift 28s ease-in-out infinite alternate;
+}
+.aurora::before {
+  content: "";
+  position: absolute;
+  left: -10vw;
+  top: 8vh;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 42% 58% 63% 37% / 46% 35% 65% 54%;
+  background:
+    radial-gradient(circle at 42% 42%, var(--m-glow-soft), transparent 64%);
+  filter: blur(48px);
+  opacity: .45;
+  animation: m-blob 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.hero::before {
+  animation: m-float 12s ease-in-out infinite alternate;
+}
+
+/* ============================================================
+   过渡：弹窗、快捷方式提示、公告、手风琴、轮播
+   ============================================================ */
+
+.modal-backdrop {
+  animation: m-fade-up .28s var(--m-ease-out) both;
+}
+.modal {
+  animation: m-modal-in .46s var(--m-ease-spring) both;
+}
+.modal.is-closing {
+  animation: m-modal-out .2s var(--m-ease-out) both;
+}
+.modal-backdrop.is-closing {
+  animation: m-modal-out .2s var(--m-ease-out) both;
+}
+
+.shortcut-prompt {
+  animation: m-shortcut-in .5s var(--m-ease-spring) both;
+}
+.shortcut-prompt.is-closing {
+  animation: m-shortcut-out .22s var(--m-ease-out) both;
+}
+
+.notice-bar.is-closing {
+  animation: m-shortcut-out .22s var(--m-ease-out) both;
+}
+
+.toast {
+  animation: m-toast-in .32s var(--m-ease-spring) both;
+}
+
+.cl-b {
+  transition:
+    max-height .65s var(--m-ease-out),
+    opacity .45s var(--m-ease-out),
+    padding .35s var(--m-ease-out);
+}
+.cl-i:not(.op) .cl-b { opacity: 0; }
+.cl-i.op .cl-b { opacity: 1; }
+.cl-i {
+  transition:
+    transform .38s var(--m-ease-spring),
+    border-color .3s var(--m-ease-out),
+    box-shadow .38s var(--m-ease-out);
+}
+.cl-i:hover {
+  transform: translate3d(0, -2px, 0);
+  border-color: color-mix(in srgb, var(--m-glow) 40%, transparent);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .16);
+}
+
+/* 政务版轮播：交叉淡化 + 滑动 + 模糊 */
+.slide {
+  transition:
+    opacity .72s var(--m-ease-out),
+    transform .72s var(--m-ease-out),
+    filter .72s var(--m-ease-out);
+  transform: translate3d(22px, 0, 0) scale(.985);
+  filter: blur(10px);
+}
+.slide.on {
+  transform: none;
+  filter: blur(0);
+}
+.slides .dots i {
+  transition: width .4s var(--m-ease-spring), background .25s var(--m-ease-out);
+}
+.arrows button {
+  transition:
+    background .25s var(--m-ease-out),
+    transform .35s var(--m-ease-spring);
+}
+.arrows button:hover { transform: scale(1.06); }
+
+/* 彩纸粒子 */
+.m-confetti-piece {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: m-confetti .9s var(--m-ease-out) forwards;
+}
+
+/* ============================================================
+   指针对应元素：无 3D 倾斜时使用轻抬升
+   ============================================================ */
+
+.card,
+.block,
+.g,
+.stat,
+.focus-main,
+.cl-i,
+.newslist li,
+.side-panel,
+.tool,
+.aside-card,
+.quick-empty {
+  transition:
+    transform .42s var(--m-ease-spring),
+    box-shadow .42s var(--m-ease-out),
+    border-color .3s var(--m-ease-out);
+}
+
+/* ============================================================
+   可访问性 / 响应式
+   ============================================================ */
+
+@media (max-width: 720px) {
+  .aurora { animation-duration: 34s; }
+  .aurora::before {
+    width: 72vw;
+    height: 72vw;
+    left: -22vw;
+    filter: blur(34px);
+    opacity: .32;
+    animation-duration: 24s;
+  }
+  .m-tilt:hover { box-shadow: none; }
+  .quick-card:hover,
+  .server-card:hover,
+  .tool:hover,
+  .aside-card:hover { transform: none; }
+}
+
+@media (hover: none) {
+  .m-tilt,
+  .m-magnetic {
+    transform: none !important;
+  }
+  .m-hover-lift:hover,
+  .cl-i:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .m-cursor-glow { display: none; }
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .m-gradient-text,
+  .launch-copy h2,
+  .hero h1 .hl {
+    background: none;
+    color: inherit;
+    -webkit-text-fill-color: currentColor;
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .he, .rv, .m-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .m-tilt,
+  .m-magnetic,
+  .m-hover-lift {
+    transform: none !important;
+  }
+  .m-cursor-glow,
+  .m-beam::after {
+    display: none !important;
+  }
+  .launch-copy h2,
+  .hero h1 .hl,
+  .m-gradient-text {
+    -webkit-text-fill-color: currentColor;
+    color: inherit;
+    background: none;
+    animation: none !important;
+  }
+  .m-typing::after { display: none; }
+}

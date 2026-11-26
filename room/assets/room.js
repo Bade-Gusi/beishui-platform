@@ -14,6 +14,9 @@
   var REFRESH_MS = 30000;
   var SHORTCUT_URL = 'https://bade-gusi.github.io/beishui-platform/room/';
   var STATUS_URL = String(window.BEISHUI_STATUS_URL || '').trim();
+  var REDUCE_MOTION = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
 
   var MAPS = {
     de_dust2:    { name: '炙热沙城 II', a: '#8A6A2F', b: '#C9A24E' },
@@ -90,6 +93,12 @@
 
   function icon(name) {
     return '<svg aria-hidden="true"><use href="#i-' + name + '"/></svg>';
+  }
+
+  function motionRefresh() {
+    if (window.BSPMotion && typeof window.BSPMotion.refresh === 'function') {
+      window.BSPMotion.refresh();
+    }
   }
 
   function stableId(address, index) {
@@ -632,9 +641,13 @@
 
     if (state.loading) {
       els.quickServers.innerHTML = '<div class="quick-skeleton"></div><div class="quick-skeleton"></div>';
-      if (els.quickJoinBtn) els.quickJoinBtn.disabled = true;
+      if (els.quickJoinBtn) {
+        els.quickJoinBtn.disabled = true;
+        els.quickJoinBtn.classList.add('is-loading');
+      }
       setText(els.quickJoinName, '读取中');
       state.quickSig = '';
+      motionRefresh();
       return;
     }
 
@@ -642,7 +655,10 @@
     if (!list.length) {
       state.quickPickId = null;
       setText(els.quickJoinName, '暂无服务器');
-      if (els.quickJoinBtn) els.quickJoinBtn.disabled = true;
+      if (els.quickJoinBtn) {
+        els.quickJoinBtn.disabled = true;
+        els.quickJoinBtn.classList.remove('is-loading');
+      }
       if (state.quickSig !== 'empty') {
         state.quickSig = 'empty';
         els.quickServers.innerHTML =
@@ -651,6 +667,7 @@
             '<div><b>还没有可用的服务器</b><p>线上列表由管理员维护；你也可以在「本地设置」中添加仅本机可见的服务器。</p></div>' +
             '<button class="btn" data-action="settings">' + icon('settings') + '打开设置</button>' +
           '</div>';
+        motionRefresh();
       }
       return;
     }
@@ -658,7 +675,10 @@
     var pick = list[0];
     state.quickPickId = pick.id;
     setText(els.quickJoinName, pick.name);
-    if (els.quickJoinBtn) els.quickJoinBtn.disabled = false;
+    if (els.quickJoinBtn) {
+      els.quickJoinBtn.disabled = false;
+      els.quickJoinBtn.classList.remove('is-loading');
+    }
 
     var sig = list.slice(0, 2).map(function (s) {
       return [s.id, s.name, s.address, s.map, s.mode, s.players, s.maxPlayers, s.online === true ? 1 : s.online === false ? 0 : -1, s.ping].join('|');
@@ -669,6 +689,7 @@
     els.quickServers.innerHTML = list.slice(0, 2).map(function (s, i) {
       return quickCardHTML(s, i === 0 && recommendRank(s) <= 1);
     }).join('');
+    motionRefresh();
   }
 
   function cardHTML(s, i) {
@@ -734,6 +755,7 @@
 
     if (state.loading) {
       els.serverList.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+      motionRefresh();
       return;
     }
 
@@ -749,28 +771,49 @@
           '<button class="btn btn-primary" data-action="settings">' + icon('settings') + '打开数据设置</button>' +
         '</div>';
       state.hasRenderedList = true;
+      motionRefresh();
       return;
     }
 
     els.serverList.innerHTML = list.map(cardHTML).join('');
     state.hasRenderedList = true;
+    motionRefresh();
   }
 
   /* ---------------- 弹窗 ---------------- */
 
   function closeModal() {
-    els.modalRoot.innerHTML = '';
-    state.pendingJoin = null;
-    state.editingId = null;
-    renderNav();
-    if (state.lastFocus && document.contains(state.lastFocus)) {
-      try { state.lastFocus.focus(); } catch (e) { /* ignore */ }
+    if (!els.modalRoot) return;
+    if (els.modalRoot.classList.contains('is-closing')) return;
+
+    var finish = function () {
+      els.modalRoot.classList.remove('is-closing');
+      els.modalRoot.innerHTML = '';
+      state.pendingJoin = null;
+      state.editingId = null;
+      renderNav();
+      if (state.lastFocus && document.contains(state.lastFocus)) {
+        try { state.lastFocus.focus(); } catch (e) { /* ignore */ }
+      }
+      state.lastFocus = null;
+    };
+
+    var modal = els.modalRoot.querySelector('.modal');
+    var backdrop = els.modalRoot.querySelector('[data-modal-backdrop]');
+
+    if (modal && !REDUCE_MOTION) {
+      els.modalRoot.classList.add('is-closing');
+      modal.classList.add('is-closing');
+      if (backdrop) backdrop.classList.add('is-closing');
+      setTimeout(finish, 200);
+    } else {
+      finish();
     }
-    state.lastFocus = null;
   }
 
   function openModal(html, size) {
     state.lastFocus = document.activeElement;
+    els.modalRoot.classList.remove('is-closing');
     els.modalRoot.innerHTML =
       '<div class="modal-backdrop" data-modal-backdrop>' +
         '<div class="modal ' + (size || '') + '" role="dialog" aria-modal="true" aria-labelledby="modalTitle">' + html + '</div>' +
@@ -778,6 +821,7 @@
     var first = els.modalRoot.querySelector('.modal-body input, .modal-body select, .modal-body textarea') ||
       els.modalRoot.querySelector('.modal-close');
     if (first) setTimeout(function () { first.focus(); }, 60);
+    motionRefresh();
   }
 
   function modalHead(title, sub) {
@@ -867,13 +911,27 @@
       state.promptTimer = setTimeout(showShortcutPrompt, 4000);
       return;
     }
+    els.shortcutPrompt.classList.remove('is-closing');
     els.shortcutPrompt.hidden = false;
     document.body.classList.add('has-shortcut-prompt');
   }
 
   function hideShortcutPrompt() {
-    if (els.shortcutPrompt) els.shortcutPrompt.hidden = true;
-    document.body.classList.remove('has-shortcut-prompt');
+    if (!els.shortcutPrompt || els.shortcutPrompt.hidden) return;
+    if (els.shortcutPrompt.classList.contains('is-closing')) return;
+
+    var finish = function () {
+      els.shortcutPrompt.hidden = true;
+      els.shortcutPrompt.classList.remove('is-closing');
+      document.body.classList.remove('has-shortcut-prompt');
+    };
+
+    if (REDUCE_MOTION) {
+      finish();
+    } else {
+      els.shortcutPrompt.classList.add('is-closing');
+      setTimeout(finish, 240);
+    }
   }
 
   function openShortcutModal() {
@@ -1008,15 +1066,29 @@
     if (!els.noticeBar) return;
     var id = els.noticeBar.getAttribute('data-notice-id') || '';
     var seen = readJSON(LS_NOTICE, '');
-    if (id && seen === id) els.noticeBar.classList.add('is-hidden');
-    else els.noticeBar.classList.remove('is-hidden');
+    if (id && seen === id) {
+      els.noticeBar.classList.add('is-hidden');
+    } else {
+      els.noticeBar.classList.remove('is-hidden', 'is-closing');
+    }
   }
 
   function dismissNotice() {
-    if (!els.noticeBar) return;
+    if (!els.noticeBar || els.noticeBar.classList.contains('is-closing')) return;
     var id = els.noticeBar.getAttribute('data-notice-id') || 'notice';
     writeJSON(LS_NOTICE, id);
-    els.noticeBar.classList.add('is-hidden');
+
+    var finish = function () {
+      els.noticeBar.classList.add('is-hidden');
+      els.noticeBar.classList.remove('is-closing');
+    };
+
+    if (REDUCE_MOTION) {
+      finish();
+    } else {
+      els.noticeBar.classList.add('is-closing');
+      setTimeout(finish, 240);
+    }
   }
 
   function openGuide() {

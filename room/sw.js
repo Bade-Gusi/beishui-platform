@@ -2,12 +2,14 @@
  * 策略：同源 GET 网络优先，失败时回退缓存。
  * 不缓存 /api/ 请求，避免本地启动接口与实时状态被旧数据覆盖。
  */
-const CACHE = 'bsp-room-v2.11.0';
+const CACHE = 'bsp-room-v2.11.1';
 const CORE = [
   './',
   './index.html',
   './assets/room.css',
   './assets/room.js',
+  './assets/motion.css',
+  './assets/motion.js',
   './assets/logo.png',
   './assets/favicon.ico',
   './data/servers.js',
